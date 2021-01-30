@@ -7,13 +7,27 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-const Settings = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserManagement from 'src/api/UserManagement.js';
+
+const Settings = ({ navigation }) => {
+
+  const logoutUser = async () => {
+    let response = await UserManagement.logout();
+
+    if (response.status === 200) {
+      await AsyncStorage.setItem('@token', '')
+      navigation.navigate('Login')
+    }
+  };
+
   return (
-    <View>
-      <Text>Settings</Text>
-    </View>
+    <Button
+      title="Logout"
+      onPress={() => logoutUser()}
+    />
   );
 };
 
