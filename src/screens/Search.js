@@ -7,12 +7,17 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-const Search = () => {
+const Search = ({ navigation }) => {
   return (
     <View>
       <Text>Search</Text>
+      <Button
+        onPress={() => navigation.navigate('SearchResults')}
+        title="Search Results"
+        color="#841584"
+      />
     </View>
   );
 };

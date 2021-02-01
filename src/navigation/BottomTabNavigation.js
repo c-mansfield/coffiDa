@@ -12,20 +12,22 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Home from 'src/screens/Home.js';
-import Search from 'src/screens/Search.js';
+import SearchStackNavigation from 'src/navigation/SearchStackNavigation.js';
 import Reviews from 'src/screens/Reviews.js';
 import Settings from 'src/screens/Settings.js';
 import AddReview from 'src/screens/AddReview.js';
+import AddReviewButton from 'src/components/TabBarAddReview.js'
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigation = () => {
+const BottomTabNavigation = (props) => {
+  
   return (
       <Tab.Navigator>
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Search" component={Search} />
+        <Tab.Screen name="Search" component={SearchStackNavigation} />
         <Tab.Screen name="AddReview" component={AddReview} options={{
-          tabBarButton: (navigation) => (<AddReviewButton navigation={navigation}/>),
+          tabBarButton: () => (<AddReviewButton/>),
         }}/>
         <Tab.Screen name="Reviews" component={Reviews} />
         <Tab.Screen name="Settings" component={Settings} />
@@ -33,29 +35,8 @@ const BottomTabNavigation = () => {
   );
 }
 
-const AddReviewButton = ({ navigation }) => {
-
-  return (
-    <TouchableOpacity
-      style={styles.addReviewStyle}
-      onPress={() => navigation.navigate('AddReview')}>
-      <Text style={styles.addReviewTextStyle}>+</Text>
-    </TouchableOpacity>
-  )
-}
 
 const styles = StyleSheet.create({
-  addReviewStyle: {
-    height: 90,
-    width: 90,
-    backgroundColor: '#964B00',
-    borderRadius: 100
-  },
-  addReviewTextStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex:1
-  }
 });
 
 export default BottomTabNavigation;
