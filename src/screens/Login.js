@@ -25,6 +25,9 @@ const Login = ({ navigation }) => {
     let response = await UserManagement.login(to_send);
 
     if (response.token) {
+      setEmail('');
+      setPassword('');
+
       await AsyncStorage.setItem('@token', response.token)
       navigation.navigate('BottomTabNavigation')
     }
