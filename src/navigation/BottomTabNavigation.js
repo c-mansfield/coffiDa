@@ -21,9 +21,13 @@ import AddReviewButton from 'src/components/TabBarAddReview.js'
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigation = (props) => {
-  
+
   return (
-      <Tab.Navigator>
+      <Tab.Navigator
+        tabBarOptions={{
+          keyboardHidesTabBar: true
+        }}
+      >
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Search" component={SearchStackNavigation} />
         <Tab.Screen name="AddReview" component={AddReview} options={{
@@ -35,6 +39,21 @@ const BottomTabNavigation = (props) => {
   );
 }
 
+const HomeIcon = (props) => (
+  <Icon {...props} name='person-outline'/>
+);
+
+const SearchIcon = (props) => (
+  <Icon {...props} name='bell-outline'/>
+);
+
+const ReviewsIcon = (props) => (
+  <Icon {...props} name='email-outline'/>
+);
+
+const SettingsIcon = (props) => (
+  <Icon {...props} name='email-outline'/>
+);
 
 const styles = StyleSheet.create({
 });

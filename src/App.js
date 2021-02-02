@@ -7,19 +7,18 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
 
 import Login from './screens/Login.js';
 import MainStackNavigation from './navigation/MainStackNavigation.js';
 
 const App = () => {
   return (
-    <MainStackNavigation/>
+    <ApplicationProvider {...eva} theme={eva.light}>
+        <MainStackNavigation />
+    </ApplicationProvider>
   );
 };
-
-const styles = StyleSheet.create({
-
-});
 
 export default App;

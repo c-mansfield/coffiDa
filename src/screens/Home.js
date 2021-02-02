@@ -10,17 +10,18 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 import UserManagement from 'src/api/UserManagement.js';
+import LocationTile from 'src/components/LocationTile.js';
 
 const Home = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home</Text>
-      <Button
-        onPress={() => testApi()}
-        title="Learn More"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
+    <View style={styles.main}>
+      <Text style={styles.title}>Explore</Text>
+      <Text style={styles.subHeading}>Manchester, UK</Text>
+
+      <View style={styles.tileWrapper}>
+        <LocationTile />
+        <LocationTile />
+      </View>
     </View>
   );
 };
@@ -39,9 +40,24 @@ const testApi = async () => {
 }
 
 const styles = StyleSheet.create({
-
-
-
+  main: {
+    padding: 15,
+    flex: 1
+  },
+  title: {
+    fontSize: 36,
+    fontFamily: 'Nunito-Bold'
+  },
+  subHeading: {
+    fontSize: 14,
+    fontFamily: 'Nunito-Regular'
+  },
+  tileWrapper: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 });
 
 export default Home;

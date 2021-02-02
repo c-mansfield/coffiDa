@@ -11,8 +11,8 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 
 const Search = ({ navigation }) => {
   return (
-    <View>
-      <Text>Search</Text>
+    <View style={styles.main}>
+      <Text style={styles.title}>Search</Text>
       <Button
         onPress={() => navigation.navigate('SearchResults')}
         title="Search Results"
@@ -23,9 +23,14 @@ const Search = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-
-
-
+  main: {
+    padding: 15,
+    flex: 1
+  },
+  title: {
+    fontSize: 36,
+    fontFamily: 'Nunito-Bold'
+  },
 });
 
 export default Search;

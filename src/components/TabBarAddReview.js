@@ -10,22 +10,26 @@ const AddReviewButton = (props) => {
     <TouchableOpacity
       style={styles.addReviewStyle}
       onPress={() => navigation.navigate('AddReview')}>
-      <Text style={styles.addReviewTextStyle}>+</Text>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   addReviewStyle: {
-    height: 90,
-    width: 90,
-    backgroundColor: '#964B00',
-    borderRadius: 100
+    height: 70,
+    width: 70,
+    backgroundColor: '#C3B299',
+    borderRadius: 100,
+    borderColor: '#247BA0',
+    top: -15,
+    borderWidth: 7,
+    borderColor: '#247BA0'
   },
   addReviewTextStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex:1
+    flex: 1,
+
   }
 });
 

@@ -9,16 +9,23 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import ReviewsTabNavigation from 'src/navigation/ReviewsTabNavigation.js';
+
 const Reviews = () => {
   return (
     <View>
-      <Text>Reviews</Text>
+      <Text style={styles.title}>Your Reviews</Text>
+      <ReviewsTabNavigation />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-
+  title: {
+    fontSize: 36,
+    fontFamily: 'Nunito-Bold',
+    padding: 15
+  },
 });
 
 export default Reviews;

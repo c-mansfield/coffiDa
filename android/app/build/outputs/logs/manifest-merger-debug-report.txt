@@ -12,7 +12,10 @@ MERGED from [:react-native-safe-area-context] C:\Users\Cole\Documents\Github\cof
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Cole\Documents\Github\coffiDa\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-community_masked-view] C:\Users\Cole\Documents\Github\coffiDa\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-gesture-handler] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:2:1-13:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\893a28228320846a4ce89518cfcdd952\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\60a65792153657ef3de9fe90ce5b70c4\android-jsc-r245459\AndroidManifest.xml:2:1-11:12
@@ -170,8 +173,14 @@ MERGED from [:react-native-community_masked-view] C:\Users\Cole\Documents\Github
 MERGED from [:react-native-community_masked-view] C:\Users\Cole\Documents\Github\coffiDa\node_modules\@react-native-community\masked-view\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-gesture-handler] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-gesture-handler\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\893a28228320846a4ce89518cfcdd952\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
