@@ -9,15 +9,20 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import LocationWidget from 'src/components/LocationWidget.js';
+
 const YourFavourites = () => {
   return (
-    <View>
-      <Text>Favourites</Text>
+    <View style={styles.main}>
+      <LocationWidget />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  main : {
+    padding: 10
+  }
 });
 
 export default YourFavourites;

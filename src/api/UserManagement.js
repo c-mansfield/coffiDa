@@ -5,13 +5,17 @@ const url = "http://10.0.2.2:3333/api/1.0.0";
 
 const addUser = async (data) => {
   try {
-    return await fetch(url + '/user', {
+    let response = await fetch(url + '/user', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     });
+
+    if(response.status == 201) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }
@@ -19,14 +23,17 @@ const addUser = async (data) => {
 
 const login = async (data) => {
   try {
-    let res = await fetch(url + '/user/login', {
+    let response = await fetch(url + '/user/login', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     });
-    return await res.json();
+
+    if(response.status == 200) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }
@@ -35,13 +42,17 @@ const login = async (data) => {
 const logout = async () => {
   try {
     const token = await AsyncStorage.getItem('@token');
-    return await fetch(url + '/user/logout', {
+    let response = await fetch(url + '/user/logout', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
         'X-Authorization': token
       }
     });
+
+    if(response.status == 200) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }
@@ -55,6 +66,10 @@ const getUser = async (userID) => {
         'X-Authorization': token
       }
     });
+
+    if(response.status == 200) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }
@@ -63,7 +78,7 @@ const getUser = async (userID) => {
 const updateUser = async (userID, data) => {
   try {
     const token = await AsyncStorage.getItem('@token');
-    return await fetch(url + '/user/' + userID, {
+    let response = await fetch(url + '/user/' + userID, {
       method: 'patch',
       headers: {
         'Content-Type': 'application/json',
@@ -71,6 +86,10 @@ const updateUser = async (userID, data) => {
       },
       body: JSON.stringify(data)
     });
+
+    if(response.status == 200) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }

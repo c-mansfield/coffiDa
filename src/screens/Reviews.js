@@ -13,10 +13,7 @@ import ReviewsTabNavigation from 'src/navigation/ReviewsTabNavigation.js';
 
 const Reviews = () => {
   return (
-    <View>
-      <Text style={styles.title}>Your Reviews</Text>
-      <ReviewsTabNavigation />
-    </View>
+    <ReviewsTabNavigation />
   );
 };
 
@@ -29,3 +26,8 @@ const styles = StyleSheet.create({
 });
 
 export default Reviews;
+
+// <View>
+//   <Text style={styles.title}>Your Reviews</Text>
+//   <ReviewsTabNavigation />
+// </View>

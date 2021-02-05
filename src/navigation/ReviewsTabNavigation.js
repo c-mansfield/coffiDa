@@ -17,15 +17,19 @@ import YourLikes from 'src/screens/YourLikes.js';
 const Tab = createMaterialTopTabNavigator();
 
 const ReviewsTabNavigation = () => {
-
   return (
-      <Tab.Navigator>
-        <Tab.Screen name="YourReviews" component={YourReviews} />
-        <Tab.Screen name="YourLikes" component={YourLikes} />
-        <Tab.Screen name="YourFavourites" component={YourFavourites} />
-      </Tab.Navigator>
+    <Tab.Navigator
+      initialRouteName="Reviews"
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Tab.Screen name="Reviews" component={YourReviews} />
+      <Tab.Screen name="Likes" component={YourLikes} />
+      <Tab.Screen name="Favourites" component={YourFavourites} />
+    </Tab.Navigator>
   );
-}
+};
 
 const styles = StyleSheet.create({
 });

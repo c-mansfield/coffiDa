@@ -21,14 +21,14 @@ const Login = ({ navigation }) => {
       email: email,
       password: password
     };
-
     let response = await UserManagement.login(to_send);
 
-    if (response.token) {
+    if (response) {
       setEmail('');
       setPassword('');
 
       await AsyncStorage.setItem('@token', response.token)
+      await AsyncStorage.setItem('@userID', response.id.toString())
       navigation.navigate('BottomTabNavigation')
     }
   };

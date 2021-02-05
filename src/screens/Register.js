@@ -27,7 +27,7 @@ const Register = ({ navigation }) => {
     };
     let response = await UserManagement.addUser(to_send);
 
-    if (response.status == 201) {
+    if (response) {
       navigation.navigate('Login')
     }
   };

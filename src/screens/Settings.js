@@ -17,7 +17,7 @@ const Settings = ({ navigation }) => {
   const logoutUser = async () => {
     let response = await UserManagement.logout();
 
-    if (response.status === 200) {
+    if (response) {
       await AsyncStorage.setItem('@token', '')
       navigation.navigate('Login')
     }
