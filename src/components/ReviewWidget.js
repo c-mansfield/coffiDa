@@ -10,25 +10,21 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Card, Text } from '@ui-kitten/components';
 
-const ReviewWidget = ({ review }) => {
-
-  useEffect(() => {
-    console.log(review.location.location_name);
-  }, []);
+const ReviewWidget = ({ review, location_name, location_town }) => {
 
   return (
     <Card style={styles.widgetMain}>
       <View style={styles.textWrapper}>
-        <Text style={styles.header}>"{review.review.review_body}"</Text>
-        <Text style={styles.subHeading}>{review.location.location_name}, {review.location.location_town}</Text>
-        <Text style={{ fontSize: 10 }}>{review.review.overall_rating}</Text>
+        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+        <Text style={styles.subHeading}>{location_name}, {location_town}</Text>
+        <Text style={{ fontSize: 10 }}>{review.overall_rating}</Text>
 
         <View style={styles.likesSection}>
           <Image
             style={styles.likesImage}
             source={require('assets/images/thumbs_up.png')}
           />
-          <Text style={styles.likesText}>{review.review.likes}</Text>
+          <Text style={styles.likesText}>{review.likes}</Text>
         </View>
       </View>
       <View style={styles.imageWrapper}>
@@ -44,10 +40,12 @@ const ReviewWidget = ({ review }) => {
 const styles = StyleSheet.create({
   widgetMain : {
     height: 110,
-    marginTop: 1
+    marginTop: 1,
+    flexDirection: 'row',
+    flex: 1
   },
   textWrapper : {
-    flex: 2
+    flex: 1
   },
   header : {
     fontSize: 18,
@@ -61,7 +59,6 @@ const styles = StyleSheet.create({
   },
   likesSection : {
     flexDirection: 'row',
-    justifyContent: 'space-between'
   },
   likesImage : {
     width: 15,
@@ -73,7 +70,6 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     flex: 1,
-    alignSelf: 'flex-end',
   },
   reviewImage: {
     width: 75,

@@ -34,7 +34,7 @@ const YourReviews = () => {
       <FlatList
           data={reviewsData}
           renderItem={({item}) => (
-              <ReviewWidget review={item}/>
+              <ReviewWidget review={item.review} location_name={item.location.location_name} location_town={item.location.location_town}/>
           )}
           keyExtractor={(item,index) => item.review.review_id.toString()}
         />

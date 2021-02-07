@@ -11,8 +11,8 @@ import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Home from 'src/screens/Home.js';
 import SearchStackNavigation from 'src/navigation/SearchStackNavigation.js';
+import HomeStackNavigation from 'src/navigation/HomeStackNavigation.js';
 import Reviews from 'src/screens/Reviews.js';
 import Settings from 'src/screens/Settings.js';
 import AddReview from 'src/screens/AddReview.js';
@@ -28,7 +28,7 @@ const BottomTabNavigation = (props) => {
           keyboardHidesTabBar: true
         }}
       >
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Home" component={HomeStackNavigation} />
         <Tab.Screen name="Search" component={SearchStackNavigation} />
         <Tab.Screen name="AddReview" component={AddReview} options={{
           tabBarButton: () => (<AddReviewButton/>),

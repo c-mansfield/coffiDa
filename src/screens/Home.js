@@ -6,38 +6,53 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Button, FlatList, TouchableHighlight } from 'react-native';
 
 import UserManagement from 'src/api/UserManagement.js';
 import LocationTile from 'src/components/LocationTile.js';
+import LocationManagement from 'src/api/LocationManagement.js';
 
-const Home = () => {
+const Home = ({ navigation }) => {
+
+  const [locationsData, setLocationsData] = useState([]);
+  const numColumns = 2;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let sendQuery = {
+        q: 'Manchester'
+      };
+      let response = await LocationManagement.searchLocations(sendQuery);
+
+      if(response) {
+        setLocationsData(response);
+      };
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <View style={styles.main}>
       <Text style={styles.title}>Explore</Text>
       <Text style={styles.subHeading}>Manchester, UK</Text>
 
       <View style={styles.tileWrapper}>
-        <LocationTile />
-        <LocationTile />
+        <FlatList
+            data={locationsData}
+            renderItem={({item}) => (
+              <TouchableHighlight onPress={() => navigation.navigate('LocationDetails', { location: item })}>
+                <LocationTile location={item}/>
+              </TouchableHighlight>
+            )}
+            keyExtractor={(item,index) => item.location_name}
+            numColumns={numColumns}
+        />
       </View>
     </View>
   );
 };
-
-const testApi = async () => {
-
-  let to_send = {
-    email: 'cole@email.com',
-    password: 'password'
-  };
-
-  let res = await UserManagement.login(to_send);
-
-  console.log(res);
-
-}
 
 const styles = StyleSheet.create({
   main: {

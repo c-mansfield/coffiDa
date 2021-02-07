@@ -14,7 +14,6 @@ import LocationWidget from 'src/components/LocationWidget.js';
 const YourFavourites = () => {
   return (
     <View style={styles.main}>
-      <LocationWidget />
     </View>
   );
 };
