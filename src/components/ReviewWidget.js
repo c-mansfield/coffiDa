@@ -7,45 +7,56 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Card, Text } from '@ui-kitten/components';
 
-const ReviewWidget = ({ review, location_name, location_town }) => {
+import RatingCircles from 'src/components/RatingCircles.js';
+
+const ReviewWidget = ({ review, location, myReview }) => {
 
   return (
-    <Card style={styles.widgetMain}>
-      <View style={styles.textWrapper}>
-        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
-        <Text style={styles.subHeading}>{location_name}, {location_town}</Text>
-        <Text style={{ fontSize: 10 }}>{review.overall_rating}</Text>
+    <TouchableOpacity>
+      <View style={styles.widgetMain}>
+        <View style={styles.textWrapper}>
+          <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+          {
+            myReview ? <Text style={styles.subHeading}>{location.location_name}, {location.location_town}</Text>
+            : null
+          }
+          <RatingCircles rating={review.overall_rating} />
 
-        <View style={styles.likesSection}>
+          <View style={styles.likesSection}>
+            <Image
+              style={styles.likesImage}
+              source={require('assets/images/thumbs_up.png')}
+            />
+            <Text style={styles.likesText}>{review.likes}</Text>
+          </View>
+        </View>
+        <View style={styles.imageWrapper}>
           <Image
-            style={styles.likesImage}
-            source={require('assets/images/thumbs_up.png')}
+            style={styles.reviewImage}
+            source={require('assets/images/reviews_placeholder.jpg')}
           />
-          <Text style={styles.likesText}>{review.likes}</Text>
         </View>
       </View>
-      <View style={styles.imageWrapper}>
-        <Image
-          style={styles.reviewImage}
-          source={require('assets/images/reviews_placeholder.jpg')}
-        />
-      </View>
-    </Card>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   widgetMain : {
-    height: 110,
-    marginTop: 1,
+    marginTop: 5,
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    borderColor: 'rgb(224, 224, 224)',
+    borderWidth: 1,
+    borderRadius: 4
   },
   textWrapper : {
-    flex: 1
+    flex: 3,
   },
   header : {
     fontSize: 18,
@@ -69,7 +80,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
   },
   imageWrapper: {
-    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flex: 1
   },
   reviewImage: {
     width: 75,

@@ -6,67 +6,144 @@
  * @flow strict-local
  */
 
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Button, ImageBackground, FlatList, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { Divider } from '@ui-kitten/components';
+import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ReviewWidget from 'src/components/ReviewWidget.js';
+import RatingCircles from 'src/components/RatingCircles.js';
+import UserManagement from 'src/api/UserManagement.js';
+import LocationManagement from 'src/api/LocationManagement.js';
 
 const LocationDetails = ({ navigation, route }) => {
 
   const { location } = route.params;
   const reviewCount = location.location_reviews.length;
+  const [favouriteIcon, setFavouriteIcon] = useState(require('assets/images/unFavourite.png'));
+  const [favourite, setFavourite] = useState(false);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      let userID = await AsyncStorage.getItem('@userID')
+      let response = await UserManagement.getUser(userID);
+
+      if(response.favourite_locations.some(item => item.location_name === location.location_name)) {
+        setFavouriteIcon(require('assets/images/favourite.png'));
+        setFavourite(true);
+      }
+    }
+
+    fetchData();
+  }, [isFocused]);
+
+  const changeFavourite = async () => {
+    if(favourite) {
+      let response = await LocationManagement.unfavouriteReview(location.location_id);
+
+      if(response) {
+        setFavouriteIcon(require('assets/images/unFavourite.png'));
+        setFavourite(false);
+      }
+    } else {
+      let response = await LocationManagement.favouriteReview(location.location_id);
+
+      if(response) {
+        setFavouriteIcon(require('assets/images/favourite.png'));
+        setFavourite(true);
+      }
+    }
+  };
 
   return (
-    <View style={styles.detailsMain}>
+    <SafeAreaView style={styles.detailsMain}>
       <View style={styles.detailsHeader}>
         <ImageBackground source={require('assets/images/location_placeholder.jpg')} style={styles.detailsImage}>
           <View style={styles.detailsOverlay}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                style={styles.iconSize}
+                source={require('assets/images/goBack.png')}
+              />
+            </TouchableOpacity>
 
             <View style={styles.detailsHeaderText}>
-              <Text style={{ fontSize: 36, fontFamily: 'Nunito-Bold' }}>{location.location_name}</Text>
-              <Text style={{ fontSize: 24, fontFamily: 'Nunito-Regular', color: '#504F4F' }}>{location.location_town}</Text>
+            <View style={styles.detailsHeaderTextWrapper}>
+                <View style={styles.detailsHeaderLHS}>
+                  <Text style={{ fontSize: 36, fontFamily: 'Nunito-Bold' }}>{location.location_name}</Text>
+                  <Text style={{ fontSize: 24, fontFamily: 'Nunito-Regular', color: '#504F4F' }}>{location.location_town}</Text>
+                </View>
+
+                <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
+                  <Image
+                    style={styles.iconSize}
+                    source={favouriteIcon}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ImageBackground>
       </View>
       <View style={styles.detailsBody}>
-        <Text style={{ fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070' }}>Overall rating</Text>
-        <Text style={{ fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070' }}>{location.avg_overall_rating} - ({reviewCount} reviews)</Text>
+        <Text style={{ fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10 }}>Overall rating</Text>
+
+        <View style={styles.overallRating}>
+          <RatingCircles rating={location.avg_overall_rating}/>
+          <Text style={{ fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070', marginLeft: 5 }}>({reviewCount} reviews)</Text>
+        </View>
 
         <View style={styles.detailsPrice}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Price rating</Text>
+
+          <View style={{marginLeft: 'auto'}}>
+            <RatingCircles rating={location.avg_price_rating} />
+          </View>
         </View>
 
         <View style={styles.detailsQuality}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Quality rating</Text>
+
+          <View style={{marginLeft: 'auto'}}>
+            <RatingCircles rating={location.avg_quality_rating}/>
+          </View>
         </View>
 
         <View style={styles.detailsClenliness}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Clenliness rating</Text>
+
+          <View style={{marginLeft: 'auto'}}>
+            <RatingCircles rating={location.avg_clenliness_rating}/>
+          </View>
         </View>
 
+        <Divider/>
+
         <View style={styles.detailsReviews}>
-          <Text style={{ fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F' }}>Reviews</Text>
+          <Text style={{ fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 10 }}>Reviews</Text>
 
           <FlatList
               data={location.location_reviews}
               renderItem={({item}) => (
-                  <ReviewWidget review={item} location_name={location.location_name} location_town={location.location_town}/>
+                  <ReviewWidget review={item} location={location}/>
               )}
               keyExtractor={(item,index) => item.review_id.toString()}
             />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   detailsMain: {
-    flex: 1,
+    flex: 1
   },
   detailsHeader: {
-    flex: 1,
+    flex: 1
   },
   detailsImage: {
     flex: 1,
@@ -75,24 +152,51 @@ const styles = StyleSheet.create({
   detailsOverlay: {
     flex: 1,
     backgroundColor:'rgba(255,255,255,0.7)',
-    justifyContent: 'flex-end',
     padding: 10
+  },
+  iconSize: {
+    height: 38,
+    width: 38
+  },
+  detailsHeaderText: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
+  detailsHeaderTextWrapper: {
+    flexDirection: 'row',
+  },
+  detailsHeaderLHS: {
+    flex: 8
+  },
+  detailsHeaderRHS: {
+    flex: 1,
+    alignSelf: 'flex-end',
+    marginBottom: 15
   },
   detailsBody: {
     flex: 2,
-    padding: 10
+    padding: 10,
+    flexDirection: 'column'
+  },
+  overallRating : {
+    flexDirection: 'row',
+    marginTop: 10
   },
   detailsPrice: {
-
+    flexDirection: 'row',
+    marginTop: 25
   },
   detailsQuality : {
-
+    flexDirection: 'row',
+    marginTop: 25
   },
   detailsClenliness : {
-
+    flexDirection: 'row',
+    marginTop: 25
   },
   detailsReviews: {
-
+    flexDirection: 'column',
+    marginTop: 30
   }
 });
 

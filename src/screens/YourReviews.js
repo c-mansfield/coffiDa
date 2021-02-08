@@ -9,12 +9,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native'
 
 import ReviewWidget from 'src/components/ReviewWidget.js';
 import UserManagement from 'src/api/UserManagement.js';
 
 const YourReviews = () => {
 
+  const isFocused = useIsFocused();
   const [reviewsData, setReviewsData] = useState([]);
 
   useEffect(() => {
@@ -27,14 +29,14 @@ const YourReviews = () => {
     }
 
     fetchData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.main}>
       <FlatList
           data={reviewsData}
           renderItem={({item}) => (
-              <ReviewWidget review={item.review} location_name={item.location.location_name} location_town={item.location.location_town}/>
+              <ReviewWidget review={item.review} location={item.location} myReview={true}/>
           )}
           keyExtractor={(item,index) => item.review.review_id.toString()}
         />

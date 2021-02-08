@@ -19,6 +19,7 @@ const Settings = ({ navigation }) => {
 
     if (response) {
       await AsyncStorage.setItem('@token', '')
+      await AsyncStorage.setItem('@userID', '')
       navigation.navigate('Login')
     }
   };

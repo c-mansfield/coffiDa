@@ -8,6 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableHighlight } from 'react-native';
+import { useIsFocused } from '@react-navigation/native'
 
 import UserManagement from 'src/api/UserManagement.js';
 import LocationTile from 'src/components/LocationTile.js';
@@ -17,6 +18,7 @@ const Home = ({ navigation }) => {
 
   const [locationsData, setLocationsData] = useState([]);
   const numColumns = 2;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ const Home = ({ navigation }) => {
     }
 
     fetchData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.main}>

@@ -7,10 +7,6 @@ const height = Dimensions.get('window').height;
 
 const LocationTile = ({ location }) => {
 
-  useEffect(() => {
-    console.log(location.photo_path);
-  }, []);
-
   return (
     <View style={styles.tile}>
       <ImageBackground source={{uri: location.photo_path}} style={styles.image}>

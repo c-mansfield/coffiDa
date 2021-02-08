@@ -7,41 +7,56 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Card, Text } from '@ui-kitten/components';
 
-const LocationWidget = () => {
+import RatingCircles from 'src/components/RatingCircles.js';
+
+const LocationWidget = ({ location }) => {
+
+  const reviewCount = location.location_reviews.length;
+
   return (
-    <Card style={styles.widgetMain}>
-      <View style={styles.imageWrapper}>
-        <Image
-          style={styles.locationImage}
-          source={require('assets/images/reviews_placeholder.jpg')}
-        />
+    <TouchableOpacity>
+      <View style={styles.widgetMain}>
+        <View style={styles.imageWrapper}>
+          <Image
+            style={styles.locationImage}
+            source={require('assets/images/reviews_placeholder.jpg')}
+          />
+        </View>
+        <View style={styles.textWrapper}>
+          <Text style={styles.header}>{location.location_name}</Text>
+          <Text style={styles.subHeading}>{location.location_town}</Text>
+
+          <View style={styles.locationRating}>
+            <RatingCircles rating={location.avg_overall_rating} />
+            <Text style={{ fontSize: 12, marginLeft: 5 }}>({reviewCount})</Text>
+          </View>
+        </View>
       </View>
-      <View style={styles.textWrapper}>
-        <Text style={styles.header}>Location Name</Text>
-        <Text style={styles.subHeading}>Manchester, UK</Text>
-        <Text style={{ fontSize: 10 }}>(1,723)</Text>
-      </View>
-    </Card>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   widgetMain : {
-    minHeight: 100,
     flexDirection: 'row',
-    textAlign: 'left'
-  },
-  imageWrapper: {
+    textAlign: 'left',
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    borderColor: 'rgb(224, 224, 224)',
+    borderRadius: 4,
+    borderWidth: 1
   },
   locationImage: {
     width: 75,
     height: 75
   },
   textWrapper : {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginLeft: 10
   },
   header : {
     fontSize: 18,
@@ -52,6 +67,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Nunito-Regular',
     color: '#707070'
+  },
+  locationRating: {
+    flexDirection: 'row',
+    flex: 1,
+    marginTop: 5
   }
 });
 

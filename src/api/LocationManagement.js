@@ -19,12 +19,16 @@ const getLocation = async (locationID) => {
 const favouriteReview = async (locationID) => {
   try {
     let token = await AsyncStorage.getItem('@token');
-    return await fetch(url + '/location/' + locationID + '/favourite', {
+    let response = await fetch(url + '/location/' + locationID + '/favourite', {
       method: 'post',
       headers: {
         'X-Authorization': token
       }
     });
+
+    if(response.status == 200) {
+      return await response.json();
+    }
   } catch (error) {
     return error;
   }
