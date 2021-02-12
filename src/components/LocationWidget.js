@@ -17,7 +17,7 @@ const LocationWidget = ({ location }) => {
   const reviewCount = location.location_reviews.length;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity style={styles.main}>
       <View style={styles.widgetMain}>
         <View style={styles.imageWrapper}>
           <Image
@@ -40,6 +40,9 @@ const LocationWidget = ({ location }) => {
 };
 
 const styles = StyleSheet.create({
+  main: {
+    marginBottom: 5
+  },
   widgetMain : {
     flexDirection: 'row',
     textAlign: 'left',

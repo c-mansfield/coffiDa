@@ -18,9 +18,8 @@ const Settings = ({ navigation }) => {
     let response = await UserManagement.logout();
 
     if (response) {
-      await AsyncStorage.setItem('@token', '')
-      await AsyncStorage.setItem('@userID', '')
-      navigation.navigate('Login')
+      await AsyncStorage.clear();
+      navigation.navigate('Login');
     }
   };
 
