@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Icon } from '@ui-kitten/components';
 
 import SearchStackNavigation from 'src/navigation/SearchStackNavigation.js';
 import HomeStackNavigation from 'src/navigation/HomeStackNavigation.js';
@@ -24,8 +25,26 @@ const BottomTabNavigation = (props) => {
 
   return (
       <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Search') {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Reviews') {
+            iconName = focused ? 'search-outline' : 'search';
+          } else if (route.name === 'Settings') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          return <Icon style={{ height: size, width: size }} fill={color} name={iconName} />;
+        },
+        })}
         tabBarOptions={{
-          keyboardHidesTabBar: true
+          keyboardHidesTabBar: true,
+          activeTintColor: '#247BA0',
+          inactiveTintColor: '#50514F',
         }}
       >
         <Tab.Screen name="Home" component={HomeStackNavigation} />

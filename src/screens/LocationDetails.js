@@ -11,6 +11,7 @@ import { View, Text, StyleSheet, Button, ImageBackground, FlatList, SafeAreaView
 import { Divider } from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Icon } from '@ui-kitten/components';
 
 import ReviewWidget from 'src/components/ReviewWidget.js';
 import RatingCircles from 'src/components/RatingCircles.js';
@@ -21,7 +22,7 @@ const LocationDetails = ({ navigation, route }) => {
 
   const { location } = route.params;
   const reviewCount = location.location_reviews.length;
-  const [favouriteIcon, setFavouriteIcon] = useState(require('assets/images/unFavourite.png'));
+  const [favouriteIcon, setFavouriteIcon] = useState('heart-outline');
   const [favourite, setFavourite] = useState(false);
   const isFocused = useIsFocused();
 
@@ -32,7 +33,7 @@ const LocationDetails = ({ navigation, route }) => {
       let response = await UserManagement.getUser(userID);
 
       if(response.favourite_locations.some(item => item.location_name === location.location_name)) {
-        setFavouriteIcon(require('assets/images/favourite.png'));
+        setFavouriteIcon('heart');
         setFavourite(true);
       }
     }
@@ -45,14 +46,14 @@ const LocationDetails = ({ navigation, route }) => {
       let response = await LocationManagement.unfavouriteReview(location.location_id);
 
       if(response) {
-        setFavouriteIcon(require('assets/images/unFavourite.png'));
+        setFavouriteIcon('heart-outline');
         setFavourite(false);
       }
     } else {
       let response = await LocationManagement.favouriteReview(location.location_id);
 
       if(response) {
-        setFavouriteIcon(require('assets/images/favourite.png'));
+        setFavouriteIcon('heart');
         setFavourite(true);
       }
     }
@@ -64,10 +65,7 @@ const LocationDetails = ({ navigation, route }) => {
         <ImageBackground source={require('assets/images/location_placeholder.jpg')} style={styles.detailsImage}>
           <View style={styles.detailsOverlay}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image
-                style={styles.iconSize}
-                source={require('assets/images/goBack.png')}
-              />
+              <Icon style={styles.iconSize} fill={'#000000'} name={'arrow-back'} />
             </TouchableOpacity>
 
             <View style={styles.detailsHeaderText}>
@@ -78,10 +76,7 @@ const LocationDetails = ({ navigation, route }) => {
                 </View>
 
                 <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
-                  <Image
-                    style={styles.iconSize}
-                    source={favouriteIcon}
-                  />
+                  <Icon style={styles.iconSize} fill={'#000000'} name={favouriteIcon} />
                 </TouchableOpacity>
               </View>
             </View>

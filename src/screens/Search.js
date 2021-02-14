@@ -39,10 +39,7 @@ const Search = ({ navigation }) => {
       <Text style={styles.title}>Search</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SearchResults')}>
           <View style={styles.searchBar}>
-            <Image
-              style={styles.searchIcon}
-              source={require('assets/images/search.png')}
-            />
+            <Icon style={styles.searchIcon} fill={'#000000'} name={'search'} />
             <Text style={{fontSize: 14, fontFamily: 'Nunito-Regular', color: '#707070', flex: 1 }}>Name, Location, rating...</Text>
           </View>
         </TouchableOpacity>

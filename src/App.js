@@ -8,16 +8,20 @@
 
 import React from 'react';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider, Layout, Text, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 import Login from './screens/Login.js';
 import MainStackNavigation from './navigation/MainStackNavigation.js';
 
 const App = () => {
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-        <MainStackNavigation />
-    </ApplicationProvider>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+          <MainStackNavigation />
+      </ApplicationProvider>
+    </>
   );
 };
 
