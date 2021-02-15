@@ -95,7 +95,7 @@ const AddReview = ({ navigation }) => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text>{overall}</Text>
+            <Text style={styles.sliderText}>{overall}</Text>
           ),
       }}
       />
@@ -109,7 +109,7 @@ const AddReview = ({ navigation }) => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text>{price}</Text>
+            <Text style={styles.sliderText}>{price}</Text>
           ),
       }}
       />
@@ -123,7 +123,7 @@ const AddReview = ({ navigation }) => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text>{quality}</Text>
+            <Text style={styles.sliderText}>{quality}</Text>
           ),
       }}
       />
@@ -137,7 +137,7 @@ const AddReview = ({ navigation }) => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text>{cleanliness}</Text>
+            <Text style={styles.sliderText}>{cleanliness}</Text>
           ),
       }}
       />
@@ -167,6 +167,11 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     fontSize: 18,
+    fontFamily: 'Nunito-Regular'
+  },
+  sliderText: {
+    marginTop: 30,
+    alignSelf: 'center',
     fontFamily: 'Nunito-Regular'
   }
 });

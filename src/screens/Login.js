@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,9 +27,11 @@ const Login = ({ navigation }) => {
       setEmail('');
       setPassword('');
 
-      await AsyncStorage.setItem('@token', response.token)
-      await AsyncStorage.setItem('@userID', response.id.toString())
-      navigation.navigate('BottomTabNavigation')
+      await AsyncStorage.setItem('@token', response.token);
+      await AsyncStorage.setItem('@userID', response.id.toString());
+
+      navigation.navigate('BottomTabNavigation');
+
     }
   };
 

@@ -17,6 +17,7 @@ import Home from 'src/screens/Home.js';
 const Stack = createStackNavigator();
 
 const HomeStackNavigation = () => {
+
   return (
     <Stack.Navigator
       initialRouteName="Home"

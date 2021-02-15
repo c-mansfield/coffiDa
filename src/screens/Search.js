@@ -8,7 +8,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Image, FlatList, TouchableHighlight } from 'react-native';
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native';
+import { Icon } from '@ui-kitten/components';
 
 import LocationTile from 'src/components/LocationTile.js';
 import LocationManagement from 'src/api/LocationManagement.js';
