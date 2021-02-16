@@ -19,10 +19,9 @@ import UserManagement from 'src/api/UserManagement.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 
 const LocationDetails = ({ navigation, route }) => {
-
   const { location } = route.params;
   const reviewCount = location.location_reviews.length;
-  const [favouriteIcon, setFavouriteIcon] = useState('heart-outline');
+  const [favouriteIcon, setFavouriteIcon] = useState('star-outline');
   const [favourite, setFavourite] = useState(false);
   const isFocused = useIsFocused();
 
@@ -33,7 +32,7 @@ const LocationDetails = ({ navigation, route }) => {
       let response = await UserManagement.getUser(userID);
 
       if(response.favourite_locations.some(item => item.location_name === location.location_name)) {
-        setFavouriteIcon('heart');
+        setFavouriteIcon('star');
         setFavourite(true);
       }
     }
@@ -46,14 +45,14 @@ const LocationDetails = ({ navigation, route }) => {
       let response = await LocationManagement.unfavouriteReview(location.location_id);
 
       if(response) {
-        setFavouriteIcon('heart-outline');
+        setFavouriteIcon('star-outline');
         setFavourite(false);
       }
     } else {
       let response = await LocationManagement.favouriteReview(location.location_id);
 
       if(response) {
-        setFavouriteIcon('heart');
+        setFavouriteIcon('star');
         setFavourite(true);
       }
     }

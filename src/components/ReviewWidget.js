@@ -1,36 +1,90 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Card, Text } from '@ui-kitten/components';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import { Text, Icon } from '@ui-kitten/components';
+import { useIsFocused } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 import RatingCircles from 'src/components/RatingCircles.js';
+import LocationReviews from 'src/api/LocationReviews.js';
 
-const ReviewWidget = ({ review, location, myReview }) => {
+const ReviewWidget = (props) => {
+  const isFocused = useIsFocused();
+  const [likeIcon, setLikeIcon] = useState('heart-outline');
+  const [like, setLike] = useState(false);
+  const { likedReviews } = props;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await setReviewLike();
+    };
+
+    fetchData();
+  }, [isFocused, props.refresh]);
+
+  const setReviewLike = () => {
+    if (likedReviews) {
+      if (likedReviews.includes(props.review.review_id)) {
+        console.log('Hit ', props.review.review_id);
+        setLikeIcon('heart');
+        setLike(true);
+      }
+    }
+  };
+
+  const changeLike = async () => {
+    if (like) {
+      const response = await LocationReviews.removeLikeReview(props.location.location_id, props.review.review_id);
+
+      if (response) {
+        props.review.likes--;
+        setLikeIcon('heart-outline');
+        setLike(false);
+      }
+    } else {
+      const response = await LocationReviews.likeReview(props.location.location_id, props.review.review_id);
+
+      if (response) {
+        setLikeIcon('heart');
+        setLike(true);
+        props.review.likes++;
+      }
+    }
+
+    // Refresh the screen when like/unlike
+    props.refresh = !props.refresh;
+  };
 
   return (
     <TouchableOpacity>
       <View style={styles.widgetMain}>
         <View style={styles.textWrapper}>
-          <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+          <Text style={styles.header} numberOfLines={1}>"{props.review.review_body}"</Text>
           {
-            myReview ? <Text style={styles.subHeading}>{location.location_name}, {location.location_town}</Text>
-            : null
+            props.myReview
+              ? (
+                <Text style={styles.subHeading}>
+                  {props.location.location_name}
+                  ,
+                  {' '}
+                  {props.location.location_town}
+                </Text>
+)
+              : null
           }
-          <RatingCircles rating={review.overall_rating} />
+          <View style={styles.ratingStyle}>
+            <RatingCircles rating={props.review.overall_rating} />
+          </View>
 
           <View style={styles.likesSection}>
-            <Image
-              style={styles.likesImage}
-              source={require('assets/images/thumbs_up.png')}
-            />
-            <Text style={styles.likesText}>{review.likes}</Text>
+            <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
+              <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
+            </TouchableOpacity>
+            <Text style={styles.likesText}>{props.review.likes}</Text>
           </View>
         </View>
         <View style={styles.imageWrapper}>
@@ -45,7 +99,7 @@ const ReviewWidget = ({ review, location, myReview }) => {
 };
 
 const styles = StyleSheet.create({
-  widgetMain : {
+  widgetMain: {
     marginTop: 5,
     flexDirection: 'row',
     flex: 1,
@@ -55,40 +109,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4
   },
-  textWrapper : {
+  textWrapper: {
     flex: 3,
   },
-  header : {
+  header: {
     fontSize: 18,
     fontFamily: 'Nunito-Bold',
     color: '#707070'
   },
-  subHeading : {
+  subHeading: {
     fontSize: 16,
     fontFamily: 'Nunito-Regular',
     color: '#707070'
   },
-  likesSection : {
+  likesSection: {
     flexDirection: 'row',
+    marginTop: 10,
   },
-  likesImage : {
-    width: 15,
-    height: 15
+  likesImage: {
+    width: 25,
+    height: 25,
   },
-  likesText : {
+  likesText: {
     fontSize: 10,
     fontFamily: 'Nunito-Regular',
+    alignSelf: 'center',
   },
   imageWrapper: {
     alignItems: 'flex-end',
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
   },
   reviewImage: {
-    width: 75,
-    height: 75,
-    borderRadius: 75 / 2
-  }
+    width: 80,
+    height: 80,
+    borderRadius: 80 / 2,
+  },
+  ratingStyle: {
+    marginTop: 10,
+  },
 });
+
+ReviewWidget.propTypes = {
+  review: PropTypes.object,
+  likedReviews: PropTypes.array,
+  location: PropTypes.object,
+  myReview: PropTypes.bool
+};
 
 export default ReviewWidget;

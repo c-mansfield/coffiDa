@@ -6,17 +6,20 @@
  * @flow strict-local
  */
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Button,
+} from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import Modal from 'react-native-modal';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
 import SearchFilterModal from 'src/components/SearchFilterModal.js';
 
 const SearchResults = () => {
-
   const [search, setSearch] = useState('');
   const [locations, setLocations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,22 +32,20 @@ const SearchResults = () => {
 
   const searchLocations = async () => {
     // Append the search query to the filters object
-    let sendQuery = searchQuery;
-    sendQuery['q'] = search;
+    const sendQuery = searchQuery;
+    sendQuery.q = search;
 
-    let response = await LocationManagement.searchLocations(sendQuery);
+    const response = await LocationManagement.searchLocations(sendQuery);
 
-    console.log(response);
-
-    if(response) {
+    if (response) {
       setLocations(response);
     } else {
       setLocations([]);
-    };
+    }
   };
 
   const toggleModal = () => {
-    setModalVisible(!modalVisible)
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -54,13 +55,13 @@ const SearchResults = () => {
         onChangeText={onSearchChange}
         value={search}
         lightTheme
-        cancelIcon={true}
-        containerStyle={{backgroundColor: '#FFFFFF'}}
-        inputContainerStyle={{backgroundColor: '#FFFFFF'}}
+        cancelIcon
+        containerStyle={{ backgroundColor: '#FFFFFF' }}
+        inputContainerStyle={{ backgroundColor: '#FFFFFF' }}
       />
       <Button
         title="Filters"
-        buttonStyle={{backgroundColor: '#247BA0'}}
+        buttonStyle={{ backgroundColor: '#247BA0' }}
         onPress={toggleModal}
       />
       <SearchFilterModal
@@ -71,21 +72,20 @@ const SearchResults = () => {
       />
       <View style={styles.searchResultsWrapper}>
         <FlatList
-            data={locations}
-            renderItem={({item}) => (
-              <LocationWidget location={item}/>
-            )}
-            keyExtractor={(item,index) => item.location_id.toString()}
+          data={locations}
+          renderItem={({ item }) => (
+            <LocationWidget location={item} />
+          )}
+          keyExtractor={(item) => item.location_id.toString()}
         />
       </View>
     </View>
   );
-
 };
 
 const styles = StyleSheet.create({
   searchResultsWrapper: {
-    padding: 15
+    padding: 15,
   },
 });
 

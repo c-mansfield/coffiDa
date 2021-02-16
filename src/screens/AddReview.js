@@ -7,18 +7,19 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Autocomplete, AutocompleteItem, Input } from '@ui-kitten/components';
+import { Text, StyleSheet } from 'react-native';
+import {
+  Autocomplete, AutocompleteItem, Input, Layout
+} from '@ui-kitten/components';
 import { Slider, Button } from 'react-native-elements';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 
 const AddReview = ({ navigation }) => {
-
   const [location, setLocation] = useState('');
   const [locationID, setLocationID] = useState('');
-  const [locations, setLocations] = React.useState([{location_name: 'No results', location_town: ''}]);
+  const [locations, setLocations] = React.useState([{ location_name: 'No results', location_town: '' }]);
   const [message, setMessage] = useState('');
   const [overall, setOverall] = useState(0);
   const [price, setPrice] = useState(0);
@@ -26,61 +27,61 @@ const AddReview = ({ navigation }) => {
   const [cleanliness, setCleanliness] = useState(0);
 
   const onSelectLocation = (index) => {
-    setLocation(locations[index].location_name + ', ' + locations[index].location_town);
+    setLocation(`${locations[index].location_name}, ${locations[index].location_town}`);
     setLocationID(locations[index].location_id);
   };
 
   const onChangeLocation = async (query) => {
     setLocation(query);
-    let sendQuery = {
-      q: query
+    const sendQuery = {
+      q: query,
     };
-    let response = await LocationManagement.searchLocations(sendQuery);
+    const response = await LocationManagement.searchLocations(sendQuery);
 
-    if(response) {
+    if (response) {
       setLocations(response);
     } else {
-      setLocations([{location_name: 'No results', location_town: ''}]);
-    };
+      setLocations([{ location_name: 'No results', location_town: '' }]);
+    }
   };
 
   const renderLocations = (item, index) => (
     <AutocompleteItem
       key={index}
-      title={item.location_name + ', ' + item.location_town}
+      title={`${item.location_name}, ${item.location_town}`}
     />
   );
 
   const addReview = async () => {
-    let reviewData = {
-      "overall_rating": overall,
-      "price_rating": price,
-      "quality_rating": quality,
-      "clenliness_rating": cleanliness,
-      "review_body": message
+    const reviewData = {
+      overall_rating: overall,
+      price_rating: price,
+      quality_rating: quality,
+      clenliness_rating: cleanliness,
+      review_body: message,
     };
-    let response = await LocationReviews.addReview(locationID, reviewData);
+    const response = await LocationReviews.addReview(locationID, reviewData);
 
-    if(response) {
+    if (response) {
       navigation.navigate('Home')
-    };
+    }
   };
 
   return (
-    <View style={styles.main}>
+    <Layout level="1" style={styles.main}>
       <Text style={styles.title}>Add Review</Text>
 
       <Autocomplete
-        placeholder='Find Location'
+        placeholder="Find Location"
         value={location}
         onSelect={onSelectLocation}
         onChangeText={onChangeLocation}>
         {locations.map(renderLocations)}
       </Autocomplete>
       <Input
-        multiline={true}
+        multiline
         textStyle={{ minHeight: 64, maxHeight: 64 }}
-        placeholder='Review Message...'
+        placeholder="Review Message..."
         value={message}
         onChangeText={message => setMessage(message)}
       />
@@ -148,7 +149,7 @@ const AddReview = ({ navigation }) => {
         buttonStyle={{backgroundColor: '#247BA0'}}
         onPress={() => addReview()}
       />
-    </View>
+    </Layout>
   );
 };
 

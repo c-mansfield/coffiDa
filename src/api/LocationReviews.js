@@ -99,6 +99,7 @@ const deleteReviewPhoto = async (locationID, reviewID) => {
 const likeReview = async (locationID, reviewID) => {
   try {
     const token = await AsyncStorage.getItem('@token');
+    console.log();
     return await fetch(url + '/location/' + locationID + '/review/' + reviewID + '/like', {
       method: 'post',
       headers: {

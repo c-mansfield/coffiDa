@@ -3,10 +3,9 @@ import { View, Text, StyleSheet, Button, TouchableOpacity, Dimensions, ImageBack
 import { Tile } from 'react-native-elements';
 
 const RatingCircles = ({ rating }) => {
-
   const innerCircleStyle = () => {
     if (rating >= 1) {
-      rating--;
+      rating -= 1;
 
       return {
         width: 8,
@@ -17,7 +16,7 @@ const RatingCircles = ({ rating }) => {
         justifyContent: 'center',
         alignItems: 'center'
       };
-    } else if (rating >= 0.2 && rating <= 0.8) {
+    } if (rating >= 0.2 && rating <= 0.8) {
       rating -= rating;
 
       return {
@@ -37,27 +36,27 @@ const RatingCircles = ({ rating }) => {
   return (
     <View style={styles.main}>
       <View style={styles.circle}>
-        <View style={innerCircleStyle()}/>
+        <View style={innerCircleStyle()} />
       </View>
       <View style={styles.circle}>
-        <View style={innerCircleStyle()}/>
+        <View style={innerCircleStyle()} />
       </View>
       <View style={styles.circle}>
-        <View style={innerCircleStyle()}/>
+        <View style={innerCircleStyle()} />
       </View>
       <View style={styles.circle}>
-        <View style={innerCircleStyle()}/>
+        <View style={innerCircleStyle()} />
       </View>
       <View style={styles.circle}>
-        <View style={innerCircleStyle()}/>
+        <View style={innerCircleStyle()} />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   main: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   circle: {
     width: 20,
@@ -67,9 +66,8 @@ const styles = StyleSheet.create({
     borderColor: '#247BA0',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 2
+    marginLeft: 2,
   },
 });
-
 
 export default RatingCircles;

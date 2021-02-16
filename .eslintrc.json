@@ -1,5 +1,21 @@
 {
   "extends": ["airbnb"],
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
+  ],
   "rules": {
+    "linebreak-style": 0,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false, "packageDir": "./"}],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": false }],
+    "arrow-body-style": 0,
+    "react/prop-types": ["error", { "ignore": ["navigation"] }],
+    "import/extensions": "off",
+    "import/no-unresolved": "off"
+  },
+  "globals": {
+    "fetch": false
   }
 }

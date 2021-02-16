@@ -6,8 +6,13 @@
  * @flow strict-local
  */
 
-import React, { useState, createContext, useContext } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Button,
+  TextInput,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import UserManagement from 'src/api/UserManagement.js';
@@ -17,11 +22,11 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const loginUser = async () => {
-    let to_send = {
-      email: email,
-      password: password
+    const toSend = {
+      email,
+      password,
     };
-    let response = await UserManagement.login(to_send);
+    const response = await UserManagement.login(toSend);
 
     if (response) {
       setEmail('');
@@ -31,24 +36,23 @@ const Login = ({ navigation }) => {
       await AsyncStorage.setItem('@userID', response.id.toString());
 
       navigation.navigate('BottomTabNavigation');
-
     }
   };
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <TextInput
-          style={{height: 40}}
-          placeholder="Email"
-          onChangeText={email => setEmail(email)}
-          defaultValue={email}
-        />
-        <TextInput
-          style={{height: 40}}
-          placeholder="Password"
-          onChangeText={password => setPassword(password)}
-          defaultValue={password}
-        />
+        style={{ height: 40 }}
+        placeholder="Email"
+        onChangeText={(emailValue) => setEmail(emailValue)}
+        defaultValue={email}
+      />
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Password"
+        onChangeText={(passwordValue) => setPassword(passwordValue)}
+        defaultValue={password}
+      />
       <Button
         title="Login"
         onPress={() => loginUser()}
@@ -61,8 +65,5 @@ const Login = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-});
 
 export default Login;
