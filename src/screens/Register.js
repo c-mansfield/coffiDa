@@ -7,57 +7,61 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+} from 'react-native';
 
 import UserManagement from 'src/api/UserManagement.js';
 
 const Register = ({ navigation }) => {
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const signUpUser = async () => {
-    let to_send = {
+    const toSend = {
       first_name: firstName,
       last_name: lastName,
-      email: email,
-      password: password
+      email,
+      password,
     };
-    let response = await UserManagement.addUser(to_send);
+    const response = await UserManagement.addUser(toSend);
 
     if (response) {
-      navigation.navigate('Login')
+      navigation.navigate('Login');
     }
   };
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <TextInput
-        style={{height: 40}}
+        style={{ height: 40 }}
         placeholder="First Name"
-        onChangeText={firstName => setFirstName(firstName)}
+        onChangeText={(firstNameInput) => setFirstName(firstNameInput)}
         defaultValue={firstName}
       />
       <TextInput
-        style={{height: 40}}
+        style={{ height: 40 }}
         placeholder="Last Name"
-        onChangeText={lastName => setLastName(lastName)}
+        onChangeText={(lastNameInput) => setLastName(lastNameInput)}
         defaultValue={lastName}
       />
       <TextInput
-          style={{height: 40}}
-          placeholder="Email"
-          onChangeText={email => setEmail(email)}
-          defaultValue={email}
-        />
-        <TextInput
-          style={{height: 40}}
-          placeholder="Password"
-          onChangeText={password => setPassword(password)}
-          defaultValue={password}
-        />
+        style={{ height: 40 }}
+        placeholder="Email"
+        onChangeText={(emailInput) => setEmail(emailInput)}
+        defaultValue={email}
+      />
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Password"
+        onChangeText={(passwordInput) => setPassword(passwordInput)}
+        defaultValue={password}
+      />
       <Button
         title="Sign Up"
         onPress={() => signUpUser()}
@@ -70,9 +74,5 @@ const Register = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-
-});
 
 export default Register;

@@ -6,25 +6,38 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import {
-  Autocomplete, AutocompleteItem, Input, Layout
+  Autocomplete,
+  AutocompleteItem,
+  Input,
+  Layout,
 } from '@ui-kitten/components';
 import { Slider, Button } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationReviews from 'src/api/LocationReviews.js';
+import AddPhotoModal from 'src/components/AddPhotoModal.js';
+import UserManagement from 'src/api/UserManagement.js';
 
-const AddReview = ({ navigation }) => {
+const AddReview = () => {
+  const isFocused = useIsFocused();
   const [location, setLocation] = useState('');
-  const [locationID, setLocationID] = useState('');
+  const [locationID, setLocationID] = useState(0);
   const [locations, setLocations] = React.useState([{ location_name: 'No results', location_town: '' }]);
   const [message, setMessage] = useState('');
   const [overall, setOverall] = useState(0);
   const [price, setPrice] = useState(0);
   const [quality, setQuality] = useState(0);
   const [cleanliness, setCleanliness] = useState(0);
+  const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
+  const [reviewID, setReviewID] = useState(0);
+
+  useEffect(() => {
+  }, [isFocused]);
 
   const onSelectLocation = (index) => {
     setLocation(`${locations[index].location_name}, ${locations[index].location_town}`);
@@ -63,7 +76,43 @@ const AddReview = ({ navigation }) => {
     const response = await LocationReviews.addReview(locationID, reviewData);
 
     if (response) {
-      navigation.navigate('Home')
+      await getReviewID();
+      resetState();
+      togglePhotoModal();
+    }
+  };
+
+  const togglePhotoModal = () => {
+    setModalPhotoVisible(!modalPhotoVisible);
+  };
+
+  const resetState = () => {
+    setLocation('');
+    setLocations([{ location_name: 'No results', location_town: '' }]);
+    setMessage('');
+    setOverall(0);
+    setPrice(0);
+    setQuality(0);
+    setCleanliness(0);
+  };
+
+  // Get the review ID as not returned when created
+  const getReviewID = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+    let maxReviewID = 0;
+
+    if (response) {
+      response.reviews.find((item) => {
+        // Check reviews from correct current location
+        // and review id is the highest value
+        if (item.location.location_id === locationID
+            && item.review.review_id > maxReviewID) {
+          maxReviewID = item.review.review_id;
+        }
+      });
+
+      setReviewID(maxReviewID);
     }
   };
 
@@ -75,7 +124,8 @@ const AddReview = ({ navigation }) => {
         placeholder="Find Location"
         value={location}
         onSelect={onSelectLocation}
-        onChangeText={onChangeLocation}>
+        onChangeText={onChangeLocation}
+      >
         {locations.map(renderLocations)}
       </Autocomplete>
       <Input
@@ -83,13 +133,13 @@ const AddReview = ({ navigation }) => {
         textStyle={{ minHeight: 64, maxHeight: 64 }}
         placeholder="Review Message..."
         value={message}
-        onChangeText={message => setMessage(message)}
+        onChangeText={(msg) => setMessage(msg)}
       />
 
       <Text style={styles.subHeadingBold}>Overall Rating</Text>
       <Slider
         value={overall}
-        onValueChange={(overall) => setOverall(overall)}
+        onValueChange={(overallInput) => setOverall(overallInput)}
         maximumValue={5}
         minimumValue={0}
         step={1}
@@ -98,12 +148,12 @@ const AddReview = ({ navigation }) => {
           children: (
             <Text style={styles.sliderText}>{overall}</Text>
           ),
-      }}
+        }}
       />
       <Text style={styles.subHeading}>Price Rating</Text>
       <Slider
         value={price}
-        onValueChange={(price) => setPrice(price)}
+        onValueChange={(priceInput) => setPrice(priceInput)}
         maximumValue={5}
         minimumValue={0}
         step={1}
@@ -112,12 +162,12 @@ const AddReview = ({ navigation }) => {
           children: (
             <Text style={styles.sliderText}>{price}</Text>
           ),
-      }}
+        }}
       />
       <Text style={styles.subHeading}>Quality Rating</Text>
       <Slider
         value={quality}
-        onValueChange={(quality) => setQuality(quality)}
+        onValueChange={(qualityInput) => setQuality(qualityInput)}
         maximumValue={5}
         minimumValue={0}
         step={1}
@@ -126,12 +176,12 @@ const AddReview = ({ navigation }) => {
           children: (
             <Text style={styles.sliderText}>{quality}</Text>
           ),
-      }}
+        }}
       />
       <Text style={styles.subHeading}>Cleanliness Rating</Text>
       <Slider
         value={cleanliness}
-        onValueChange={(cleanliness) => setCleanliness(cleanliness)}
+        onValueChange={(cleanlinessInput) => setCleanliness(cleanlinessInput)}
         maximumValue={5}
         minimumValue={0}
         step={1}
@@ -140,14 +190,18 @@ const AddReview = ({ navigation }) => {
           children: (
             <Text style={styles.sliderText}>{cleanliness}</Text>
           ),
-      }}
+        }}
       />
-
-      <Text style={styles.subHeadingBold}>Photo</Text>
       <Button
-        title="Save"
-        buttonStyle={{backgroundColor: '#247BA0'}}
+        title="Add"
+        buttonStyle={{ backgroundColor: '#247BA0', marginTop: 40 }}
         onPress={() => addReview()}
+      />
+      <AddPhotoModal
+        modalPhotoVisible={modalPhotoVisible}
+        togglePhotoModal={togglePhotoModal}
+        reviewID={reviewID}
+        locationID={locationID}
       />
     </Layout>
   );
@@ -156,25 +210,27 @@ const AddReview = ({ navigation }) => {
 const styles = StyleSheet.create({
   main: {
     padding: 15,
-    flex: 1
+    flex: 1,
   },
   title: {
     fontSize: 36,
-    fontFamily: 'Nunito-Bold'
+    fontFamily: 'Nunito-Bold',
   },
   subHeadingBold: {
     fontSize: 18,
-    fontFamily: 'Nunito-Bold'
+    fontFamily: 'Nunito-Bold',
+    marginTop: 25,
   },
   subHeading: {
     fontSize: 18,
-    fontFamily: 'Nunito-Regular'
+    fontFamily: 'Nunito-Regular',
+    marginTop: 25,
   },
   sliderText: {
     marginTop: 30,
     alignSelf: 'center',
-    fontFamily: 'Nunito-Regular'
-  }
+    fontFamily: 'Nunito-Regular',
+  },
 });
 
 export default AddReview;

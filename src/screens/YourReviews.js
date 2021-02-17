@@ -6,18 +6,25 @@
  * @flow strict-local
  */
 
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import DropdownAlert from 'react-native-dropdownalert';
 
 import ReviewWidget from 'src/components/ReviewWidget.js';
 import UserManagement from 'src/api/UserManagement.js';
 
-const YourReviews = () => {
+const YourReviews = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [reviewsData, setReviewsData] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
+  let dropDownAlertRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,19 +49,34 @@ const YourReviews = () => {
     return reviewIDs;
   };
 
+  const alertMessage = (type, title, message) => {
+    dropDownAlertRef.alertWithType(type, title, message);
+  };
+
   return (
     <View style={styles.main}>
       <FlatList
         data={reviewsData}
         renderItem={({ item }) => (
-          <ReviewWidget
-            review={item.review}
-            location={item.location}
-            myReview
-            likedReviews={likedReviews}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate('ViewReview', {
+            review: item.review, location: item.location, likedReviews, alertMessage,
+          })}
+          >
+            <ReviewWidget
+              review={item.review}
+              location={item.location}
+              myReview
+              likedReviews={likedReviews}
+            />
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.review.review_id.toString()}
+      />
+      <DropdownAlert ref={(ref) => {
+        if (ref) {
+          dropDownAlertRef = ref;
+        }
+      }}
       />
     </View>
   );

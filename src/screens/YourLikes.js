@@ -13,7 +13,6 @@ import UserManagement from 'src/api/UserManagement.js';
 const YourLikes = () => {
   const isFocused = useIsFocused();
   const [likesData, setLikesData] = useState([]);
-  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +23,7 @@ const YourLikes = () => {
     };
 
     fetchData();
-  }, [isFocused, refresh]);
+  }, [isFocused]);
 
   return (
     <View style={styles.main}>
@@ -36,7 +35,6 @@ const YourLikes = () => {
             location={item.location}
             myReview
             likedReviews={[item.review.review_id]}
-            refresh
           />
         )}
         keyExtractor={(item) => item.review.review_id.toString()}

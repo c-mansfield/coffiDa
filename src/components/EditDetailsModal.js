@@ -100,10 +100,6 @@ const EditDetailsModal = (props) => {
   );
 };
 
-EditDetailsModal.propTypes = {
-  // userData: PropTypes.InstanceOf(Object).isRequired,
-};
-
 const styles = StyleSheet.create({
   modalMain: {
     justifyContent: 'flex-end',
@@ -135,5 +131,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
+
+EditDetailsModal.propTypes = {
+  // userData: PropTypes.InstanceOf(Object).isRequired,
+};
 
 export default EditDetailsModal;

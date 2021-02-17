@@ -7,12 +7,11 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import YourReviews from 'src/screens/YourReviews.js';
 import YourFavourites from 'src/screens/YourFavourites.js';
 import YourLikes from 'src/screens/YourLikes.js';
+import YourReviews from 'src/screens/YourReviews.js';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,7 +20,7 @@ const ReviewsTabNavigation = () => {
     <Tab.Navigator
       initialRouteName="Reviews"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Tab.Screen name="Reviews" component={YourReviews} />
@@ -30,8 +29,5 @@ const ReviewsTabNavigation = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-});
 
 export default ReviewsTabNavigation;

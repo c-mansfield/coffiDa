@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\Cole\\Documents\\Github\\coffiDa\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt\\values-pt.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Cole\\.gradle\\caches\\transforms-2\\files-2.1\\47eb2a7dc800c008fb3b9ebaa8a4b135\\core-1.1.0\\res\\values-pt\\values-pt.xml",
+                    "source": "C:\\Users\\Cole\\.gradle\\caches\\transforms-2\\files-2.1\\03810691e7c7f9a18c73fd44ce2dab19\\core-1.3.1\\res\\values-pt\\values-pt.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

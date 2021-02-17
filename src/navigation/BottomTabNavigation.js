@@ -13,9 +13,9 @@ import { Icon } from '@ui-kitten/components';
 import SearchStackNavigation from 'src/navigation/SearchStackNavigation.js';
 import HomeStackNavigation from 'src/navigation/HomeStackNavigation.js';
 import Account from 'src/screens/Account.js';
-import Reviews from 'src/screens/Reviews.js';
+import ReviewStackNavigation from 'src/navigation/ReviewStackNavigation.js';
 import AddReview from 'src/screens/AddReview.js';
-import AddReviewButton from 'src/components/TabBarAddReview.js'
+import AddReviewButton from 'src/components/TabBarAddReview.js';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,7 +53,7 @@ const BottomTabNavigation = (props) => {
           tabBarButton: () => (<AddReviewButton />),
         }}
       />
-      <Tab.Screen name="Reviews" component={Reviews} />
+      <Tab.Screen name="Reviews" component={ReviewStackNavigation} />
       <Tab.Screen name="Account" component={Account} />
     </Tab.Navigator>
   );

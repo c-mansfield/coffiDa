@@ -13,7 +13,9 @@
     "arrow-body-style": 0,
     "react/prop-types": ["error", { "ignore": ["navigation"] }],
     "import/extensions": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "react/jsx-one-expression-per-line": 0,
+    "no-plusplus": "off"
   },
   "globals": {
     "fetch": false

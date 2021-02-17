@@ -15,8 +15,14 @@ import LocationReviews from 'src/api/LocationReviews.js';
 const ReviewWidget = (props) => {
   const isFocused = useIsFocused();
   const [likeIcon, setLikeIcon] = useState('heart-outline');
-  const [like, setLike] = useState(false);
-  const { likedReviews } = props;
+  const [like, setLike] = useState(null);
+  const {
+    likedReviews,
+    myReview,
+    location,
+    review,
+  } = props;
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,77 +30,69 @@ const ReviewWidget = (props) => {
     };
 
     fetchData();
-  }, [isFocused, props.refresh]);
+  }, [isFocused]);
 
   const setReviewLike = () => {
     if (likedReviews) {
-      if (likedReviews.includes(props.review.review_id)) {
-        console.log('Hit ', props.review.review_id);
+      if (likedReviews.includes(review.review_id)) {
         setLikeIcon('heart');
         setLike(true);
       }
+    } else {
+      setLikeIcon('heart-outline');
+      setLike(false);
     }
   };
 
   const changeLike = async () => {
     if (like) {
-      const response = await LocationReviews.removeLikeReview(props.location.location_id, props.review.review_id);
+      const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
 
       if (response) {
-        props.review.likes--;
+        review.likes--;
         setLikeIcon('heart-outline');
         setLike(false);
       }
     } else {
-      const response = await LocationReviews.likeReview(props.location.location_id, props.review.review_id);
+      const response = await LocationReviews.likeReview(location.location_id, review.review_id);
 
       if (response) {
         setLikeIcon('heart');
         setLike(true);
-        props.review.likes++;
+        review.likes++;
       }
     }
-
-    // Refresh the screen when like/unlike
-    props.refresh = !props.refresh;
   };
 
   return (
-    <TouchableOpacity>
-      <View style={styles.widgetMain}>
-        <View style={styles.textWrapper}>
-          <Text style={styles.header} numberOfLines={1}>"{props.review.review_body}"</Text>
-          {
-            props.myReview
-              ? (
-                <Text style={styles.subHeading}>
-                  {props.location.location_name}
-                  ,
-                  {' '}
-                  {props.location.location_town}
-                </Text>
-)
-              : null
-          }
-          <View style={styles.ratingStyle}>
-            <RatingCircles rating={props.review.overall_rating} />
-          </View>
-
-          <View style={styles.likesSection}>
-            <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
-              <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-            </TouchableOpacity>
-            <Text style={styles.likesText}>{props.review.likes}</Text>
-          </View>
+    <View style={styles.widgetMain}>
+      <View style={styles.textWrapper}>
+        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+        {
+          myReview
+            ? (
+              <Text style={styles.subHeading}>
+                {location.location_name}
+                ,
+                {' '}
+                {location.location_town}
+              </Text>
+            )
+            : null
+        }
+        <View style={styles.ratingStyle}>
+          <RatingCircles rating={review.overall_rating} />
         </View>
-        <View style={styles.imageWrapper}>
-          <Image
-            style={styles.reviewImage}
-            source={require('assets/images/reviews_placeholder.jpg')}
-          />
+
+        <View style={styles.likesSection}>
+          <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
+            <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
+          </TouchableOpacity>
+          <Text style={styles.likesText}>{review.likes}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+      <View style={styles.imageWrapper} />
+    </View>
   );
 };
 
@@ -107,7 +105,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor: 'rgb(224, 224, 224)',
     borderWidth: 1,
-    borderRadius: 4
+    borderRadius: 4,
   },
   textWrapper: {
     flex: 3,
@@ -115,12 +113,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontFamily: 'Nunito-Bold',
-    color: '#707070'
+    color: '#707070',
   },
   subHeading: {
     fontSize: 16,
     fontFamily: 'Nunito-Regular',
-    color: '#707070'
+    color: '#707070',
   },
   likesSection: {
     flexDirection: 'row',

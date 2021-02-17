@@ -5,7 +5,7 @@
 5    android:versionName="1.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="16"
+8        android:minSdkVersion="21"
 9        android:targetSdkVersion="29" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -14,55 +14,108 @@
 12    <uses-permission android:name="android.permission.INTERNET" />
 12-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:4:5-67
 12-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:4:22-64
-13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->[com.facebook.flipper:flipper:0.54.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\b2425b1507d7a29efe63293643bd5223\flipper-0.54.0\AndroidManifest.xml:16:5-76
-13-->[com.facebook.flipper:flipper:0.54.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\b2425b1507d7a29efe63293643bd5223\flipper-0.54.0\AndroidManifest.xml:16:22-73
-14
-15    <application
-15-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:6:5-25:19
-16        android:name="com.coffida.MainApplication"
-16-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:7:7-38
-17        android:allowBackup="false"
-17-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:11:7-34
-18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-18-->[androidx.core:core:1.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\47eb2a7dc800c008fb3b9ebaa8a4b135\core-1.1.0\AndroidManifest.xml:24:18-86
-19        android:debuggable="true"
-20        android:icon="@mipmap/ic_launcher"
-20-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:9:7-41
-21        android:label="@string/app_name"
-21-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:8:7-39
-22        android:roundIcon="@mipmap/ic_launcher_round"
-22-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:10:7-52
-23        android:theme="@style/AppTheme"
-23-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:12:7-38
-24        android:usesCleartextTraffic="true" >
-24-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\debug\AndroidManifest.xml:7:18-53
-25        <activity
-25-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:13:7-23:18
-26            android:name="com.coffida.MainActivity"
-26-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:14:9-37
-27            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-27-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:16:9-86
-28            android:label="@string/app_name"
-28-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:15:9-41
-29            android:launchMode="singleTask"
-29-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:17:9-40
-30            android:windowSoftInputMode="adjustResize" >
-30-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:18:9-51
-31            <intent-filter>
-31-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:19:9-22:25
-32                <action android:name="android.intent.action.MAIN" />
-32-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:20:13-65
-32-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:20:21-62
-33
-34                <category android:name="android.intent.category.LAUNCHER" />
-34-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:13-73
-34-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:23-70
-35            </intent-filter>
-36        </activity>
-37        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-37-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:24:7-84
-37-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:24:17-81
-38    </application>
-39
-40</manifest>
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:5:5-65
+13-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:5:22-62
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:6:5-81
+14-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:6:22-78
+15    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+15-->[com.facebook.flipper:flipper:0.54.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\b2425b1507d7a29efe63293643bd5223\flipper-0.54.0\AndroidManifest.xml:16:5-76
+15-->[com.facebook.flipper:flipper:0.54.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\b2425b1507d7a29efe63293643bd5223\flipper-0.54.0\AndroidManifest.xml:16:22-73
+16
+17    <uses-feature
+17-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:11:5-13:36
+18        android:name="android.hardware.camera"
+18-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:12:9-47
+19        android:required="false" />
+19-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:13:9-33
+20    <uses-feature
+20-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:14:5-16:36
+21        android:name="android.hardware.camera.autofocus"
+21-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:15:9-57
+22        android:required="false" />
+22-->[:react-native-camera] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-camera\android\build\intermediates\library_manifest\generalDebug\AndroidManifest.xml:16:9-33
+23
+24    <application
+24-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:8:5-27:19
+25        android:name="com.coffida.MainApplication"
+25-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:9:7-38
+26        android:allowBackup="false"
+26-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:13:7-34
+27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+27-->[androidx.core:core:1.3.1] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\03810691e7c7f9a18c73fd44ce2dab19\core-1.3.1\AndroidManifest.xml:24:18-86
+28        android:debuggable="true"
+29        android:icon="@mipmap/ic_launcher"
+29-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:11:7-41
+30        android:label="@string/app_name"
+30-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:10:7-39
+31        android:roundIcon="@mipmap/ic_launcher_round"
+31-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:12:7-52
+32        android:theme="@style/AppTheme"
+32-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:14:7-38
+33        android:usesCleartextTraffic="true" >
+33-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\debug\AndroidManifest.xml:7:18-53
+34        <activity
+34-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:15:7-25:18
+35            android:name="com.coffida.MainActivity"
+35-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:16:9-37
+36            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+36-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:18:9-86
+37            android:label="@string/app_name"
+37-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:17:9-41
+38            android:launchMode="singleTask"
+38-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:19:9-40
+39            android:windowSoftInputMode="adjustResize" >
+39-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:20:9-51
+40            <intent-filter>
+40-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:9-24:25
+41                <action android:name="android.intent.action.MAIN" />
+41-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:22:13-65
+41-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:22:21-62
+42
+43                <category android:name="android.intent.category.LAUNCHER" />
+43-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:23:13-73
+43-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:23:23-70
+44            </intent-filter>
+45        </activity>
+46        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+46-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:26:7-84
+46-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:26:17-81
+47
+48        <provider
+48-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:12:9-20:20
+49            android:name="com.imagepicker.ImagePickerProvider"
+49-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:13:13-63
+50            android:authorities="com.coffida.imagepickerprovider"
+50-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:14:13-71
+51            android:exported="false"
+51-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:15:13-37
+52            android:grantUriPermissions="true" >
+52-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:16:13-47
+53            <meta-data
+53-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:17:13-19:70
+54                android:name="android.support.FILE_PROVIDER_PATHS"
+54-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:18:17-67
+55                android:resource="@xml/imagepicker_provider_paths" />
+55-->[:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-image-picker\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:19:17-67
+56        </provider>
+57
+58        <activity
+58-->[com.google.android.gms:play-services-base:16.0.1] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\183e78497dedb0d21cf0f110df95c566\jetified-play-services-base-16.0.1\AndroidManifest.xml:23:9-26:75
+59            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+59-->[com.google.android.gms:play-services-base:16.0.1] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\183e78497dedb0d21cf0f110df95c566\jetified-play-services-base-16.0.1\AndroidManifest.xml:24:13-79
+60            android:exported="false"
+60-->[com.google.android.gms:play-services-base:16.0.1] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\183e78497dedb0d21cf0f110df95c566\jetified-play-services-base-16.0.1\AndroidManifest.xml:25:13-37
+61            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+61-->[com.google.android.gms:play-services-base:16.0.1] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\183e78497dedb0d21cf0f110df95c566\jetified-play-services-base-16.0.1\AndroidManifest.xml:26:13-72
+62
+63        <meta-data
+63-->[com.google.android.gms:play-services-basement:16.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1e8666332bbfa7d251e32c77df1ce6fe\jetified-play-services-basement-16.1.0\AndroidManifest.xml:23:9-25:69
+64            android:name="com.google.android.gms.version"
+64-->[com.google.android.gms:play-services-basement:16.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1e8666332bbfa7d251e32c77df1ce6fe\jetified-play-services-basement-16.1.0\AndroidManifest.xml:24:13-58
+65            android:value="@integer/google_play_services_version" />
+65-->[com.google.android.gms:play-services-basement:16.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1e8666332bbfa7d251e32c77df1ce6fe\jetified-play-services-basement-16.1.0\AndroidManifest.xml:25:13-66
+66    </application>
+67
+68</manifest>

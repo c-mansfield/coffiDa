@@ -7,11 +7,19 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground, FlatList, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { Divider } from '@ui-kitten/components';
-import { useIsFocused } from '@react-navigation/native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Icon } from '@ui-kitten/components';
+import { Icon, Divider } from '@ui-kitten/components';
+import PropTypes from 'prop-types';
 
 import ReviewWidget from 'src/components/ReviewWidget.js';
 import RatingCircles from 'src/components/RatingCircles.js';
@@ -27,34 +35,41 @@ const LocationDetails = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const userID = await AsyncStorage.getItem('@userID')
+      const response = await UserManagement.getUser(userID);
 
-      let userID = await AsyncStorage.getItem('@userID')
-      let response = await UserManagement.getUser(userID);
-
-      if(response.favourite_locations.some(item => item.location_name === location.location_name)) {
+      if (response.favourite_locations.some((item) => item.location_name === location.location_name)) {
         setFavouriteIcon('star');
         setFavourite(true);
       }
-    }
+    };
 
     fetchData();
   }, [isFocused]);
 
   const changeFavourite = async () => {
-    if(favourite) {
-      let response = await LocationManagement.unfavouriteReview(location.location_id);
-
-      if(response) {
-        setFavouriteIcon('star-outline');
-        setFavourite(false);
-      }
+    if (favourite) {
+      await unfavouriteLocation();
     } else {
-      let response = await LocationManagement.favouriteReview(location.location_id);
+      await favouriteLocation();
+    }
+  };
 
-      if(response) {
-        setFavouriteIcon('star');
-        setFavourite(true);
-      }
+  const favouriteLocation = async () => {
+    const response = await LocationManagement.favouriteReview(location.location_id);
+
+    if (response) {
+      setFavouriteIcon('star');
+      setFavourite(true);
+    }
+  };
+
+  const unfavouriteLocation = async () => {
+    const response = await LocationManagement.unfavouriteReview(location.location_id);
+
+    if (response) {
+      setFavouriteIcon('star-outline');
+      setFavourite(false);
     }
   };
 
@@ -64,18 +79,18 @@ const LocationDetails = ({ navigation, route }) => {
         <ImageBackground source={require('assets/images/location_placeholder.jpg')} style={styles.detailsImage}>
           <View style={styles.detailsOverlay}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Icon style={styles.iconSize} fill={'#000000'} name={'arrow-back'} />
+              <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
             </TouchableOpacity>
 
             <View style={styles.detailsHeaderText}>
-            <View style={styles.detailsHeaderTextWrapper}>
+              <View style={styles.detailsHeaderTextWrapper}>
                 <View style={styles.detailsHeaderLHS}>
                   <Text style={{ fontSize: 36, fontFamily: 'Nunito-Bold' }}>{location.location_name}</Text>
                   <Text style={{ fontSize: 24, fontFamily: 'Nunito-Regular', color: '#504F4F' }}>{location.location_town}</Text>
                 </View>
 
                 <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
-                  <Icon style={styles.iconSize} fill={'#000000'} name={favouriteIcon} />
+                  <Icon style={styles.iconSize} fill="#000000" name={favouriteIcon} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -83,17 +98,25 @@ const LocationDetails = ({ navigation, route }) => {
         </ImageBackground>
       </View>
       <View style={styles.detailsBody}>
-        <Text style={{ fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10 }}>Overall rating</Text>
+        <Text style={{
+          fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10,
+        }}
+        >Overall rating
+        </Text>
 
         <View style={styles.overallRating}>
-          <RatingCircles rating={location.avg_overall_rating}/>
-          <Text style={{ fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070', marginLeft: 5 }}>({reviewCount} reviews)</Text>
+          <RatingCircles rating={location.avg_overall_rating} />
+          <Text style={{
+            fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070', marginLeft: 5,
+          }}
+          >({reviewCount} reviews)
+          </Text>
         </View>
 
         <View style={styles.detailsPrice}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Price rating</Text>
 
-          <View style={{marginLeft: 'auto'}}>
+          <View style={{ marginLeft: 'auto' }}>
             <RatingCircles rating={location.avg_price_rating} />
           </View>
         </View>
@@ -101,31 +124,36 @@ const LocationDetails = ({ navigation, route }) => {
         <View style={styles.detailsQuality}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Quality rating</Text>
 
-          <View style={{marginLeft: 'auto'}}>
-            <RatingCircles rating={location.avg_quality_rating}/>
+          <View style={{ marginLeft: 'auto' }}>
+            <RatingCircles rating={location.avg_quality_rating} />
           </View>
         </View>
 
         <View style={styles.detailsClenliness}>
           <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Clenliness rating</Text>
 
-          <View style={{marginLeft: 'auto'}}>
-            <RatingCircles rating={location.avg_clenliness_rating}/>
+          <View style={{ marginLeft: 'auto' }}>
+            <RatingCircles rating={location.avg_clenliness_rating} />
           </View>
         </View>
 
-        <Divider/>
+        <Divider />
 
         <View style={styles.detailsReviews}>
-          <Text style={{ fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 10 }}>Reviews</Text>
+          <Text style={{
+            fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 10,
+          }}
+          >
+            Reviews
+          </Text>
 
           <FlatList
-              data={location.location_reviews}
-              renderItem={({item}) => (
-                  <ReviewWidget review={item} location={location}/>
-              )}
-              keyExtractor={(item,index) => item.review_id.toString()}
-            />
+            data={location.location_reviews}
+            renderItem={({ item }) => (
+              <ReviewWidget review={item} location={location} />
+            )}
+            keyExtractor={(item) => item.review_id.toString()}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -134,10 +162,10 @@ const LocationDetails = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   detailsMain: {
-    flex: 1
+    flex: 1,
   },
   detailsHeader: {
-    flex: 1
+    flex: 1,
   },
   detailsImage: {
     flex: 1,
@@ -145,53 +173,57 @@ const styles = StyleSheet.create({
   },
   detailsOverlay: {
     flex: 1,
-    backgroundColor:'rgba(255,255,255,0.7)',
-    padding: 10
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    padding: 10,
   },
   iconSize: {
     height: 38,
-    width: 38
+    width: 38,
   },
   detailsHeaderText: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   detailsHeaderTextWrapper: {
     flexDirection: 'row',
   },
   detailsHeaderLHS: {
-    flex: 8
+    flex: 8,
   },
   detailsHeaderRHS: {
     flex: 1,
     alignSelf: 'flex-end',
-    marginBottom: 15
+    marginBottom: 15,
   },
   detailsBody: {
     flex: 2,
     padding: 10,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
-  overallRating : {
+  overallRating: {
     flexDirection: 'row',
-    marginTop: 10
+    marginTop: 10,
   },
   detailsPrice: {
     flexDirection: 'row',
-    marginTop: 25
+    marginTop: 25,
   },
-  detailsQuality : {
+  detailsQuality: {
     flexDirection: 'row',
-    marginTop: 25
+    marginTop: 25,
   },
-  detailsClenliness : {
+  detailsClenliness: {
     flexDirection: 'row',
-    marginTop: 25
+    marginTop: 25,
   },
   detailsReviews: {
     flexDirection: 'column',
-    marginTop: 30
-  }
+    marginTop: 30,
+  },
 });
+
+LocationDetails.propTypes = {
+  route: PropTypes.objects,
+};
 
 export default LocationDetails;

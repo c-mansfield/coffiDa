@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
-import { Tile } from 'react-native-elements';
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+const { width } = Dimensions.get('window');
 
 const LocationTile = ({ location }) => {
-
   return (
     <View style={styles.tile}>
-      <ImageBackground source={{uri: location.photo_path}} style={styles.image}>
+      <ImageBackground source={{ uri: location.photo_path }} style={styles.image}>
         <View style={styles.overlay}>
           <Text style={{ fontSize: 20, fontFamily: 'Nunito-Bold' }}>{location.location_name}</Text>
           <Text style={{ fontSize: 14, color: '#504F4F' }}>{location.location_town}</Text>
@@ -17,15 +20,16 @@ const LocationTile = ({ location }) => {
         </View>
       </ImageBackground>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   tile: {
-    width: (width/2)-15,
-    height: (width/2)-15,
+    width: (width / 2) - 20,
+    height: (width / 2) - 20,
     flex: 1,
     justifyContent: 'flex-end',
+    marginTop: 10,
   },
   image: {
     flex: 1,
@@ -33,11 +37,10 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor:'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255,255,255,0.7)',
     justifyContent: 'flex-end',
-    padding: 5
-  }
+    padding: 5,
+  },
 });
-
 
 export default LocationTile;

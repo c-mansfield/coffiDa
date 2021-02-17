@@ -12,6 +12,7 @@ import {
   StyleSheet,
   FlatList,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
@@ -19,7 +20,7 @@ import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
 import SearchFilterModal from 'src/components/SearchFilterModal.js';
 
-const SearchResults = () => {
+const SearchResults = ({ navigation }) => {
   const [search, setSearch] = useState('');
   const [locations, setLocations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -74,7 +75,9 @@ const SearchResults = () => {
         <FlatList
           data={locations}
           renderItem={({ item }) => (
-            <LocationWidget location={item} />
+            <TouchableOpacity onPress={() => navigation.navigate('LocationDetailsSearch', { location: item })}>
+              <LocationWidget location={item} />
+            </TouchableOpacity>
           )}
           keyExtractor={(item) => item.location_id.toString()}
         />

@@ -8,6 +8,10 @@ target 'coffiDa' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'coffiDaTests' do
     inherit! :complete
     # Pods for testing
