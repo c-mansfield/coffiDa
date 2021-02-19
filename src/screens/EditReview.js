@@ -74,12 +74,6 @@ const EditReview = ({ navigation, route }) => {
 
   return (
     <Layout level="1" style={styles.main}>
-      <View style={styles.editHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
-        </TouchableOpacity>
-      </View>
-
       <View style={styles.editMain}>
         <Text style={styles.subHeadingBold}>{location.location_name}, {location.location_town}</Text>
 
@@ -183,13 +177,6 @@ const styles = StyleSheet.create({
   detailsMain: {
     flex: 1,
     flexDirection: 'column',
-  },
-  editHeader: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 15,
   },
   editMain: {
     padding: 25,

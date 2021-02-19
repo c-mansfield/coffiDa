@@ -30,7 +30,7 @@ const EditDetailsModal = (props) => {
 
     if (response.status === 200) {
       props.toggleModalDetails();
-      props.successMessage('User updated');
+      props.showDropdownMessage('success', 'Success', 'User updated');
     }
   };
 

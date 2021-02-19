@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -15,13 +15,40 @@ import LocationReviews from 'src/api/LocationReviews.js';
 
 const ViewReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
-  const { location, review, likedReviews, alertMessage } = route.params;
+  const {
+    location,
+    review,
+    likedReviews,
+    alertMessage,
+  } = route.params;
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
-    setReviewLike();
+    const fetchData = async () => {
+      setReviewLike();
+      await getPhoto();
+    };
+
+    fetchData();
   }, [isFocused]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{ flex: 1, flexDirection: 'row', padding: 15 }}>
+          <TouchableOpacity onPress={() => navigateToEdit()}>
+            <Icon style={{ height: 28, width: 28 }} fill="#000000" name="edit" />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => checkUserDeleteReview()} style={{ marginLeft: 10 }}>
+            <Icon style={{ height: 28, width: 28 }} fill="#000000" name="trash" />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   const deleteReview = async () => {
     const response = await LocationReviews.deleteReview(location.location_id, review.review_id);
@@ -79,30 +106,34 @@ const ViewReview = ({ navigation, route }) => {
     }
   };
 
+  const getPhoto = async () => {
+    const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
+
+    if (response.blob()) {
+      const reader = new FileReader();
+      reader.readAsDataURL(response);
+
+      reader.onloadend = () => {
+        setPhoto({ uri: reader.result });
+      };
+    }
+  };
+
+  const navigateToEdit = () => {
+    navigation.navigate('EditReview', { review, location });
+  };
+
   return (
     <Layout level="2" style={styles.detailsMain}>
-      <View style={styles.detailsHeader}>
-        <View style={styles.headerLeftIcons}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.headerRightIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('EditReview', { review, location })}>
-            <Icon style={styles.iconSize} fill="#000000" name="edit" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => checkUserDeleteReview()} style={{ marginLeft: 15 }}>
-            <Icon style={styles.iconSize} fill="#000000" name="trash" />
-          </TouchableOpacity>
-        </View>
-      </View>
       <View style={styles.detailsInformation}>
         <View style={styles.imageWrapper}>
-          <Image
-            style={styles.reviewImage}
-            source={require('assets/images/reviews_placeholder.jpg')}
-          />
+          { photo ? (
+            <Image
+              style={styles.reviewImage}
+              source={{ uri: photo.uri }}
+            />
+          )
+            : null}
         </View>
 
         <View style={styles.sectionStyle}>
@@ -163,28 +194,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  detailsHeader: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 15,
-    paddingBottom: 15,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 6,
-    shadowOpacity: 0.2,
-    elevation: 3,
-  },
-  headerLeftIcons: {
-    flexDirection: 'row',
-    flex: 3,
-  },
-  headerRightIcons: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    flex: 1,
-  },
   iconSize: {
     height: 38,
     width: 38,
@@ -214,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
-    marginLeft: 5
+    marginLeft: 5,
   },
 });
 

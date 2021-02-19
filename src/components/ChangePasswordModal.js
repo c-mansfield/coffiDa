@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,10 +12,16 @@ import {
   Icon,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import DropdownAlert from 'react-native-dropdownalert';
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
+import PropTypes from 'prop-types';
 
 import UserManagement from 'src/api/UserManagement.js';
 
 const ChangePasswordModal = (props) => {
+  const isFocused = useIsFocused();
+  let dropDownAlertRef = useRef(null);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,9 +31,29 @@ const ChangePasswordModal = (props) => {
     confirmPasswordEntry: true,
   });
 
+  useEffect(() => {
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  }, [isFocused]);
+
   const changePassword = async () => {
-    const oldPasswordPassed = await checkOldPassword();
-    console.log(oldPasswordPassed);
+    if (await checkOldPassword()) {
+      if (await checkPasswordCriteria()) {
+        if (await checkPasswordsMatch()) {
+          await updatePassword();
+        }
+      }
+    }
+  };
+
+  const updatePassword = async () => {
+    const response = await UserManagement.updateUser(props.userData.user_id, { password: newPassword });
+
+    if (response.status === 200) {
+      props.toggleModalPassword();
+      props.showDropdownMessage('success', 'Success', 'Password has been updated!');
+    }
   };
 
   const checkOldPassword = async () => {
@@ -37,15 +63,35 @@ const ChangePasswordModal = (props) => {
     };
     const response = await UserManagement.login(toSend);
 
-    console.log(response);
     if (response) {
       await AsyncStorage.setItem('@token', response.token);
-      console.log(response);
       return true;
     }
 
+    dropDownAlertRef.alertWithType('error', 'Error', 'Old password is incorrect. Please try again!');
     return false;
   };
+
+  const checkPasswordCriteria = async () => {
+    if (newPassword.length >= 8) {
+      return true;
+    }
+
+    dropDownAlertRef.alertWithType('error', 'Error', 'Password does not match criteria. Please try again!');
+    return false;
+  };
+
+  const checkPasswordsMatch = async () => {
+    console.log(confirmPassword);
+    console.log(newPassword);
+    if (newPassword === confirmPassword) {
+      return true;
+    }
+
+    dropDownAlertRef.alertWithType('error', 'Error', 'Passwords do not match. Please try again!');
+    return false;
+  };
+
 
   const toggleSecureTextEntry = (field) => {
     setSecureTextEntrys(!secureTextEntrys[field]);
@@ -73,9 +119,7 @@ const ChangePasswordModal = (props) => {
             value={oldPassword}
             onChangeText={(nextValue) => setOldPassword(nextValue)}
             placeholder="Enter old password"
-            caption="Should contain at least 8 charecters"
             accessoryRight={renderSecureIcon}
-            captionIcon={AlertIcon}
             secureTextEntry={secureTextEntrys.oldPasswordEntry}
             style={styles.inputBox}
           />
@@ -94,16 +138,18 @@ const ChangePasswordModal = (props) => {
             style={styles.inputBox}
           />
         </View>
-
+        <BarPasswordStrengthDisplay
+          password={newPassword}
+          barContainerStyle={{ alignSelf: 'center' }}
+          width={350}
+        />
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>Confirm Password</Text>
           <Input
             value={confirmPassword}
             onChangeText={(value) => setConfirmPassword(value)}
-            placeholder="Confir new password"
-            caption="Should contain at least 8 charecters"
+            placeholder="Confirm new password"
             accessoryRight={renderSecureIcon}
-            captionIcon={AlertIcon}
             secureTextEntry={secureTextEntrys.confirmPasswordEntry}
             style={styles.inputBox}
           />
@@ -112,6 +158,12 @@ const ChangePasswordModal = (props) => {
         <Button style={styles.button} status="success" onPress={() => changePassword()}>
           Update
         </Button>
+        <DropdownAlert ref={(ref) => {
+          if (ref) {
+            dropDownAlertRef = ref;
+          }
+        }}
+        />
       </View>
     </Modal>
   );
@@ -150,8 +202,15 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     marginTop: 5,
-    height: 10
-  }
+    height: 10,
+  },
 });
+
+ChangePasswordModal.propTypes = {
+  modalPasswordVisible: PropTypes.bool.isRequired,
+  toggleModalPassword: PropTypes.func.isRequired,
+  successMessage: PropTypes.func.isRequired,
+  userData: PropTypes.object.isRequired,
+};
 
 export default ChangePasswordModal;

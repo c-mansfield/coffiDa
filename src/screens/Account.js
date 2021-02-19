@@ -50,8 +50,8 @@ const Account = ({ navigation }) => {
     setModalPasswordVisible(!modalPasswordVisible);
   };
 
-  const successMessage = (message) => {
-    dropDownAlertRef.alertWithType('success', 'Success', message);
+  const showDropdownMessage = (option, title, message) => {
+    dropDownAlertRef.alertWithType(option, title, message);
   };
 
   return (
@@ -72,7 +72,7 @@ const Account = ({ navigation }) => {
           modalDetailsVisible={modalDetailsVisible}
           toggleModalDetails={toggleModalDetails}
           userData={userData}
-          successMessage={successMessage}
+          showDropdownMessage={showDropdownMessage}
         />
         <MenuItem
           title="Change Password"
@@ -84,6 +84,7 @@ const Account = ({ navigation }) => {
           modalPasswordVisible={modalPasswordVisible}
           toggleModalPassword={toggleModalPassword}
           userData={userData}
+          showDropdownMessage={showDropdownMessage}
         />
       </View>
 

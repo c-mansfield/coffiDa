@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import {
   Autocomplete,
@@ -22,9 +14,12 @@ import LocationManagement from 'src/api/LocationManagement.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import UserManagement from 'src/api/UserManagement.js';
+import { FilterWords } from 'assets/globals.js';
+import DropdownAlert from 'react-native-dropdownalert';
 
 const AddReview = () => {
   const isFocused = useIsFocused();
+  let dropDownAlertRef = useRef(null);
   const [location, setLocation] = useState('');
   const [locationID, setLocationID] = useState(0);
   const [locations, setLocations] = React.useState([{ location_name: 'No results', location_town: '' }]);
@@ -64,6 +59,43 @@ const AddReview = () => {
       title={`${item.location_name}, ${item.location_town}`}
     />
   );
+
+  const checkReview = async () => {
+    if (checkReviewFields()) {
+      if (await checkReviewProfanity()) {
+        await addReview();
+      }
+    }
+  };
+
+  const checkReviewFields = () => {
+    if (location !== ''
+        && message !== ''
+        && overall > 0
+        && price > 0
+        && quality > 0
+        && cleanliness > 0) {
+      return true;
+    }
+
+    dropDownAlertRef.alertWithType('error', 'Unexpected items', 'All fields are requried');
+    return false;
+  };
+
+  // Checks if message contains any word that wish to be filtered out
+  const checkReviewProfanity = async () => {
+    const filterRegex = new RegExp(`\\b(${FilterWords.join('|')})\\b`);
+
+    console.log(filterRegex.test(message.toLowerCase()));
+
+    if (!await filterRegex.test(message.toLowerCase())) {
+      return true;
+    }
+
+    dropDownAlertRef.alertWithType('error', 'Unexpected items',
+      'Cannot add review due to mention of other aspects of the cafe experience that isn\'t coffee. Please try again!');
+    return false;
+  };
 
   const addReview = async () => {
     const reviewData = {
@@ -195,13 +227,19 @@ const AddReview = () => {
       <Button
         title="Add"
         buttonStyle={{ backgroundColor: '#247BA0', marginTop: 40 }}
-        onPress={() => addReview()}
+        onPress={() => checkReview()}
       />
       <AddPhotoModal
         modalPhotoVisible={modalPhotoVisible}
         togglePhotoModal={togglePhotoModal}
         reviewID={reviewID}
         locationID={locationID}
+      />
+      <DropdownAlert ref={(ref) => {
+        if (ref) {
+          dropDownAlertRef = ref;
+        }
+      }}
       />
     </Layout>
   );

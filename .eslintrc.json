@@ -15,7 +15,8 @@
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "react/jsx-one-expression-per-line": 0,
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "max-len": [2, 128, 4]
   },
   "globals": {
     "fetch": false
