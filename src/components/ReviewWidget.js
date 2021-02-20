@@ -24,6 +24,9 @@ const ReviewWidget = (props) => {
   } = props;
   const [image, setImage] = useState(null);
 
+  // TEST VAR FOR DROPDOWN REVIEW
+  const testDD = true;
+
   useEffect(() => {
     const fetchData = async () => {
       await setReviewLike();
@@ -67,7 +70,9 @@ const ReviewWidget = (props) => {
   return (
     <View style={styles.widgetMain}>
       <View style={styles.textWrapper}>
-        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+        { testDD
+          ? <Text style={styles.header}>"{review.review_body}"</Text>
+          : <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>}
         {
           myReview
             ? (
@@ -108,7 +113,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   textWrapper: {
-    flex: 3,
   },
   header: {
     fontSize: 18,

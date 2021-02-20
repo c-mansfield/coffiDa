@@ -29,18 +29,34 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const sendQuery = {
-        q: 'Manchester',
-      };
-      const response = await LocationManagement.searchLocations(sendQuery);
+      // await findCoordinates();
 
-      if (response) {
-        setLocationsData(response);
-      }
+      // TEMP WHILE TESTING
+      setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: false }));
+      await getLocations();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getLocations = async () => {
+    const sendQuery = {
+      q: getSearchString(),
+    };
+    const response = await LocationManagement.searchLocations(sendQuery);
+
+    if (response) {
+      setLocationsData(response);
+    }
+  };
+
+  const getSearchString = () => {
+    if (geoLocationDetails.locationPermission) {
+      return '';
+    }
+
+    return 'Manchester';
+  };
 
   const findCoordinates = async () => {
     if (!geoLocationDetails.locationPermission) {
@@ -72,6 +88,7 @@ const Home = ({ navigation }) => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can access location');
+        setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: true }));
         return true;
       }
 
@@ -86,7 +103,9 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.main}>
       <Text style={styles.title}>Explore</Text>
-      <Text style={styles.subHeading}>Manchester, UK</Text>
+      { geoLocationDetails.locationPermission
+        ? <Text style={styles.subHeading}>Locations near you</Text>
+        : <Text style={styles.subHeading}>Manchester, UK</Text>}
 
       <View style={styles.tileWrapper}>
         <FlatList

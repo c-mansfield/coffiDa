@@ -79,6 +79,22 @@ const LocationDetails = ({ navigation, route }) => {
     }
   };
 
+  const getHighlightReviews = (highlightsLength) => {
+    const reviews = [];
+
+    for (let i = 0; i < highlightsLength; i++) {
+      if (location.location_reviews[i]) {
+        reviews.push(
+          <TouchableOpacity>
+            <ReviewWidget review={location.location_reviews[i]} location={location.location_reviews[i].location} />
+          </TouchableOpacity>
+        );
+      }
+    }
+
+    return reviews;
+  };
+
   return (
     <ScrollView style={styles.detailsMain}>
       { isLoading
@@ -96,7 +112,7 @@ const LocationDetails = ({ navigation, route }) => {
           <>
             <StatusBar />
             <View style={styles.detailsHeader}>
-              <ImageBackground source={require('assets/images/location_placeholder.jpg')} style={styles.detailsImage}>
+              <ImageBackground source={{ uri: location.photo_path }} style={styles.detailsImage}>
                 <View style={styles.detailsOverlay}>
                   <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
@@ -182,6 +198,9 @@ const LocationDetails = ({ navigation, route }) => {
                       latitude: location.latitude,
                       longitude: location.longitude,
                     }}
+                    key={location.location_id}
+                    title={location.location_name}
+                    pinColor="#247BA0"
                   />
                 </MapView>
               </TouchableOpacity>
@@ -190,23 +209,26 @@ const LocationDetails = ({ navigation, route }) => {
 
               <View style={styles.detailsReviews}>
                 <Text style={{
-                  fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 5
+                  fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 5,
                 }}
                 >
                   Reviews
                 </Text>
 
-                <ReviewWidget review={location.location_reviews[0]} location={location.location_reviews[0].location} />
-                <ReviewWidget review={location.location_reviews[1]} location={location.location_reviews[0].location} />
-                <ReviewWidget review={location.location_reviews[2]} location={location.location_reviews[0].location} />
-
-                <Button
-                  style={{ marginTop: 10 }}
-                  status="primary"
-                  onPress={() => navigation.navigate('AllReviews', { location })}
-                >
-                  See all reviews
-                </Button>
+                {getHighlightReviews(3)}
+                { location.location_reviews.length > 0
+                  ? (
+                    <>
+                      <Button
+                        style={{ marginTop: 10 }}
+                        status="primary"
+                        onPress={() => navigation.navigate('AllReviews', { location })}
+                      >
+                        See all reviews
+                      </Button>
+                    </>
+                  )
+                  : <Text style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>No reviews yet</Text>}
               </View>
             </View>
           </>
