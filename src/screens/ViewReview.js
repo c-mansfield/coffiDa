@@ -109,7 +109,9 @@ const ViewReview = ({ navigation, route }) => {
   const getPhoto = async () => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
 
-    if (response.blob()) {
+    console.log(response);
+    
+    if (response) {
       const reader = new FileReader();
       reader.readAsDataURL(response);
 

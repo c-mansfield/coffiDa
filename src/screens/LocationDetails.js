@@ -23,7 +23,7 @@ import { Icon, Divider, Button } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
-import ReviewWidget from 'src/components/ReviewWidget.js';
+import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 import RatingCircles from 'src/components/RatingCircles.js';
 import UserManagement from 'src/api/UserManagement.js';
 import LocationManagement from 'src/api/LocationManagement.js';
@@ -85,9 +85,7 @@ const LocationDetails = ({ navigation, route }) => {
     for (let i = 0; i < highlightsLength; i++) {
       if (location.location_reviews[i]) {
         reviews.push(
-          <TouchableOpacity>
-            <ReviewWidget review={location.location_reviews[i]} location={location.location_reviews[i].location} />
-          </TouchableOpacity>
+          <ExpandableReviewWidget review={location.location_reviews[i]} location={location} />
         );
       }
     }

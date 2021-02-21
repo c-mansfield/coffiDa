@@ -7,7 +7,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
-import ReviewWidget from 'src/components/ReviewWidget.js';
+import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 import UserManagement from 'src/api/UserManagement.js';
 
 const YourLikes = () => {
@@ -30,7 +30,7 @@ const YourLikes = () => {
       <FlatList
         data={likesData}
         renderItem={({ item }) => (
-          <ReviewWidget
+          <ExpandableReviewWidget
             review={item.review}
             location={item.location}
             myReview

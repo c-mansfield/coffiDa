@@ -18,14 +18,9 @@ const ReviewWidget = (props) => {
   const [like, setLike] = useState(null);
   const {
     likedReviews,
-    myReview,
     location,
     review,
   } = props;
-  const [image, setImage] = useState(null);
-
-  // TEST VAR FOR DROPDOWN REVIEW
-  const testDD = true;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,21 +65,13 @@ const ReviewWidget = (props) => {
   return (
     <View style={styles.widgetMain}>
       <View style={styles.textWrapper}>
-        { testDD
-          ? <Text style={styles.header}>"{review.review_body}"</Text>
-          : <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>}
-        {
-          myReview
-            ? (
-              <Text style={styles.subHeading}>
-                {location.location_name}
-                ,
-                {' '}
-                {location.location_town}
-              </Text>
-            )
-            : null
-        }
+        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
+        <Text style={styles.subHeading}>
+          {location.location_name}
+          ,
+          {' '}
+          {location.location_town}
+        </Text>
         <View style={styles.ratingStyle}>
           <RatingCircles rating={review.overall_rating} />
         </View>
