@@ -7,10 +7,16 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { Slider } from 'react-native-elements';
-import { Toggle, Button } from '@ui-kitten/components';
+import {
+  Toggle,
+  Button,
+  Text,
+  RadioGroup,
+  Radio,
+} from '@ui-kitten/components';
 
 const SearchFilterModal = (props) => {
   const [filters, setFilters] = useState({
@@ -18,13 +24,16 @@ const SearchFilterModal = (props) => {
     price_rating: 0,
     quality_rating: 0,
     clenliness_rating: 0,
+    search_in: 'favourite',
   });
   const [filterChecked, setFilterChecked] = useState({
     overall_rating_checked: false,
     price_rating_checked: false,
     quality_rating_checked: false,
     cleanliness_rating_checked: false,
+    search_in_checked: false,
   });
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const setFilterObject = async () => {
     const filtersObj = await buildFiltersObject();
@@ -44,6 +53,7 @@ const SearchFilterModal = (props) => {
       }
     });
 
+    console.log(filtersCopy);
     return filtersCopy;
   };
 
@@ -53,6 +63,16 @@ const SearchFilterModal = (props) => {
 
   const updateFilters = (val, field) => {
     setFilters((prevState) => ({ ...prevState, [field]: val }));
+  };
+
+  const updateIncludeFilter = (index) => {
+    setSelectedIndex(index);
+
+    if (index === 0) {
+      updateFilters('favourite', 'search_in');
+    } else {
+      updateFilters('reviewed', 'search_in');
+    }
   };
 
   return (
@@ -172,6 +192,31 @@ const SearchFilterModal = (props) => {
               />
             )
             : null}
+
+          <View style={styles.filterTitleToggle}>
+            <Text style={styles.subHeadingBold}>Only Include</Text>
+            <Toggle
+              checked={filterChecked.search_in_checked}
+              onChange={(includedCheck) => updateFilterChecker(includedCheck, 'search_in_checked')}
+              style={styles.toggleStyle}
+              status="info"
+            />
+          </View>
+          { filterChecked.search_in_checked
+            ? (
+              <>
+                <RadioGroup
+                  selectedIndex={selectedIndex}
+                  onChange={(index) => updateIncludeFilter(index)}
+                  style={styles.filterRadios}
+                >
+                  <Radio>Favourites</Radio>
+                  <Radio>Reviewed</Radio>
+                </RadioGroup>
+              </>
+            )
+            : null}
+
         </View>
 
         <Button onPress={setFilterObject} status="success">
@@ -181,6 +226,11 @@ const SearchFilterModal = (props) => {
       </View>
     </Modal>
   );
+};
+
+const useRadioState = (initialCheck = false) => {
+  const [checked, setChecked] = React.useState(initialCheck);
+  return { checked, onChange: setChecked };
 };
 
 const styles = StyleSheet.create({
@@ -206,6 +256,11 @@ const styles = StyleSheet.create({
   filterSection: {
     marginTop: 10,
     marginBottom: 20,
+  },
+  filterRadios: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingTop: 10
   },
   filterTitleToggle: {
     flexDirection: 'row',

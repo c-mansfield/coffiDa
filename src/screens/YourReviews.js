@@ -58,7 +58,7 @@ const YourReviews = ({ navigation }) => {
       <FlatList
         data={reviewsData}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('ViewReview', {
+          <TouchableOpacity onPress={() => navigation.navigate('View Review', {
             review: item.review, location: item.location, likedReviews, alertMessage,
           })}
           >

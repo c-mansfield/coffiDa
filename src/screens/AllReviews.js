@@ -5,7 +5,7 @@ import {
 } from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native';
 
-import ReviewWidget from 'src/components/ReviewWidget.js';
+import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 
 const AllReviews = ({ route }) => {
   const isFocused = useIsFocused();
@@ -19,7 +19,7 @@ const AllReviews = ({ route }) => {
       <FlatList
         data={location.location_reviews}
         renderItem={({ item }) => (
-          <ReviewWidget review={item} location={location} />
+          <ExpandableReviewWidget review={item} location={location} />
         )}
         keyExtractor={(item) => item.review_id.toString()}
       />

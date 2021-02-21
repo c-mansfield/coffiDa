@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -25,24 +25,53 @@ const SearchResults = ({ navigation }) => {
   const [locations, setLocations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState({});
+  const [page, setPage] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const onSearchChange = (query) => {
-    setSearch(query);
-    searchLocations();
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      await searchLocations();
+    };
+
+    fetchData();
+  }, [search, isRefreshing, page]);
 
   const searchLocations = async () => {
     // Append the search query to the filters object
     const sendQuery = searchQuery;
     sendQuery.q = search;
+    sendQuery.limit = 8;
+    sendQuery.offset = page;
 
     const response = await LocationManagement.searchLocations(sendQuery);
 
     if (response) {
-      setLocations(response);
+      setCorrectLocation(response);
     } else {
       setLocations([]);
     }
+
+    setIsRefreshing(false);
+  };
+
+  const setCorrectLocation = (response) => {
+    if (page === 0) {
+      setLocations([]);
+      setLocations(response);
+    } else {
+      setLocations([...locations, ...response]);
+    }
+  };
+
+  const handleNextPageSearch = async () => {
+    const nextPageNumber = page + 1;
+
+    setPage(nextPageNumber);
+  };
+
+  const handleRefreshSearch = async () => {
+    setPage(0);
+    setIsRefreshing(true);
   };
 
   const toggleModal = () => {
@@ -50,10 +79,10 @@ const SearchResults = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <SearchBar
         placeholder="Search"
-        onChangeText={onSearchChange}
+        onChangeText={(value) => setSearch(value)}
         value={search}
         lightTheme
         cancelIcon
@@ -80,6 +109,10 @@ const SearchResults = ({ navigation }) => {
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.location_id.toString()}
+          refreshing={isRefreshing}
+          onRefresh={() => handleRefreshSearch()}
+          onEndReached={() => handleNextPageSearch()}
+          onEndReachedThreshold={0}
         />
       </View>
     </View>
@@ -88,7 +121,8 @@ const SearchResults = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   searchResultsWrapper: {
-    padding: 15,
+    flex: 1,
+    padding: 10
   },
 });
 

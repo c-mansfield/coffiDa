@@ -30,13 +30,13 @@ const ReviewStackNavigation = () => {
     >
       <Stack.Screen name="ReviewsTabNavigation" component={ReviewsTabNavigation} />
       <Stack.Screen
-        name="ViewReview"
+        name="View Review"
         component={ViewReview}
         options={{
           headerShown: true,
         }}
       />
-      <Stack.Screen name="EditReview" component={EditReview} options={{ headerShown: true }} />
+      <Stack.Screen name="Edit Review" component={EditReview} options={{ headerShown: true }} />
     </Stack.Navigator>
   );
 };

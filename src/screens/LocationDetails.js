@@ -30,8 +30,8 @@ import LocationManagement from 'src/api/LocationManagement.js';
 import mapstyle from 'assets/theme/mapstyle.js';
 
 const LocationDetails = ({ navigation, route }) => {
-  const { location } = route.params;
-  const reviewCount = location.location_reviews.length;
+  const { locationID } = route.params;
+  const [location, setLocation] = useState(null);
   const [favouriteIcon, setFavouriteIcon] = useState('star-outline');
   const [favourite, setFavourite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,19 +39,32 @@ const LocationDetails = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userID = await AsyncStorage.getItem('@userID');
-      const response = await UserManagement.getUser(userID);
-
-      if (response.favourite_locations.some((item) => item.location_name === location.location_name)) {
-        setFavouriteIcon('star');
-        setFavourite(true);
-      }
+      await getLocationDetails();
+      await setLocationFavourite();
 
       setIsLoading(false);
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getLocationDetails = async () => {
+    const response = await LocationManagement.getLocation(locationID);
+
+    if (response) {
+      setLocation(response);
+    }
+  };
+
+  const setLocationFavourite = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.favourite_locations.some((item) => item.location_name === location.location_name)) {
+      setFavouriteIcon('star');
+      setFavourite(true);
+    }
+  };
 
   const changeFavourite = async () => {
     if (favourite) {
@@ -84,9 +97,7 @@ const LocationDetails = ({ navigation, route }) => {
 
     for (let i = 0; i < highlightsLength; i++) {
       if (location.location_reviews[i]) {
-        reviews.push(
-          <ExpandableReviewWidget review={location.location_reviews[i]} location={location} />
-        );
+        reviews.push(<ExpandableReviewWidget review={location.location_reviews[i]} location={location} />);
       }
     }
 
@@ -146,7 +157,7 @@ const LocationDetails = ({ navigation, route }) => {
                 <Text style={{
                   fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070', marginLeft: 5,
                 }}
-                >({reviewCount} reviews)
+                >({location.location_reviews.length} reviews)
                 </Text>
               </View>
 

@@ -105,12 +105,14 @@ const AddPhotoModal = ({
               />
               <Button title="Upload" onPress={() => uploadPhoto()} />
               <Button title="Retake Photo" onPress={() => retakePhoto()} />
+              <Button title="Maybe Later" onPress={togglePhotoModal} />
             </>
           ) : (
             <>
               <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} />
               <Button title="Take Photo" onPress={() => takePicture()} />
               <Button title="Choose From Library" onPress={() => handleChoosePhoto()} />
+              <Button title="Maybe Later" onPress={togglePhotoModal} />
             </>
           )}
         </View>
@@ -151,7 +153,7 @@ AddPhotoModal.propTypes = {
   togglePhotoModal: PropTypes.func.isRequired,
   reviewID: PropTypes.number.isRequired,
   locationID: PropTypes.number.isRequired,
-  editPhoto: PropTypes.bool.isRequired,
+  editPhoto: PropTypes.bool,
 };
 
 export default AddPhotoModal;

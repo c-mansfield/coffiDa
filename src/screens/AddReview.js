@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   Autocomplete,
   AutocompleteItem,
   Input,
   Layout,
+  Text,
+  Button,
 } from '@ui-kitten/components';
-import { Slider, Button } from 'react-native-elements';
+import { Slider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -162,11 +164,16 @@ const AddReview = () => {
       </Autocomplete>
       <Input
         multiline
-        textStyle={{ minHeight: 64, maxHeight: 64 }}
+        textStyle={{ maxHeight: 80 }}
         placeholder="Review Message..."
         value={message}
         onChangeText={(msg) => setMessage(msg)}
+        maxLength={200}
+        numberOfLines={5}
       />
+      <Text style={{ fontSize: 10, textAlign: 'right' }}>
+        {message.length}/200
+      </Text>
 
       <Text style={styles.subHeadingBold}>Overall Rating</Text>
       <Slider
@@ -225,10 +232,12 @@ const AddReview = () => {
         }}
       />
       <Button
-        title="Add"
-        buttonStyle={{ backgroundColor: '#247BA0', marginTop: 40 }}
         onPress={() => checkReview()}
-      />
+        status='success'
+        style={{marginTop: 40}}
+      >
+        Add
+      </Button>
       <AddPhotoModal
         modalPhotoVisible={modalPhotoVisible}
         togglePhotoModal={togglePhotoModal}
@@ -257,7 +266,7 @@ const styles = StyleSheet.create({
   subHeadingBold: {
     fontSize: 18,
     fontFamily: 'Nunito-Bold',
-    marginTop: 25,
+    marginTop: 15,
   },
   subHeading: {
     fontSize: 18,

@@ -29,7 +29,6 @@ const ExpandableReviewWidget = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       await setReviewLike();
-      await getPhoto();
     };
 
     fetchData();
@@ -67,6 +66,19 @@ const ExpandableReviewWidget = (props) => {
     }
   };
 
+  const expandWidget = async () => {
+    setExpanded(!expanded);
+
+    await checkReviewPhoto();
+  };
+
+  // Checks if photo already pulled from db, stops uneccassary calls to the DB
+  const checkReviewPhoto = async () => {
+    if (!photo) {
+      await getPhoto();
+    }
+  };
+
   const getPhoto = async () => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
 
@@ -81,7 +93,7 @@ const ExpandableReviewWidget = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.widgetMain}>
+    <TouchableOpacity onPress={() => expandWidget()} style={styles.widgetMain}>
       { expanded
         ? (
           <>
@@ -99,7 +111,7 @@ const ExpandableReviewWidget = (props) => {
                   )
                   : null
               }
-              <View style={styles.ratingStyle}>
+              <View style={styles.ratingStyleOverall}>
                 <RatingCircles rating={review.overall_rating} />
                 <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', marginLeft: 10 }}>Overall rating</Text>
               </View>
@@ -153,7 +165,7 @@ const ExpandableReviewWidget = (props) => {
                   )
                   : null
               }
-              <View style={styles.ratingStyle}>
+              <View style={styles.ratingStyleOverall}>
                 <RatingCircles rating={review.overall_rating} />
               </View>
 
@@ -215,6 +227,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 80 / 2,
+  },
+  ratingStyleOverall: {
+    flexDirection: 'row',
+    marginTop: 10,
   },
   ratingStyle: {
     flexDirection: 'row',

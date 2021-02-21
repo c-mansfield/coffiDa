@@ -110,7 +110,7 @@ const ViewReview = ({ navigation, route }) => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
 
     console.log(response);
-    
+
     if (response) {
       const reader = new FileReader();
       reader.readAsDataURL(response);
@@ -122,7 +122,7 @@ const ViewReview = ({ navigation, route }) => {
   };
 
   const navigateToEdit = () => {
-    navigation.navigate('EditReview', { review, location });
+    navigation.navigate('Edit Review', { review, location });
   };
 
   return (
