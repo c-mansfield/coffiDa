@@ -19,7 +19,9 @@ const YourLikes = () => {
       const userID = await AsyncStorage.getItem('@userID')
       const response = await UserManagement.getUser(userID);
 
-      setLikesData(response.liked_reviews);
+      if (response.success) {
+        setLikesData(response.body.liked_reviews);
+      }
     };
 
     fetchData();

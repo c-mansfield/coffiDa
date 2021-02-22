@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View, StyleSheet, ActivityIndicator, TouchableOpacity,
+} from 'react-native';
 import {
   Button,
   Icon,
@@ -24,7 +26,9 @@ const Account = ({ navigation }) => {
       const userID = await AsyncStorage.getItem('@userID');
       const response = await UserManagement.getUser(userID);
 
-      setUserData(response);
+      if (response.success) {
+        setUserData(response.body);
+      }
       setIsLoading(false);
     };
 
@@ -35,7 +39,7 @@ const Account = ({ navigation }) => {
     setIsLoading(true);
     const response = await UserManagement.logout();
 
-    if (response) {
+    if (response.success) {
       navigation.navigate('Entry');
       await AsyncStorage.clear();
     }
@@ -79,7 +83,6 @@ const Account = ({ navigation }) => {
                 modalDetailsVisible={modalDetailsVisible}
                 toggleModalDetails={toggleModalDetails}
                 userData={userData}
-                showDropdownMessage={showDropdownMessage}
               />
               <MenuItem
                 title="Change Password"
@@ -91,7 +94,6 @@ const Account = ({ navigation }) => {
                 modalPasswordVisible={modalPasswordVisible}
                 toggleModalPassword={toggleModalPassword}
                 userData={userData}
-                showDropdownMessage={showDropdownMessage}
               />
             </View>
 
@@ -99,22 +101,17 @@ const Account = ({ navigation }) => {
               <Text style={styles.sectionHeader}>Accessibility</Text>
 
               <MenuItem
-                title="Edit Details"
-                accessoryLeft={PersonIcon}
-                accessoryRight={ForwardIcon}
-              />
-              <MenuItem
-                title="Change Password"
-                accessoryLeft={EditIcon}
+                title="Language"
+                accessoryLeft={GlobeIcon}
                 accessoryRight={ForwardIcon}
               />
             </View>
 
-            <View styles={styles.sectionMain}>
-              <Button style={styles.button} status="danger" onPress={() => logoutUser()} appearance="outline">
-                Sign Out
-              </Button>
-            </View>
+            <TouchableOpacity style={styles.logoutButton} onPress={() => logoutUser()}>
+              <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                LOGOUT
+              </Text>
+            </TouchableOpacity>
           </>
         )}
     </Layout>
@@ -131,6 +128,10 @@ const EditIcon = (props) => (
 
 const ForwardIcon = (props) => (
   <Icon {...props} name="arrow-ios-forward" />
+);
+
+const GlobeIcon = (props) => (
+  <Icon {...props} name="globe-3" />
 );
 
 const styles = StyleSheet.create({
@@ -156,6 +157,15 @@ const styles = StyleSheet.create({
   },
   sectionMain: {
     marginTop: 20,
+  },
+  logoutButton: {
+    backgroundColor: '#A02323',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 30,
   },
 });
 

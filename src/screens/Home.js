@@ -46,6 +46,14 @@ const Home = ({ navigation }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await getLocations();
+    };
+
+    fetchData();
+  }, [geoLocationDetails]);
+
   const getLocations = async () => {
     const sendQuery = {
       q: getSearchString(),
@@ -102,8 +110,6 @@ const Home = ({ navigation }) => {
 
     const locationStr = await getCurrentLocation();
     setGeoLocationDetails((prevState) => ({ ...prevState, location: locationStr }));
-
-    await getLocations();
   };
 
   const getCurrentLocation = () => {

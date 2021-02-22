@@ -29,10 +29,13 @@ const YourReviews = ({ navigation }) => {
     const fetchData = async () => {
       const userID = await AsyncStorage.getItem('@userID');
       const response = await UserManagement.getUser(userID);
-      const likes = await getLikedReviews(response);
 
-      setReviewsData(response.reviews);
-      setLikedReviews(likes);
+      if (response.success) {
+        const likes = await getLikedReviews(response.body);
+
+        setReviewsData(response.body.reviews);
+        setLikedReviews(likes);
+      }
     };
 
     fetchData();

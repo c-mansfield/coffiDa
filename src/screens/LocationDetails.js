@@ -66,9 +66,11 @@ const LocationDetails = ({ navigation, route }) => {
     const userID = await AsyncStorage.getItem('@userID');
     const response = await UserManagement.getUser(userID);
 
-    if (response.favourite_locations.some((item) => item.location_name === location.location_name)) {
-      setFavouriteIcon('star');
-      setFavourite(true);
+    if (response.success) {
+      if (response.body.favourite_locations.some((item) => item.location_name === location.location_name)) {
+        setFavouriteIcon('star');
+        setFavourite(true);
+      }
     }
   };
 

@@ -132,8 +132,8 @@ const AddReview = () => {
     const response = await UserManagement.getUser(userID);
     let maxReviewID = 0;
 
-    if (response) {
-      response.reviews.find((item) => {
+    if (response.success) {
+      response.body.reviews.find((item) => {
         // Check reviews from correct current location
         // and review id is the highest value
         if (item.location.location_id === locationID

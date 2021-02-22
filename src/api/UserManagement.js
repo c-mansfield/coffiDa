@@ -54,10 +54,10 @@ const logout = async () => {
     });
 
     if (response.status === 200) {
-      return await response.json();
+      return { success: true, status: response.status };
     }
 
-    return null;
+    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -73,10 +73,10 @@ const getUser = async (userID) => {
     });
 
     if (response.status === 200) {
-      return await response.json();
+      return { success: true, status: response.status, body: await response.json() };
     }
 
-    return null;
+    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -94,7 +94,11 @@ const updateUser = async (userID, data) => {
       body: JSON.stringify(data),
     });
 
-    return await response;
+    if (response.status === 200) {
+      return { success: true, status: response.status };
+    }
+
+    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }

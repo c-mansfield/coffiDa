@@ -56,7 +56,8 @@ const LoginModal = ({ navigateHome, loginModalVisible, toggleLoginModal }) => {
   const checkCanLogin = async () => {
     const fields = await checkRequiredFields();
     const emailCheck = await testEmail();
-    if (!fields && await !emailCheck) {
+
+    if (!fields && !emailCheck) {
       await loginUser();
     }
   };

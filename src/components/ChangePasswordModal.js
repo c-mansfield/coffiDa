@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
@@ -25,6 +26,12 @@ const ChangePasswordModal = (props) => {
   const [newPassword, setNewPassword] = useState('');
   const [secureTextEntryOld, setSecureTextEntryOld] = useState(true);
   const [secureTextEntryNew, setSecureTextEntryNew] = useState(true);
+  const [textStatus, setTextStatus] = useState({ oldPassword: 'basic', newPassword: 'basic' });
+  const [errorMessage, setErrorMessage] = useState({
+    oldPassword: '',
+    newPassword: '',
+  });
+
 
   useEffect(() => {
     setOldPassword('');
@@ -32,17 +39,18 @@ const ChangePasswordModal = (props) => {
   }, [isFocused]);
 
   const changePassword = async () => {
-    if (await checkOldPassword()) {
-      if (await checkPasswordCriteria()) {
-        await updatePassword();
-      }
+    const fields = await checkRequiredFields();
+    const emailCheck = await testEmail();
+
+    if (!fields && !emailCheck) {
+      await updatePassword();
     }
   };
 
   const updatePassword = async () => {
     const response = await UserManagement.updateUser(props.userData.user_id, { password: newPassword });
 
-    if (response.status === 200) {
+    if (response.success) {
       props.toggleModalPassword();
       DropDownHolder.success('Success', 'Password has been updated!');
     }
@@ -64,13 +72,38 @@ const ChangePasswordModal = (props) => {
     return false;
   };
 
-  const checkPasswordCriteria = async () => {
-    if (newPassword.length >= 8) {
+  const testPassword = async () => {
+    if (await !Utilities.testPasswordValid(newPassword.password)) {
+      updateTextStatusState('danger', 'newPassword');
+      updateErrorMessageState(
+        'Please make sure password is 8 characters and has atleast 1 letter and number', 'newPassword',
+      );
+
       return true;
     }
 
-    DropDownHolder.error('Error', 'Password does not match criteria. Please try again!');
+    updateTextStatusState('basic', 'email');
+    updateErrorMessageState('', 'email');
+
     return false;
+  };
+
+  const checkRequiredFields = () => {
+    let error = false;
+
+    // Object.keys(user).forEach((key) => {
+    //   if (user[key] === '') {
+    //     updateTextStatusState('danger', key);
+    //     updateErrorMessageState('Required field', key);
+    //
+    //     error = true;
+    //   } else {
+    //     updateTextStatusState('basic', key);
+    //     updateErrorMessageState('', key);
+    //   }
+    // });
+
+    return error;
   };
 
   const toggleSecureTextEntryOld = (field) => {
@@ -81,17 +114,25 @@ const ChangePasswordModal = (props) => {
     setSecureTextEntryNew(!secureTextEntryNew);
   };
 
-  const renderSecureIconOld = (field) => (
+  const renderSecureIconOld = (props) => (
     <TouchableWithoutFeedback onPress={toggleSecureTextEntryOld}>
       <Icon {...props} name={secureTextEntryOld ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
 
-  const renderSecureIconNew = (field) => (
+  const renderSecureIconNew = (props) => (
     <TouchableWithoutFeedback onPress={toggleSecureTextEntryNew}>
       <Icon {...props} name={secureTextEntryNew ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
+
+  const updateTextStatusState = (val, field) => {
+    setTextStatus((prevState) => ({ ...prevState, [field]: val }));
+  };
+
+  const updateErrorMessageState = (val, field) => {
+    setErrorMessage((prevState) => ({ ...prevState, [field]: val }));
+  };
 
   return (
     <Modal
@@ -121,7 +162,6 @@ const ChangePasswordModal = (props) => {
             value={newPassword}
             onChangeText={(value) => setNewPassword(value)}
             placeholder="Enter new password"
-            caption="Should contain at least 8 charecters"
             accessoryRight={renderSecureIconNew}
             secureTextEntry={toggleSecureTextEntryNew}
             style={styles.inputBox}
@@ -133,9 +173,11 @@ const ChangePasswordModal = (props) => {
           width={350}
         />
 
-        <Button style={styles.button} status="success" onPress={() => changePassword()}>
-          Update
-        </Button>
+        <TouchableOpacity style={styles.updateButton} onPress={() => changePassword()}>
+          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            Update
+          </Text>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -159,7 +201,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionStyle: {
-    height: 100,
+    height: 80,
   },
   sectionHeading: {
     fontSize: 14,
@@ -172,12 +214,20 @@ const styles = StyleSheet.create({
     marginTop: 5,
     height: 10,
   },
+  updateButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 40,
+  },
 });
 
 ChangePasswordModal.propTypes = {
   modalPasswordVisible: PropTypes.bool.isRequired,
   toggleModalPassword: PropTypes.func.isRequired,
-  successMessage: PropTypes.func.isRequired,
   userData: PropTypes.object.isRequired,
 };
 

@@ -27,8 +27,8 @@ const YourFavourites = () => {
       const userID = await AsyncStorage.getItem('@userID');
       const response = await UserManagement.getUser(userID);
 
-      if (response.favourite_locations) {
-        setLocationsData(response.favourite_locations);
+      if (response.success && response.body.favourite_locations) {
+        setLocationsData(response.body.favourite_locations);
       }
     };
 

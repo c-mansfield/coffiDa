@@ -2,18 +2,26 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import { Text, Input, Button } from '@ui-kitten/components';
-import PropTypes from 'prop-types';
+import { Text, Input } from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import UserManagement from 'src/api/UserManagement.js';
+import Utilities from 'src/components/Utilities.js';
 
 const EditDetailsModal = (props) => {
   const isFocused = useIsFocused();
   const [user, setUser] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+  });
+  const [textStatus, setTextStatus] = useState({ first_name: 'basic', last_name: 'basic', email: 'basic' });
+  const [errorMessage, setErrorMessage] = useState({
+    main: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -23,13 +31,18 @@ const EditDetailsModal = (props) => {
     updateUserState(props.userData.first_name, 'first_name');
     updateUserState(props.userData.last_name, 'last_name');
     updateUserState(props.userData.email, 'email');
+
+    setTextStatus({ first_name: 'basic', last_name: 'basic', email: 'basic' });
+    setErrorMessage({
+      main: '', first_name: '', last_name: '', email: '',
+    });
   }, [isFocused, props.modalDetailsVisible]);
 
   const updateUser = async () => {
     const updatedDetails = await getUserUpdates();
     const response = await UserManagement.updateUser(props.userData.user_id, updatedDetails);
 
-    if (response.status === 200) {
+    if (response.success) {
       props.toggleModalDetails();
       DropDownHolder.success('Success', 'User updated');
     }
@@ -49,8 +62,57 @@ const EditDetailsModal = (props) => {
     return updatedDetails;
   };
 
+  const checkCanUpdate = async () => {
+    const fields = await checkRequiredFields();
+    const emailCheck = await testEmail();
+
+    if (!fields && !emailCheck) {
+      await updateUser();
+    }
+  };
+
+  const checkRequiredFields = () => {
+    let error = false;
+
+    Object.keys(user).forEach((key) => {
+      if (user[key] === '') {
+        updateTextStatusState('danger', key);
+        updateErrorMessageState('Required field', key);
+
+        error = true;
+      } else {
+        updateTextStatusState('basic', key);
+        updateErrorMessageState('', key);
+      }
+    });
+
+    return error;
+  };
+
+  const testEmail = async () => {
+    if (!Utilities.testEmailValid(user.email)) {
+      updateTextStatusState('danger', 'email');
+      updateErrorMessageState('Please input email in correct format', 'email');
+
+      return true;
+    }
+
+    updateTextStatusState('basic', 'email');
+    updateErrorMessageState('', 'email');
+
+    return false;
+  };
+
   const updateUserState = (val, field) => {
     setUser((prevState) => ({ ...prevState, [field]: val }));
+  };
+
+  const updateTextStatusState = (val, field) => {
+    setTextStatus((prevState) => ({ ...prevState, [field]: val }));
+  };
+
+  const updateErrorMessageState = (val, field) => {
+    setErrorMessage((prevState) => ({ ...prevState, [field]: val }));
   };
 
   return (
@@ -70,32 +132,40 @@ const EditDetailsModal = (props) => {
             value={user.first_name}
             onChangeText={(firstName) => updateUserState(firstName, 'first_name')}
             style={styles.inputsStyle}
+            status={textStatus.first_name}
+            caption={errorMessage.first_name}
           />
         </View>
 
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>Last Name</Text>
           <Input
-            placeholder="Enter first name"
+            placeholder="Enter last name"
             value={user.last_name}
             onChangeText={(lastName) => updateUserState(lastName, 'last_name')}
             style={styles.inputsStyle}
+            status={textStatus.last_name}
+            caption={errorMessage.last_name}
           />
         </View>
 
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>Email</Text>
           <Input
-            placeholder="Enter first name"
+            placeholder="Enter email"
             value={user.email}
             onChangeText={(email) => updateUserState(email, 'email')}
             style={styles.inputsStyle}
+            status={textStatus.email}
+            caption={errorMessage.email}
           />
         </View>
 
-        <Button style={styles.button} status="success" onPress={() => updateUser()}>
-          Update
-        </Button>
+        <TouchableOpacity style={styles.updateButton} onPress={() => checkCanUpdate()}>
+          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            Update
+          </Text>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -128,7 +198,13 @@ const styles = StyleSheet.create({
   inputsStyle: {
     marginTop: 5,
   },
-  button: {
+  updateButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
     marginTop: 40,
   },
 });
