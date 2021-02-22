@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 import { Text, Input, Button } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 
+import DropDownHolder from 'src/services/DropdownHolder.js';
 import UserManagement from 'src/api/UserManagement.js';
 
 const EditDetailsModal = (props) => {
@@ -30,7 +31,7 @@ const EditDetailsModal = (props) => {
 
     if (response.status === 200) {
       props.toggleModalDetails();
-      props.showDropdownMessage('success', 'Success', 'User updated');
+      DropDownHolder.success('Success', 'User updated');
     }
   };
 
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   sectionHeading: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: 'Nunito-Regular',
   },
   inputsStyle: {

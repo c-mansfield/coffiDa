@@ -7,12 +7,11 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import { Slider } from 'react-native-elements';
 import {
   Toggle,
-  Button,
   Text,
   RadioGroup,
   Radio,
@@ -219,9 +218,11 @@ const SearchFilterModal = (props) => {
 
         </View>
 
-        <Button onPress={setFilterObject} status="success">
-          Apply filters
-        </Button>
+        <TouchableOpacity style={styles.applyButton} onPress={setFilterObject}>
+          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            Apply filters
+          </Text>
+        </TouchableOpacity>
 
       </View>
     </Modal>
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   filterRadios: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingTop: 10
+    paddingTop: 10,
   },
   filterTitleToggle: {
     flexDirection: 'row',
@@ -274,8 +275,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontFamily: 'Nunito-Regular',
   },
-  buttonStyle: {
-    fontFamily: 'Nunito-Regular',
+  applyButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
 

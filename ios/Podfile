@@ -12,6 +12,8 @@ target 'coffiDa' do
 
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'coffiDaTests' do
     inherit! :complete
     # Pods for testing

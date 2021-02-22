@@ -1,27 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Autocomplete,
   AutocompleteItem,
   Input,
   Layout,
   Text,
-  Button,
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
+import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import UserManagement from 'src/api/UserManagement.js';
 import { FilterWords } from 'assets/globals.js';
-import DropdownAlert from 'react-native-dropdownalert';
 
 const AddReview = () => {
   const isFocused = useIsFocused();
-  let dropDownAlertRef = useRef(null);
   const [location, setLocation] = useState('');
   const [locationID, setLocationID] = useState(0);
   const [locations, setLocations] = React.useState([{ location_name: 'No results', location_town: '' }]);
@@ -80,7 +78,7 @@ const AddReview = () => {
       return true;
     }
 
-    dropDownAlertRef.alertWithType('error', 'Unexpected items', 'All fields are requried');
+    DropDownHolder.error('error', 'Unexpected items', 'All fields are requried');
     return false;
   };
 
@@ -88,13 +86,11 @@ const AddReview = () => {
   const checkReviewProfanity = async () => {
     const filterRegex = new RegExp(`\\b(${FilterWords.join('|')})\\b`);
 
-    console.log(filterRegex.test(message.toLowerCase()));
-
     if (!await filterRegex.test(message.toLowerCase())) {
       return true;
     }
 
-    dropDownAlertRef.alertWithType('error', 'Unexpected items',
+    DropDownHolder.error('Unexpected items',
       'Cannot add review due to mention of other aspects of the cafe experience that isn\'t coffee. Please try again!');
     return false;
   };
@@ -151,7 +147,7 @@ const AddReview = () => {
   };
 
   return (
-    <Layout level="1" style={styles.main}>
+    <Layout level="2" style={styles.main}>
       <Text style={styles.title}>Add Review</Text>
 
       <Autocomplete
@@ -231,24 +227,17 @@ const AddReview = () => {
           ),
         }}
       />
-      <Button
-        onPress={() => checkReview()}
-        status='success'
-        style={{marginTop: 40}}
-      >
-        Add
-      </Button>
+      <TouchableOpacity style={styles.addButton} onPress={() => checkReview()}>
+        <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+          Add
+        </Text>
+      </TouchableOpacity>
+
       <AddPhotoModal
         modalPhotoVisible={modalPhotoVisible}
         togglePhotoModal={togglePhotoModal}
         reviewID={reviewID}
         locationID={locationID}
-      />
-      <DropdownAlert ref={(ref) => {
-        if (ref) {
-          dropDownAlertRef = ref;
-        }
-      }}
       />
     </Layout>
   );
@@ -277,6 +266,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignSelf: 'center',
     fontFamily: 'Nunito-Regular',
+  },
+  addButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 25,
   },
 });
 

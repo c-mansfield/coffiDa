@@ -11,7 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import SearchResults from 'src/screens/SearchResults.js';
 import Search from 'src/screens/Search.js';
-import LocationDetails from 'src/screens/LocationDetails.js';
+import LocationStackNavigation from 'src/navigation/LocationStackNavigation.js';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +25,7 @@ const SearchStackNavigation = () => {
     >
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="SearchResults" component={SearchResults} />
-      <Stack.Screen name="LocationDetailsSearch" component={LocationDetails} />
+      <Stack.Screen name="LocationStackNavigationSearch" component={LocationStackNavigation} />
     </Stack.Navigator>
   );
 };

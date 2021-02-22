@@ -83,8 +83,8 @@
 45-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:18:9-41
 46            android:launchMode="singleTask"
 46-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:20:9-40
-47            android:windowSoftInputMode="adjustResize" >
-47-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:9-51
+47            android:windowSoftInputMode="adjustPan" >
+47-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:9-48
 48            <intent-filter>
 48-->C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:22:9-25:25
 49                <action android:name="android.intent.action.MAIN" />

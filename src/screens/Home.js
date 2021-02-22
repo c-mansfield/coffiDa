@@ -17,7 +17,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
@@ -31,7 +30,6 @@ const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
   const [locationsData, setLocationsData] = useState([]);
-  const isFocused = useIsFocused();
   const [geoLocationDetails, setGeoLocationDetails] = useState({ location: null, locationPermission: false });
   const [isLoading, setIsLoading] = useState(true);
   const carousel = useRef(null);
@@ -46,7 +44,7 @@ const Home = ({ navigation }) => {
     };
 
     fetchData();
-  }, [isFocused]);
+  }, []);
 
   const getLocations = async () => {
     const sendQuery = {
@@ -164,7 +162,6 @@ const Home = ({ navigation }) => {
               itemWidth={screenWidth}
               sliderWidth={screenWidth}
             />
-            
             <View style={{ padding: 15 }}>
               <Text style={styles.title}>Explore</Text>
               { geoLocationDetails.locationPermission
@@ -176,7 +173,10 @@ const Home = ({ navigation }) => {
                   <>
                     {locationsData.map((location) => (
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('LocationDetails', { locationID: location.location_id })}
+                        onPress={() => navigation.navigate(
+                          'LocationStackNavigation',
+                          { screen: 'LocationDetails', params: { locationID: location.location_id } },
+                        )}
                       >
                         <LocationTile location={location} />
                       </TouchableOpacity>

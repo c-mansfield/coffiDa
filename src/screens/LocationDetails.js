@@ -17,7 +17,6 @@ import {
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, Divider, Button } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
@@ -35,18 +34,25 @@ const LocationDetails = ({ navigation, route }) => {
   const [favouriteIcon, setFavouriteIcon] = useState('star-outline');
   const [favourite, setFavourite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchData = async () => {
       await getLocationDetails();
-      await setLocationFavourite();
+    };
 
+    console.log('Hit once');
+    fetchData();
+  }, []);
+
+  // Get favourite location when location is added to state
+  useEffect(() => {
+    const fetchData = async () => {
+      await setLocationFavourite();
       setIsLoading(false);
     };
 
     fetchData();
-  }, [isFocused]);
+  }, [location]);
 
   const getLocationDetails = async () => {
     const response = await LocationManagement.getLocation(locationID);
@@ -97,7 +103,9 @@ const LocationDetails = ({ navigation, route }) => {
 
     for (let i = 0; i < highlightsLength; i++) {
       if (location.location_reviews[i]) {
-        reviews.push(<ExpandableReviewWidget review={location.location_reviews[i]} location={location} />);
+        reviews.push(
+          <ExpandableReviewWidget key={`Review ${i.toString()}`} review={location.location_reviews[i]} location={location} />
+        );
       }
     }
 
@@ -317,7 +325,6 @@ const styles = StyleSheet.create({
 });
 
 LocationDetails.propTypes = {
-  route: PropTypes.objects,
 };
 
 export default LocationDetails;

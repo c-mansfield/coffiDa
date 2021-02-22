@@ -1,4 +1,3 @@
-import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const url = 'http://10.0.2.2:3333/api/1.0.0';
@@ -14,8 +13,11 @@ const addUser = async (data) => {
     });
 
     if (response.status === 201) {
-      return await response.json();
+      const body = await response.json();
+      return { success: true, status: response.status, body };
     }
+
+    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -31,12 +33,14 @@ const login = async (data) => {
       body: JSON.stringify(data),
     });
     if (response.status === 200) {
-      return await response.json();
+      return { success: true, status: response.status, body: await response.json() };
     }
+
+    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
-}
+};
 
 const logout = async () => {
   try {
@@ -52,6 +56,8 @@ const logout = async () => {
     if (response.status === 200) {
       return await response.json();
     }
+
+    return null;
   } catch (error) {
     return error;
   }
@@ -69,6 +75,8 @@ const getUser = async (userID) => {
     if (response.status === 200) {
       return await response.json();
     }
+
+    return null;
   } catch (error) {
     return error;
   }

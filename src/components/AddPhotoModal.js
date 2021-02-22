@@ -4,8 +4,8 @@ import {
   View,
   Image,
   Button,
+  TouchableOpacity,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import { Text } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
@@ -22,12 +22,13 @@ const AddPhotoModal = ({
   editPhoto,
 }) => {
   const [photo, setPhoto] = useState(null);
-  const isFocused = useIsFocused();
   let camera = useRef(null);
+  const [photoTaken, setPhotoTaken] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setPhoto(null);
+      setPhotoTaken(false);
 
       if (editPhoto) {
         setPhoto('PLACEHOLDER');
@@ -36,7 +37,7 @@ const AddPhotoModal = ({
     };
 
     fetchData();
-  }, [isFocused, modalPhotoVisible]);
+  }, [modalPhotoVisible]);
 
   const handleChoosePhoto = () => {
     const options = {
@@ -47,6 +48,8 @@ const AddPhotoModal = ({
         setPhoto(data);
       }
     });
+
+    setPhotoTaken(true);
   };
 
   const takePicture = async () => {
@@ -55,6 +58,7 @@ const AddPhotoModal = ({
       const data = await camera.takePictureAsync(options);
 
       setPhoto(data);
+      setPhotoTaken(true);
     }
   };
 
@@ -93,28 +97,68 @@ const AddPhotoModal = ({
     >
       <View style={styles.modalContent}>
         { editPhoto
-          ? <Text style={styles.title}>Edit photo</Text>
-          : <Text style={styles.title}>Add photo</Text>}
+          ? <Text style={styles.title}>Edit review photo</Text>
+          : <Text style={styles.title}>Add photo to review</Text>}
 
         <View style={styles.imageView}>
           {photo ? (
             <>
-              <Image
-                source={{ uri: photo.uri }}
-                style={{ width: 300, height: 300 }}
-              />
-              <Button title="Upload" onPress={() => uploadPhoto()} />
-              <Button title="Retake Photo" onPress={() => retakePhoto()} />
-              <Button title="Maybe Later" onPress={togglePhotoModal} />
+              <View style={styles.cameraPreview}>
+                <Image
+                  source={{ uri: photo.uri }}
+                  style={{ width: 240, height: 300 }}
+                />
+              </View>
+              { !editPhoto || photoTaken
+                ? (
+                  <>
+                    <TouchableOpacity style={styles.primaryButton} onPress={() => uploadPhoto()}>
+                      <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                        Upload Photo
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ) : null }
+              <TouchableOpacity style={styles.secondaryButton} onPress={() => retakePhoto()}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                  Retake photo
+                </Text>
+              </TouchableOpacity>
             </>
           ) : (
             <>
-              <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} />
-              <Button title="Take Photo" onPress={() => takePicture()} />
-              <Button title="Choose From Library" onPress={() => handleChoosePhoto()} />
-              <Button title="Maybe Later" onPress={togglePhotoModal} />
+              <View style={styles.cameraPreview}>
+                <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} />
+              </View>
+              <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                  Take Photo 📷
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.secondaryButton} onPress={() => handleChoosePhoto()}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                  Choose From Library
+                </Text>
+              </TouchableOpacity>
             </>
           )}
+
+          { editPhoto
+            ? (
+              <>
+                <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                  <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
+                </TouchableOpacity>
+              </>
+            )
+            : (
+              <>
+                <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                  <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
         </View>
 
       </View>
@@ -141,10 +185,36 @@ const styles = StyleSheet.create({
   },
   imageView: {
   },
-  preview: {
-    width: 200,
-    height: 250,
+  cameraPreview: {
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  preview: {
+    width: 240,
+    height: 300,
+  },
+  primaryButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  secondaryButton: {
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    borderColor: '#247BA0',
+    borderWidth: 1,
+  },
+  maybeLater: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });
 

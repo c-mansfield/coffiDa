@@ -6,22 +6,17 @@ import {
 } from 'react-native';
 import {
   Input,
-  Layout,
-  Icon,
   Text,
-  Button,
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import DropdownAlert from 'react-native-dropdownalert';
 
+import DropDownHolder from 'src/services/DropdownHolder.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 
 const EditReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
-  let dropDownAlertRef = useRef(null);
   const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
   const { location, review } = route.params;
   const [reviewData, setReviewData] = useState({
@@ -46,11 +41,10 @@ const EditReview = ({ navigation, route }) => {
 
   const editReview = async () => {
     const updatedDetails = await getReviewUpdates();
-    console.log(updatedDetails);
     const response = await LocationReviews.updateReview(location.location_id, review.review_id, updatedDetails);
 
     if (response) {
-      dropDownAlertRef.alertWithType('success', 'Success', 'Review has been updated!');
+      DropDownHolder.success('Success', 'Review has been updated!');
     }
   };
 
@@ -73,7 +67,7 @@ const EditReview = ({ navigation, route }) => {
   };
 
   return (
-    <Layout level="1" style={styles.main}>
+    <View style={styles.main}>
       <View style={styles.editMain}>
         <Text style={styles.subHeadingBold}>{location.location_name}, {location.location_town}</Text>
 
@@ -84,8 +78,11 @@ const EditReview = ({ navigation, route }) => {
           value={reviewData.review_body}
           onChangeText={(reviewBody) => updateReviewDataState(reviewBody, 'review_body')}
         />
+        <Text style={{ fontSize: 10, textAlign: 'right' }}>
+          {reviewData.review_body.length}/200
+        </Text>
 
-        <Text style={styles.subHeadingBold}>Overall Rating</Text>
+        <Text style={styles.subHeadingOverall}>Overall Rating</Text>
         <Slider
           value={reviewData.overall_rating}
           onValueChange={(overall) => updateReviewDataState(overall, 'overall_rating')}
@@ -141,20 +138,18 @@ const EditReview = ({ navigation, route }) => {
             ),
           }}
         />
-        <Button
-          buttonStyle={{ marginTop: 40 }}
-          status="primary"
-          onPress={() => togglePhotoModal()}
-        >
-          Edit Photo
-        </Button>
-        <Button
-          buttonStyle={{ marginTop: 40 }}
-          status="success"
-          onPress={() => editReview()}
-        >
-          Update Review
-        </Button>
+
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => togglePhotoModal()}>
+          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+            Edit Photo 📷
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.primaryButton} onPress={() => editReview()}>
+          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            Update Review
+          </Text>
+        </TouchableOpacity>
+
         <AddPhotoModal
           modalPhotoVisible={modalPhotoVisible}
           togglePhotoModal={togglePhotoModal}
@@ -162,14 +157,8 @@ const EditReview = ({ navigation, route }) => {
           locationID={location.location_id}
           editPhoto
         />
-        <DropdownAlert ref={(ref) => {
-          if (ref) {
-            dropDownAlertRef = ref;
-          }
-        }}
-        />
       </View>
-    </Layout>
+    </View>
   );
 };
 
@@ -179,7 +168,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   editMain: {
-    padding: 25,
+    paddingLeft: 25,
+    paddingRight: 25,
   },
   iconSize: {
     height: 38,
@@ -188,17 +178,40 @@ const styles = StyleSheet.create({
   subHeadingBold: {
     fontSize: 18,
     fontFamily: 'Nunito-Bold',
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  subHeadingOverall: {
+    fontSize: 18,
+    fontFamily: 'Nunito-Bold',
     marginTop: 10,
   },
   subHeading: {
     fontSize: 18,
     fontFamily: 'Nunito-Regular',
-    marginTop: 25,
+    marginTop: 15,
   },
   sliderText: {
     marginTop: 30,
     alignSelf: 'center',
     fontFamily: 'Nunito-Regular',
+  },
+  primaryButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  secondaryButton: {
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+    borderColor: '#247BA0',
+    borderWidth: 1,
   },
 });
 

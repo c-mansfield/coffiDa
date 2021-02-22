@@ -25,6 +25,7 @@ MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\Cole\.gradle\cach
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\9be61ae6c077004ee2137cbc7119d8f6\legacy-support-core-ui-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\893a28228320846a4ce89518cfcdd952\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\60a65792153657ef3de9fe90ce5b70c4\android-jsc-r245459\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-linear-gradient] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-linear-gradient\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.fresco:flipper:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\13c548728fedbcec976146b09294cc23\flipper-2.2.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:stetho:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\510ebfb1f91bd718761197c0737b574e\stetho-2.2.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:fresco:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\14e4e1fe53197c21a4f8151c1e8f086c\fresco-2.2.0\AndroidManifest.xml:2:1-9:12
@@ -204,7 +205,7 @@ ADDED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidMa
 	android:launchMode
 		ADDED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:20:9-40
 	android:windowSoftInputMode
-		ADDED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:9-51
+		ADDED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:21:9-48
 	android:configChanges
 		ADDED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\main\AndroidManifest.xml:19:9-86
 	android:name
@@ -273,6 +274,8 @@ MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Cole
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\893a28228320846a4ce89518cfcdd952\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\60a65792153657ef3de9fe90ce5b70c4\android-jsc-r245459\AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\60a65792153657ef3de9fe90ce5b70c4\android-jsc-r245459\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-linear-gradient] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-linear-gradient\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-linear-gradient] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-linear-gradient\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.fresco:flipper:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\13c548728fedbcec976146b09294cc23\flipper-2.2.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:flipper:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\13c548728fedbcec976146b09294cc23\flipper-2.2.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:stetho:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\510ebfb1f91bd718761197c0737b574e\stetho-2.2.0\AndroidManifest.xml:5:5-7:41

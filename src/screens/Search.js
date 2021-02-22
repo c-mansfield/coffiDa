@@ -12,17 +12,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
+  ScrollView,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Icon } from '@ui-kitten/components';
+import { Icon, Input } from '@ui-kitten/components';
 
 import LocationTile from 'src/components/LocationTile.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 
 const Search = ({ navigation }) => {
   const [locationsData, setLocationsData] = useState([]);
-  const numColumns = 2;
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -41,36 +40,44 @@ const Search = ({ navigation }) => {
   }, [isFocused]);
 
   return (
-    <View style={styles.main}>
+    <ScrollView style={styles.main}>
       <Text style={styles.title}>Search</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('SearchResults')}>
-        <View style={styles.searchBar}>
-          <Icon style={styles.searchIcon} fill="#000000" name="search" />
-          <Text style={{
-            fontSize: 14, fontFamily: 'Nunito-Regular', color: '#707070', flex: 1,
-          }}
-          >Name, Location, rating...
-          </Text>
-        </View>
+      <TouchableOpacity onPress={() => navigation.navigate('SearchResults')} style={styles.searchBar}>
+        <Input
+          placeholder="Name, Location, rating..."
+          accessoryLeft={searchIcon}
+          status="info"
+          disabled
+        />
       </TouchableOpacity>
 
-      <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Top Locations</Text>
+      <Text style={styles.subHeading}>Top Locations</Text>
       <View style={styles.tileWrapper}>
-        <FlatList
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
-          data={locationsData}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('LocationDetails', { location: item })}>
-              <LocationTile location={item} />
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.location_name}
-          numColumns={numColumns}
-        />
+        { locationsData !== null ? (
+          <>
+            {locationsData.map((location) => (
+              <>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(
+                    'LocationStackNavigationSearch',
+                    { screen: 'LocationDetails', params: { locationID: location.location_id } },
+                  )}
+                >
+                  <LocationTile location={location} />
+                </TouchableOpacity>
+              </>
+            ))}
+          </>
+        )
+          : null}
       </View>
-    </View>
+    </ScrollView>
   );
 };
+
+const searchIcon = (props) => (
+  <Icon {...props} name="search" />
+);
 
 const styles = StyleSheet.create({
   main: {
@@ -82,26 +89,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
   },
   searchBar: {
-    textAlign: 'left',
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderColor: 'rgb(224, 224, 224)',
-    borderRadius: 4,
-    borderWidth: 1,
-    flexDirection: 'row',
-    height: 100,
+    marginTop: 5,
   },
-  searchIcon: {
-    width: 16,
-    height: 16,
-    justifyContent: 'center',
+  subHeading: {
+    fontSize: 18,
+    fontFamily: 'Nunito-Regular',
+    color: '#707070',
+    marginTop: 10,
   },
   tileWrapper: {
     flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 30,
   },
 });
 

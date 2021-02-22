@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import {
   Button,
   Icon,
@@ -9,18 +8,16 @@ import {
   Text,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DropdownAlert from 'react-native-dropdownalert';
 
 import UserManagement from 'src/api/UserManagement.js';
 import EditDetailsModal from 'src/components/EditDetailsModal.js';
 import ChangePasswordModal from 'src/components/ChangePasswordModal.js';
 
 const Account = ({ navigation }) => {
-  const isFocused = useIsFocused();
   const [userData, setUserData] = useState({});
   const [modalDetailsVisible, setModalDetailsVisible] = useState(false);
   const [modalPasswordVisible, setModalPasswordVisible] = useState(false);
-  let dropDownAlertRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,17 +25,19 @@ const Account = ({ navigation }) => {
       const response = await UserManagement.getUser(userID);
 
       setUserData(response);
+      setIsLoading(false);
     };
 
     fetchData();
-  }, [isFocused, modalDetailsVisible]);
+  }, [modalDetailsVisible]);
 
   const logoutUser = async () => {
+    setIsLoading(true);
     const response = await UserManagement.logout();
 
     if (response) {
+      navigation.navigate('Entry');
       await AsyncStorage.clear();
-      navigation.navigate('Login');
     }
   };
 
@@ -50,70 +49,74 @@ const Account = ({ navigation }) => {
     setModalPasswordVisible(!modalPasswordVisible);
   };
 
-  const showDropdownMessage = (option, title, message) => {
-    dropDownAlertRef.alertWithType(option, title, message);
-  };
-
   return (
     <Layout level="1" style={styles.main}>
-      <Text style={styles.title}>{userData.first_name} {userData.last_name}</Text>
-      <Text style={styles.subHeading}>{userData.email}</Text>
+      { isLoading
+        ? (
+          <>
+            <View style={{
+              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+            }}
+            >
+              <ActivityIndicator />
+            </View>
+          </>
+        ) : (
+          <>
+            <Text style={styles.title}>{userData.first_name} {userData.last_name}</Text>
+            <Text style={styles.subHeading}>{userData.email}</Text>
 
-      <View style={styles.sectionMain}>
-        <Text style={styles.sectionHeader}>Account Settings</Text>
+            <View style={styles.sectionMain}>
+              <Text style={styles.sectionHeader}>Account Settings</Text>
 
-        <MenuItem
-          title="Edit Details"
-          accessoryLeft={PersonIcon}
-          accessoryRight={ForwardIcon}
-          onPress={toggleModalDetails}
-        />
-        <EditDetailsModal
-          modalDetailsVisible={modalDetailsVisible}
-          toggleModalDetails={toggleModalDetails}
-          userData={userData}
-          showDropdownMessage={showDropdownMessage}
-        />
-        <MenuItem
-          title="Change Password"
-          accessoryLeft={EditIcon}
-          accessoryRight={ForwardIcon}
-          onPress={toggleModalPassword}
-        />
-        <ChangePasswordModal
-          modalPasswordVisible={modalPasswordVisible}
-          toggleModalPassword={toggleModalPassword}
-          userData={userData}
-          showDropdownMessage={showDropdownMessage}
-        />
-      </View>
+              <MenuItem
+                title="Edit Details"
+                accessoryLeft={PersonIcon}
+                accessoryRight={ForwardIcon}
+                onPress={toggleModalDetails}
+              />
+              <EditDetailsModal
+                modalDetailsVisible={modalDetailsVisible}
+                toggleModalDetails={toggleModalDetails}
+                userData={userData}
+                showDropdownMessage={showDropdownMessage}
+              />
+              <MenuItem
+                title="Change Password"
+                accessoryLeft={EditIcon}
+                accessoryRight={ForwardIcon}
+                onPress={toggleModalPassword}
+              />
+              <ChangePasswordModal
+                modalPasswordVisible={modalPasswordVisible}
+                toggleModalPassword={toggleModalPassword}
+                userData={userData}
+                showDropdownMessage={showDropdownMessage}
+              />
+            </View>
 
-      <View style={styles.sectionMain}>
-        <Text style={styles.sectionHeader}>Accessibility</Text>
+            <View style={styles.sectionMain}>
+              <Text style={styles.sectionHeader}>Accessibility</Text>
 
-        <MenuItem
-          title="Edit Details"
-          accessoryLeft={PersonIcon}
-          accessoryRight={ForwardIcon}
-        />
-        <MenuItem
-          title="Change Password"
-          accessoryLeft={EditIcon}
-          accessoryRight={ForwardIcon}
-        />
-      </View>
+              <MenuItem
+                title="Edit Details"
+                accessoryLeft={PersonIcon}
+                accessoryRight={ForwardIcon}
+              />
+              <MenuItem
+                title="Change Password"
+                accessoryLeft={EditIcon}
+                accessoryRight={ForwardIcon}
+              />
+            </View>
 
-      <View styles={styles.sectionMain}>
-        <Button style={styles.button} status="danger" onPress={() => logoutUser()} appearance="outline">
-          Sign Out
-        </Button>
-      </View>
-      <DropdownAlert ref={(ref) => {
-        if (ref) {
-          dropDownAlertRef = ref;
-        }
-      }}
-      />
+            <View styles={styles.sectionMain}>
+              <Button style={styles.button} status="danger" onPress={() => logoutUser()} appearance="outline">
+                Sign Out
+              </Button>
+            </View>
+          </>
+        )}
     </Layout>
   );
 };

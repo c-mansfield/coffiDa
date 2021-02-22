@@ -14,7 +14,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { Icon, Input } from '@ui-kitten/components';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
@@ -80,20 +80,23 @@ const SearchResults = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <SearchBar
-        placeholder="Search"
-        onChangeText={(value) => setSearch(value)}
-        value={search}
-        lightTheme
-        cancelIcon
-        containerStyle={{ backgroundColor: '#FFFFFF' }}
-        inputContainerStyle={{ backgroundColor: '#FFFFFF' }}
-      />
-      <Button
-        title="Filters"
-        buttonStyle={{ backgroundColor: '#247BA0' }}
-        onPress={toggleModal}
-      />
+      <View style={styles.searchBarContainer}>
+        <Input
+          placeholder="Search"
+          accessoryLeft={searchIcon}
+          status="info"
+          value={search}
+          onChangeText={(value) => setSearch(value)}
+          style={styles.searchBarStyle}
+        />
+        <TouchableOpacity onPress={toggleModal}>
+          <Icon
+            style={styles.filterIcon}
+            fill="#000000"
+            name="funnel"
+          />
+        </TouchableOpacity>
+      </View>
       <SearchFilterModal
         modalVisible={modalVisible}
         toggleModal={toggleModal}
@@ -105,7 +108,7 @@ const SearchResults = ({ navigation }) => {
           data={locations}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => navigation.navigate('LocationDetailsSearch', { location: item })}>
-              <LocationWidget location={item} />
+              <LocationWidget location={item} key={item.location_id.toString()} />
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.location_id.toString()}
@@ -119,10 +122,29 @@ const SearchResults = ({ navigation }) => {
   );
 };
 
+const searchIcon = (props) => (
+  <Icon {...props} name="search" />
+);
+
 const styles = StyleSheet.create({
   searchResultsWrapper: {
     flex: 1,
-    padding: 10
+    padding: 10,
+  },
+  searchBarContainer: {
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchBarStyle: {
+    flex: 1,
+    marginRight: 10,
+  },
+  filterIcon: {
+    height: 38,
+    width: 38,
   },
 });
 
