@@ -10,6 +10,7 @@ import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import { Icon, Text, Layout } from '@ui-kitten/components';
 
+import DropDownHolder from 'src/services/DropdownHolder.js';
 import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 
@@ -19,7 +20,6 @@ const ViewReview = ({ navigation, route }) => {
     location,
     review,
     likedReviews,
-    alertMessage,
   } = route.params;
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(null);
@@ -55,7 +55,7 @@ const ViewReview = ({ navigation, route }) => {
 
     if (response) {
       navigation.navigate('ReviewsTabNavigation');
-      alertMessage('success', 'Success', 'Review Deleted');
+      DropDownHolder.success('Success', 'Review Deleted');
     }
   };
 
@@ -108,9 +108,7 @@ const ViewReview = ({ navigation, route }) => {
 
   const getPhoto = async () => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
-
-    console.log(response);
-
+    
     if (response) {
       const reader = new FileReader();
       reader.readAsDataURL(response);

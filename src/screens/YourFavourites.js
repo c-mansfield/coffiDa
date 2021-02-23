@@ -11,6 +11,7 @@ import {
   View,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -18,7 +19,7 @@ import { useIsFocused } from '@react-navigation/native';
 import UserManagement from 'src/api/UserManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
 
-const YourFavourites = () => {
+const YourFavourites = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [locationsData, setLocationsData] = useState([]);
 
@@ -40,7 +41,14 @@ const YourFavourites = () => {
       <FlatList
         data={locationsData}
         renderItem={({ item }) => (
-          <LocationWidget location={item} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(
+              'LocationStackNavigation',
+              { screen: 'LocationDetails', params: { locationID: item.location_id } },
+            )}
+          >
+            <LocationWidget location={item} />
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.location_id.toString()}
       />

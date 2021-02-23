@@ -83,7 +83,7 @@ const LoginModal = ({ navigateHome, loginModalVisible, toggleLoginModal }) => {
   const testEmail = async () => {
     if (!Utilities.testEmailValid(userDetails.email)) {
       updateTextStatusState('danger', 'email');
-      updateErrorMessageState('Please input email in correct format', 'email');
+      updateErrorMessageState('Invalid email', 'email');
 
       return true;
     }

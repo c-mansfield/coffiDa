@@ -11,7 +11,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Input } from '@ui-kitten/components';
@@ -34,7 +33,7 @@ const SearchResults = ({ navigation }) => {
     };
 
     fetchData();
-  }, [search, isRefreshing, page]);
+  }, [search, isRefreshing, page, searchQuery]);
 
   const searchLocations = async () => {
     // Append the search query to the filters object
@@ -81,6 +80,9 @@ const SearchResults = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.searchBarContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10 }}>
+          <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
+        </TouchableOpacity>
         <Input
           placeholder="Search"
           accessoryLeft={searchIcon}
@@ -88,15 +90,13 @@ const SearchResults = ({ navigation }) => {
           value={search}
           onChangeText={(value) => setSearch(value)}
           style={styles.searchBarStyle}
+          autoFocus
         />
         <TouchableOpacity onPress={toggleModal}>
-          <Icon
-            style={styles.filterIcon}
-            fill="#000000"
-            name="funnel"
-          />
+          <Icon style={styles.iconSize} fill="#000000" name="funnel-outline" />
         </TouchableOpacity>
       </View>
+
       <SearchFilterModal
         modalVisible={modalVisible}
         toggleModal={toggleModal}
@@ -107,7 +107,12 @@ const SearchResults = ({ navigation }) => {
         <FlatList
           data={locations}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('LocationDetailsSearch', { location: item })}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(
+                'LocationStackNavigationSearch',
+                { screen: 'LocationDetails', params: { locationID: item.location_id } },
+              )}
+            >
               <LocationWidget location={item} key={item.location_id.toString()} />
             </TouchableOpacity>
           )}
@@ -142,9 +147,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
   },
-  filterIcon: {
-    height: 38,
-    width: 38,
+  iconSize: {
+    height: 28,
+    width: 28,
   },
 });
 

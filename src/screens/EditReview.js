@@ -45,6 +45,7 @@ const EditReview = ({ navigation, route }) => {
 
     if (response) {
       DropDownHolder.success('Success', 'Review has been updated!');
+      navigation.setParams({ location });
     }
   };
 

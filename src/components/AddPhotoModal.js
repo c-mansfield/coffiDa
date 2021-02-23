@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Image,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -31,7 +30,7 @@ const AddPhotoModal = ({
       setPhotoTaken(false);
 
       if (editPhoto) {
-        setPhoto('PLACEHOLDER');
+        setPhoto('');
         await getPhoto();
       }
     };
@@ -96,13 +95,12 @@ const AddPhotoModal = ({
       onBackdropPress={togglePhotoModal}
     >
       <View style={styles.modalContent}>
-        { editPhoto
-          ? <Text style={styles.title}>Edit review photo</Text>
-          : <Text style={styles.title}>Add photo to review</Text>}
 
-        <View style={styles.imageView}>
-          {photo ? (
-            <>
+        {photo ? (
+          <>
+            <Text style={styles.title}>Edit review photo</Text>
+
+            <View style={styles.imageView}>
               <View style={styles.cameraPreview}>
                 <Image
                   source={{ uri: photo.uri }}
@@ -124,9 +122,18 @@ const AddPhotoModal = ({
                   Retake photo
                 </Text>
               </TouchableOpacity>
-            </>
-          ) : (
-            <>
+
+              <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <>
+
+            <Text style={styles.title}>Add photo to review</Text>
+            <View style={styles.imageView}>
+
               <View style={styles.cameraPreview}>
                 <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} />
               </View>
@@ -140,26 +147,13 @@ const AddPhotoModal = ({
                   Choose From Library
                 </Text>
               </TouchableOpacity>
-            </>
-          )}
 
-          { editPhoto
-            ? (
-              <>
-                <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                  <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
-                </TouchableOpacity>
-              </>
-            )
-            : (
-              <>
-                <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                  <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
-                </TouchableOpacity>
-              </>
-            )}
-
-        </View>
+              <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
 
       </View>
     </Modal>

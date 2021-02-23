@@ -55,7 +55,7 @@ const Search = ({ navigation }) => {
       <View style={styles.tileWrapper}>
         { locationsData !== null ? (
           <>
-            {locationsData.map((location) => (
+            {locationsData.map((location, index) => (
               <>
                 <TouchableOpacity
                   onPress={() => navigation.navigate(
@@ -63,7 +63,7 @@ const Search = ({ navigation }) => {
                     { screen: 'LocationDetails', params: { locationID: location.location_id } },
                   )}
                 >
-                  <LocationTile location={location} />
+                  <LocationTile location={location} key={location.location_id} />
                 </TouchableOpacity>
               </>
             ))}

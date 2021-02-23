@@ -220,7 +220,7 @@ const SearchFilterModal = (props) => {
 
         <TouchableOpacity style={styles.applyButton} onPress={setFilterObject}>
           <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-            Apply filters
+            Apply
           </Text>
         </TouchableOpacity>
 

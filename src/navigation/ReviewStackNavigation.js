@@ -8,15 +8,11 @@
 
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Icon } from '@ui-kitten/components';
 
 import ReviewsTabNavigation from 'src/navigation/ReviewsTabNavigation.js';
 import ViewReview from 'src/screens/ViewReview.js';
 import EditReview from 'src/screens/EditReview.js';
+import LocationStackNavigation from 'src/navigation/LocationStackNavigation.js';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +33,7 @@ const ReviewStackNavigation = () => {
         }}
       />
       <Stack.Screen name="Edit Review" component={EditReview} options={{ headerShown: true }} />
+      <Stack.Screen name="LocationStackNavigation" component={LocationStackNavigation} />
     </Stack.Navigator>
   );
 };
