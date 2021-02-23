@@ -20,6 +20,7 @@ MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\no
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-video] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-video\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:2:1-13:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\5b36a9da79829ace464b6b3808ee0847\legacy-support-v4-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\9be61ae6c077004ee2137cbc7119d8f6\legacy-support-core-ui-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -88,6 +89,7 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Cole\.gradle\
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\788bea98b94aeb7848375e92ffebc67e\lifecycle-livedata-core-2.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\6339efbb2a669e295bc723a0ac81fd93\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\ebb4b17ac909094cced660534311273f\jetified-android-maps-utils-0.5\AndroidManifest.xml:2:1-13:12
+MERGED from [com.yqritc:android-scalablevideoview:1.0.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1d171a0f7ec1083010ef94c94a1edc1b\jetified-android-scalablevideoview-1.0.4\AndroidManifest.xml:2:1-12:12
 MERGED from [com.facebook.fresco:fbcore:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\a1a57ac4eaead5c4e42935ee8e479589\jetified-fbcore-2.2.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:ui-common:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\889c9073fbddfedcc7814a19173ddc7e\ui-common-2.2.0\AndroidManifest.xml:2:1-9:12
 INJECTED from C:\Users\Cole\Documents\Github\coffiDa\android\app\src\debug\AndroidManifest.xml:2:1-8:12
@@ -264,6 +266,8 @@ MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modu
 MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-video] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-video\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-video] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-video\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\5b36a9da79829ace464b6b3808ee0847\legacy-support-v4-1.0.0\AndroidManifest.xml:20:5-44
@@ -400,6 +404,8 @@ MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Cole\.gradle\caches
 MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\6339efbb2a669e295bc723a0ac81fd93\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\ebb4b17ac909094cced660534311273f\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
 MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\ebb4b17ac909094cced660534311273f\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
+MERGED from [com.yqritc:android-scalablevideoview:1.0.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1d171a0f7ec1083010ef94c94a1edc1b\jetified-android-scalablevideoview-1.0.4\AndroidManifest.xml:8:5-10:41
+MERGED from [com.yqritc:android-scalablevideoview:1.0.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\1d171a0f7ec1083010ef94c94a1edc1b\jetified-android-scalablevideoview-1.0.4\AndroidManifest.xml:8:5-10:41
 MERGED from [com.facebook.fresco:fbcore:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\a1a57ac4eaead5c4e42935ee8e479589\jetified-fbcore-2.2.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fbcore:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\a1a57ac4eaead5c4e42935ee8e479589\jetified-fbcore-2.2.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:ui-common:2.2.0] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\889c9073fbddfedcc7814a19173ddc7e\ui-common-2.2.0\AndroidManifest.xml:5:5-7:41

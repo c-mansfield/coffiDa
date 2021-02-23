@@ -124,6 +124,7 @@ const EditDetailsModal = (props) => {
     >
       <View style={styles.modalContent}>
         <Text style={styles.title}>Edit Details</Text>
+        <Text style={styles.errorMain}>{errorMessage.main}</Text>
 
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>First Name</Text>
@@ -186,7 +187,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontFamily: 'Nunito-Bold',
-    marginBottom: 10,
+  },
+  errorMain: {
+    fontSize: 14,
+    fontFamily: 'Nunito-Regular',
+    marginBottom: 5,
+    color: '#B74171',
+    marginTop: 5,
   },
   sectionStyle: {
     marginTop: 20,

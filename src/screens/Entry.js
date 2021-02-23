@@ -10,17 +10,21 @@ import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import LinearGradient from 'react-native-linear-gradient';
+import Video from 'react-native-video';
 
 import LoginModal from 'src/components/LoginModal.js';
 import RegisterModal from 'src/components/RegisterModal.js';
 
 const logoIcon = require('assets/images/coffee_cup_blue.png');
+const coffeeVideo = require('assets/images/coffee_video3.mp4');
+
+const { height } = Dimensions.get('window');
 
 const Entry = ({ navigation }) => {
   const [loginModalVisible, setModalLoginVisible] = useState(false);
@@ -40,18 +44,18 @@ const Entry = ({ navigation }) => {
 
   return (
     <LinearGradient style={styles.main} colors={['#C3B299', '#CBD4C2']}>
+      <Video
+        source={coffeeVideo}
+        style={styles.backgroundVideo}
+        muted
+        repeat
+        resizeMode="cover"
+        rate={1.0}
+        ignoreSilentSwitch="obey"
+      />
       <KeyboardAvoidingView style={{ flex: 1 }}>
-        <View style={styles.logoWrapper}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Image
-              style={styles.logoIconStyle}
-              source={logoIcon}
-            />
-          </View>
-        </View>
-
         <Text style={{
-          fontFamily: 'Nunito-Regular', fontSize: 38, color: '#FFFFFF', marginTop: 20,
+          fontFamily: 'Nunito-Regular', fontSize: 38, color: '#FFFFFF', marginTop: 70,
         }}
         >
           Find the perfect cup...
@@ -65,7 +69,7 @@ const Entry = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.registerButton} onPress={() => toggleRegisterModal()}>
-            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
               REGISTER
             </Text>
           </TouchableOpacity>
@@ -89,6 +93,15 @@ const styles = StyleSheet.create({
     padding: 25,
     flex: 1,
   },
+  backgroundVideo: {
+    height,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    alignItems: 'stretch',
+    bottom: 0,
+    right: 0,
+  },
   logoWrapper: {
     height: 88,
     width: 88,
@@ -99,6 +112,7 @@ const styles = StyleSheet.create({
   logoIconStyle: {
     width: 60,
     height: 44,
+    marginTop: 50,
   },
   buttonsStyles: {
     flex: 1,
@@ -114,13 +128,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   registerButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     borderRadius: 30,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#247BA0',
-    borderWidth: 1,
+    borderWidth: 2,
   },
 });
 

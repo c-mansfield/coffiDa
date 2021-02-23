@@ -3,7 +3,6 @@ import {
   View, StyleSheet, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
 import {
-  Button,
   Icon,
   Layout,
   MenuItem,

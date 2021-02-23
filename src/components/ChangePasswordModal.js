@@ -19,71 +19,77 @@ import PropTypes from 'prop-types';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import UserManagement from 'src/api/UserManagement.js';
+import Utilities from 'src/components/Utilities.js';
 
 const ChangePasswordModal = (props) => {
+  const newPasswordMessage = 'Password should be greater than 8 characters and have atleast 1 letter and number';
   const isFocused = useIsFocused();
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const [secureTextEntryOld, setSecureTextEntryOld] = useState(true);
   const [secureTextEntryNew, setSecureTextEntryNew] = useState(true);
-  const [textStatus, setTextStatus] = useState({ oldPassword: 'basic', newPassword: 'basic' });
+  const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
+  const [textStatus, setTextStatus] = useState({ oldPassword: 'basic', newPassword: 'basic', main: 'basic' });
   const [errorMessage, setErrorMessage] = useState({
-    oldPassword: '',
-    newPassword: '',
+    oldPassword: '', newPassword: newPasswordMessage, main: '',
   });
 
-
   useEffect(() => {
-    setOldPassword('');
-    setNewPassword('');
+    setPasswords({ oldPassword: '', newPassword: '' });
+    setErrorMessage({ oldPassword: '', newPassword: newPasswordMessage });
+    setTextStatus({ oldPassword: 'basic', newPassword: 'basic' });
   }, [isFocused]);
 
   const changePassword = async () => {
     const fields = await checkRequiredFields();
-    const emailCheck = await testEmail();
+    const emailCheck = await testPassword();
 
     if (!fields && !emailCheck) {
-      await updatePassword();
+      const oldPassed = await checkOldPassword();
+
+      if (oldPassed) {
+        await updatePassword();
+      }
     }
   };
 
   const updatePassword = async () => {
-    const response = await UserManagement.updateUser(props.userData.user_id, { password: newPassword });
+    const response = await UserManagement.updateUser(props.userData.user_id, { password: passwords.newPassword });
 
     if (response.success) {
       props.toggleModalPassword();
       DropDownHolder.success('Success', 'Password has been updated!');
+    } else {
+      updateTextStatusState('danger', 'main');
+      updateErrorMessageState('Error with changing password, please try again later!', 'main');
     }
   };
 
   const checkOldPassword = async () => {
     const toSend = {
       email: props.userData.email,
-      password: oldPassword,
+      password: passwords.oldPassword,
     };
     const response = await UserManagement.login(toSend);
 
-    if (response) {
-      await AsyncStorage.setItem('@token', response.token);
+    if (response.success) {
+      await AsyncStorage.setItem('@token', response.body.token);
       return true;
     }
 
-    DropDownHolder.error('Error', 'Old password is incorrect. Please try again!');
+    updateTextStatusState('danger', 'oldPassword');
+    updateErrorMessageState('Old password incorrect', 'oldPassword');
     return false;
   };
 
   const testPassword = async () => {
-    if (await !Utilities.testPasswordValid(newPassword.password)) {
+    updateErrorMessageState(newPasswordMessage, 'newPassword');
+
+    if (await !Utilities.testPasswordValid(passwords.newPassword)) {
       updateTextStatusState('danger', 'newPassword');
-      updateErrorMessageState(
-        'Please make sure password is 8 characters and has atleast 1 letter and number', 'newPassword',
-      );
 
       return true;
     }
 
-    updateTextStatusState('basic', 'email');
-    updateErrorMessageState('', 'email');
+    updateTextStatusState('basic', 'newPassword');
 
     return false;
   };
@@ -91,17 +97,17 @@ const ChangePasswordModal = (props) => {
   const checkRequiredFields = () => {
     let error = false;
 
-    // Object.keys(user).forEach((key) => {
-    //   if (user[key] === '') {
-    //     updateTextStatusState('danger', key);
-    //     updateErrorMessageState('Required field', key);
-    //
-    //     error = true;
-    //   } else {
-    //     updateTextStatusState('basic', key);
-    //     updateErrorMessageState('', key);
-    //   }
-    // });
+    Object.keys(passwords).forEach((key) => {
+      if (passwords[key] === '') {
+        updateTextStatusState('danger', key);
+        updateErrorMessageState('Required field', key);
+
+        error = true;
+      } else {
+        updateTextStatusState('basic', key);
+        updateErrorMessageState('', key);
+      }
+    });
 
     return error;
   };
@@ -126,6 +132,10 @@ const ChangePasswordModal = (props) => {
     </TouchableWithoutFeedback>
   );
 
+  const updatePasswordsState = (val, field) => {
+    setPasswords((prevState) => ({ ...prevState, [field]: val }));
+  };
+
   const updateTextStatusState = (val, field) => {
     setTextStatus((prevState) => ({ ...prevState, [field]: val }));
   };
@@ -143,32 +153,38 @@ const ChangePasswordModal = (props) => {
     >
       <View style={styles.modalContent}>
         <Text style={styles.title}>Change Password</Text>
+        <Text style={styles.errorMain}>{errorMessage.main}</Text>
 
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>Old Password</Text>
           <Input
-            value={oldPassword}
-            onChangeText={(nextValue) => setOldPassword(nextValue)}
+            value={passwords.oldPassword}
+            onChangeText={(value) => updatePasswordsState(value, 'oldPassword')}
             placeholder="Enter old password"
             accessoryRight={renderSecureIconOld}
             secureTextEntry={toggleSecureTextEntryOld}
             style={styles.inputBox}
+            status={textStatus.oldPassword}
+            caption={errorMessage.oldPassword}
           />
         </View>
 
         <View style={styles.sectionStyle}>
           <Text style={styles.sectionHeading}>New Password</Text>
           <Input
-            value={newPassword}
-            onChangeText={(value) => setNewPassword(value)}
+            value={passwords.newPassword}
+            onChangeText={(value) => updatePasswordsState(value, 'newPassword')}
             placeholder="Enter new password"
             accessoryRight={renderSecureIconNew}
             secureTextEntry={toggleSecureTextEntryNew}
             style={styles.inputBox}
+            status={textStatus.newPassword}
+            caption={errorMessage.newPassword}
+            captionIcon={AlertIcon}
           />
         </View>
         <BarPasswordStrengthDisplay
-          password={newPassword}
+          password={passwords.newPassword}
           barContainerStyle={{ alignSelf: 'center' }}
           width={350}
         />
@@ -198,10 +214,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontFamily: 'Nunito-Bold',
-    marginBottom: 20,
+  },
+  errorMain: {
+    fontSize: 14,
+    fontFamily: 'Nunito-Regular',
+    marginBottom: 15,
+    color: '#B74171',
+    marginTop: 5,
   },
   sectionStyle: {
-    height: 80,
+    height: 100,
   },
   sectionHeading: {
     fontSize: 14,
@@ -230,5 +252,9 @@ ChangePasswordModal.propTypes = {
   toggleModalPassword: PropTypes.func.isRequired,
   userData: PropTypes.object.isRequired,
 };
+
+const AlertIcon = (props) => (
+  <Icon {...props} name="alert-circle-outline"/>
+);
 
 export default ChangePasswordModal;
