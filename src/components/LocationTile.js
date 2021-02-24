@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React from 'react';
 import {
   View,

@@ -1,10 +1,7 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
  * @format
  * @flow strict-local
- */
+*/
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -13,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Icon, Input } from '@ui-kitten/components';
@@ -24,23 +22,27 @@ import DropDownHolder from 'src/services/DropdownHolder.js';
 const Search = ({ navigation }) => {
   const [locationsData, setLocationsData] = useState([]);
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       await getTopLocations();
     };
 
+    setIsLoading(true);
     fetchData();
   }, [isFocused]);
 
   const getTopLocations = async () => {
     const sendQuery = {
-      overall_rating: 3,
+      overall_rating: 0,
     };
     const response = await LocationManagement.searchLocations(sendQuery);
 
     if (response.success) {
-      setLocationsData(response.body);
+      response.body.sort((a, b) => ((a.avg_overall_rating > b.avg_overall_rating) ? -1 : 1));
+      setLocationsData(response.body.slice(0, 8)); // Get top 8 locations
+      setIsLoading(false);
     } else {
       DropDownHolder.error('Error', response.error);
     }
@@ -48,36 +50,51 @@ const Search = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.main}>
-      <Text style={styles.title}>Search</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('SearchResults')} style={styles.searchBar}>
-        <Input
-          placeholder="Name, Location, rating..."
-          accessoryLeft={searchIcon}
-          status="info"
-          disabled
-        />
-      </TouchableOpacity>
-
-      <Text style={styles.subHeading}>Top Locations</Text>
-      <View style={styles.tileWrapper}>
-        { locationsData !== null ? (
+      { isLoading
+        ? (
           <>
-            {locationsData.map((location, index) => (
-              <>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate(
-                    'LocationStackNavigationSearch',
-                    { screen: 'LocationDetails', params: { locationID: location.location_id } },
-                  )}
-                >
-                  <LocationTile location={location} key={location.location_id} />
-                </TouchableOpacity>
-              </>
-            ))}
+            <View style={{
+              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+            }}
+            >
+              <ActivityIndicator />
+            </View>
           </>
-        )
-          : null}
-      </View>
+        ) : (
+          <>
+            <Text style={styles.title}>Search</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchResults')} style={styles.searchBar}>
+              <Input
+                placeholder="Name, Location, rating..."
+                accessoryLeft={searchIcon}
+                status="info"
+                disabled
+              />
+            </TouchableOpacity>
+
+            <Text style={styles.subHeading}>Top Rated Locations</Text>
+            <View style={styles.tileWrapper}>
+              { locationsData !== null ? (
+                <>
+                  {locationsData.map((location) => (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate(
+                          'LocationStackNavigationSearch',
+                          { screen: 'LocationDetails', params: { locationID: location.location_id } },
+                        )}
+                      >
+                        <LocationTile location={location} key={location.location_id} />
+                      </TouchableOpacity>
+                    </>
+                  ))}
+                </>
+              )
+                : null}
+            </View>
+          </>
+        )}
+
     </ScrollView>
   );
 };

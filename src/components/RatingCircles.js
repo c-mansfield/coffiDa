@@ -1,36 +1,54 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
-import { Tile } from 'react-native-elements';
+/**
+ * @format
+ * @flow strict-local
+*/
+
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
 const RatingCircles = ({ rating }) => {
+  let ratingTotal = rating;
+
   const innerCircleStyle = () => {
-    if (rating >= 1) {
-      rating -= 1;
+    if (ratingTotal >= 1) {
+      ratingTotal -= 1;
 
-      return {
-        width: 8,
-        height: 8,
-        borderWidth: 0,
-        borderRadius: 14,
-        backgroundColor: '#C3B299',
-        justifyContent: 'center',
-        alignItems: 'center'
-      };
-    } if (rating >= 0.2 && rating <= 0.8) {
-      rating -= rating;
-
-      return {
-        width: 4,
-        height: 8,
-        borderWidth: 0,
-        borderRadius: 14,
-        backgroundColor: '#C3B299',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-      };
+      return fullCircle();
     }
+
+    if (ratingTotal >= 0.2 && ratingTotal <= 0.8) {
+      ratingTotal -= ratingTotal;
+
+      return halfCircle();
+    }
+
+    return null;
+  };
+
+  const fullCircle = () => {
+    return {
+      width: 8,
+      height: 8,
+      borderWidth: 0,
+      borderRadius: 14,
+      backgroundColor: '#C3B299',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+  };
+
+  const halfCircle = () => {
+    return {
+      width: 4,
+      height: 8,
+      borderWidth: 0,
+      borderRadius: 14,
+      backgroundColor: '#C3B299',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0,
+    };
   };
 
   return (

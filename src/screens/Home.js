@@ -1,10 +1,7 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
  * @format
  * @flow strict-local
- */
+*/
 
 import React, { useEffect, useState, useRef } from 'react';
 import {
@@ -19,6 +16,7 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useIsFocused } from '@react-navigation/native';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationTile from 'src/components/LocationTile.js';
@@ -34,6 +32,7 @@ const Home = ({ navigation }) => {
   const [geoLocationDetails, setGeoLocationDetails] = useState({ location: null, locationPermission: false });
   const [isLoading, setIsLoading] = useState(true);
   const carousel = useRef(null);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,7 +52,7 @@ const Home = ({ navigation }) => {
     };
 
     fetchData();
-  }, [geoLocationDetails]);
+  }, [geoLocationDetails, isFocused]);
 
   const getLocations = async () => {
     const sendQuery = {
@@ -63,7 +62,7 @@ const Home = ({ navigation }) => {
     const response = await LocationManagement.searchLocations(sendQuery);
 
     if (response.success) {
-      if (geoLocationDetails.locationPermission) {
+      if (geoLocationDetails.locationPermission && geoLocationDetails.location) {
         response.body = await getSurroundingLocations(response.body);
       }
       setLocationsData(response.body);
@@ -125,16 +124,7 @@ const Home = ({ navigation }) => {
 
   const requestLocationPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Permission',
-          message: 'This app requires access to your location',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: true }));
         return true;

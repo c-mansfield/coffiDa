@@ -1,8 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+/**
+ * @format
+ * @flow strict-local
+*/
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Input,
@@ -26,13 +32,17 @@ const EditReview = ({ navigation, route }) => {
     quality_rating: 0,
     clenliness_rating: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    updateReviewDataState(review.review_body, 'review_body');
-    updateReviewDataState(review.overall_rating, 'overall_rating');
-    updateReviewDataState(review.price_rating, 'price_rating');
-    updateReviewDataState(review.quality_rating, 'quality_rating');
-    updateReviewDataState(review.clenliness_rating, 'clenliness_rating');
+    setReviewData({
+      review_body: review.review_body,
+      overall_rating: review.overall_rating,
+      price_rating: review.price_rating,
+      quality_rating: review.quality_rating,
+      clenliness_rating: review.clenliness_rating,
+    });
+    setIsLoading(false);
   }, [isFocused]);
 
   const togglePhotoModal = () => {
@@ -45,7 +55,6 @@ const EditReview = ({ navigation, route }) => {
 
     if (response.success) {
       DropDownHolder.success('Success', 'Review has been updated!');
-      // navigation.setParams({ location });
     } else {
       DropDownHolder.error('Error', response.error);
     }
@@ -71,96 +80,111 @@ const EditReview = ({ navigation, route }) => {
 
   return (
     <View style={styles.main}>
-      <View style={styles.editMain}>
-        <Text style={styles.subHeadingBold}>{location.location_name}, {location.location_town}</Text>
+      { isLoading
+        ? (
+          <>
+            <View style={{
+              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+            }}
+            >
+              <ActivityIndicator />
+            </View>
+          </>
+        ) : (
+          <>
 
-        <Input
-          multiline
-          textStyle={{ minHeight: 64, maxHeight: 64 }}
-          placeholder="Review Message..."
-          value={reviewData.review_body}
-          onChangeText={(reviewBody) => updateReviewDataState(reviewBody, 'review_body')}
-        />
-        <Text style={{ fontSize: 10, textAlign: 'right' }}>
-          {reviewData.review_body.length}/200
-        </Text>
+            <View style={styles.editMain}>
+              <Text style={styles.subHeadingBold}>{location.location_name}, {location.location_town}</Text>
 
-        <Text style={styles.subHeadingOverall}>Overall Rating</Text>
-        <Slider
-          value={reviewData.overall_rating}
-          onValueChange={(overall) => updateReviewDataState(overall, 'overall_rating')}
-          maximumValue={5}
-          minimumValue={0}
-          step={1}
-          thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
-          thumbProps={{
-            children: (
-              <Text style={styles.sliderText}>{reviewData.overall_rating}</Text>
-            ),
-          }}
-        />
-        <Text style={styles.subHeading}>Price Rating</Text>
-        <Slider
-          value={reviewData.price_rating}
-          onValueChange={(price) => updateReviewDataState(price, 'price_rating')}
-          maximumValue={5}
-          minimumValue={0}
-          step={1}
-          thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
-          thumbProps={{
-            children: (
-              <Text style={styles.sliderText}>{reviewData.price_rating}</Text>
-            ),
-          }}
-        />
-        <Text style={styles.subHeading}>Quality Rating</Text>
-        <Slider
-          value={reviewData.quality_rating}
-          onValueChange={(quality) => updateReviewDataState(quality, 'quality_rating')}
-          maximumValue={5}
-          minimumValue={0}
-          step={1}
-          thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
-          thumbProps={{
-            children: (
-              <Text style={styles.sliderText}>{reviewData.quality_rating}</Text>
-            ),
-          }}
-        />
-        <Text style={styles.subHeading}>Cleanliness Rating</Text>
-        <Slider
-          value={reviewData.clenliness_rating}
-          onValueChange={(clenliness) => updateReviewDataState(clenliness, 'clenliness_rating')}
-          maximumValue={5}
-          minimumValue={0}
-          step={1}
-          thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
-          thumbProps={{
-            children: (
-              <Text style={styles.sliderText}>{reviewData.clenliness_rating}</Text>
-            ),
-          }}
-        />
+              <Input
+                multiline
+                textStyle={{ minHeight: 64, maxHeight: 64 }}
+                placeholder="Review Message..."
+                value={reviewData.review_body}
+                onChangeText={(reviewBody) => updateReviewDataState(reviewBody, 'review_body')}
+              />
+              <Text style={{ fontSize: 10, textAlign: 'right' }}>
+                {reviewData.review_body.length}/200
+              </Text>
 
-        <TouchableOpacity style={styles.secondaryButton} onPress={() => togglePhotoModal()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
-            Edit Photo 📷
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.primaryButton} onPress={() => editReview()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-            Update Review
-          </Text>
-        </TouchableOpacity>
+              <Text style={styles.subHeadingOverall}>Overall Rating</Text>
+              <Slider
+                value={reviewData.overall_rating}
+                onValueChange={(overall) => updateReviewDataState(overall, 'overall_rating')}
+                maximumValue={5}
+                minimumValue={0}
+                step={1}
+                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbProps={{
+                  children: (
+                    <Text style={styles.sliderText}>{reviewData.overall_rating}</Text>
+                  ),
+                }}
+              />
+              <Text style={styles.subHeading}>Price Rating</Text>
+              <Slider
+                value={reviewData.price_rating}
+                onValueChange={(price) => updateReviewDataState(price, 'price_rating')}
+                maximumValue={5}
+                minimumValue={0}
+                step={1}
+                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbProps={{
+                  children: (
+                    <Text style={styles.sliderText}>{reviewData.price_rating}</Text>
+                  ),
+                }}
+              />
+              <Text style={styles.subHeading}>Quality Rating</Text>
+              <Slider
+                value={reviewData.quality_rating}
+                onValueChange={(quality) => updateReviewDataState(quality, 'quality_rating')}
+                maximumValue={5}
+                minimumValue={0}
+                step={1}
+                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbProps={{
+                  children: (
+                    <Text style={styles.sliderText}>{reviewData.quality_rating}</Text>
+                  ),
+                }}
+              />
+              <Text style={styles.subHeading}>Cleanliness Rating</Text>
+              <Slider
+                value={reviewData.clenliness_rating}
+                onValueChange={(clenliness) => updateReviewDataState(clenliness, 'clenliness_rating')}
+                maximumValue={5}
+                minimumValue={0}
+                step={1}
+                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbProps={{
+                  children: (
+                    <Text style={styles.sliderText}>{reviewData.clenliness_rating}</Text>
+                  ),
+                }}
+              />
 
-        <AddPhotoModal
-          modalPhotoVisible={modalPhotoVisible}
-          togglePhotoModal={togglePhotoModal}
-          reviewID={review.review_id}
-          locationID={location.location_id}
-          editPhoto
-        />
-      </View>
+              <TouchableOpacity style={styles.secondaryButton} onPress={() => togglePhotoModal()}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                  Edit Photo 📷
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.primaryButton} onPress={() => editReview()}>
+                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                  Update Review
+                </Text>
+              </TouchableOpacity>
+
+              <AddPhotoModal
+                modalPhotoVisible={modalPhotoVisible}
+                togglePhotoModal={togglePhotoModal}
+                reviewID={review.review_id}
+                locationID={location.location_id}
+                editPhoto
+              />
+            </View>
+          </>
+        )}
     </View>
   );
 };

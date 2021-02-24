@@ -1,13 +1,15 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React from 'react';
 import {
   View,
   StyleSheet,
-  Dimensions,
   ImageBackground,
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
-
-import RatingCircles from 'src/components/RatingCircles.js';
 
 const ImageCarouselItem = ({ location }) => {
   const reviewCount = location.location_reviews.length;

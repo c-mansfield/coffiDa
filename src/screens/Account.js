@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useEffect, useState } from 'react';
 import {
   View, StyleSheet, ActivityIndicator, TouchableOpacity,

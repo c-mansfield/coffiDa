@@ -1,20 +1,25 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@ui-kitten/components';
 
-const AddReviewButton = (props) => {
-
+const AddReviewButton = () => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.addReviewStyle}
-      onPress={() => navigation.navigate('AddReview')}>
-        <Icon style={styles.addReviewTextStyle} fill={'#000000'} name={'plus-outline'} />
+      onPress={() => navigation.navigate('AddReview')}
+    >
+      <Icon style={styles.addReviewTextStyle} fill="#000000" name="plus-outline" />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   addReviewStyle: {
@@ -31,7 +36,7 @@ const styles = StyleSheet.create({
   addReviewTextStyle: {
     height: 38,
     width: 38,
-  }
+  },
 });
 
 export default AddReviewButton;

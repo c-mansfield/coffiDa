@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,

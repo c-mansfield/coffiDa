@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -65,9 +70,9 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
 
   const checkCanSignUp = async () => {
     const fields = await checkRequiredFields();
-    const emailCheck = await testEmail();
     const passwordCheck = await testPassword();
-
+    const emailCheck = await testEmail();
+    
     if (!fields && !emailCheck && !passwordCheck) {
       await signUpUser();
     }

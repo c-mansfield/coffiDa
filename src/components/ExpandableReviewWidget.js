@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -23,12 +28,13 @@ const ExpandableReviewWidget = (props) => {
     location,
     review,
   } = props;
-  const [image, setImage] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLike(false);
+      setLikeIcon('heart-outline');
       await setReviewLike();
     };
 
@@ -156,12 +162,10 @@ const ExpandableReviewWidget = (props) => {
                 <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', marginLeft: 10 }}>Cleanliness rating</Text>
               </View>
 
-              <View style={styles.likesSection}>
-                <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
-                  <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-                </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
+                <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
                 <Text style={styles.likesText}>{review.likes}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.imageWrapper}>
               { photo ? (
@@ -194,12 +198,10 @@ const ExpandableReviewWidget = (props) => {
                 <RatingCircles rating={review.overall_rating} />
               </View>
 
-              <View style={styles.likesSection}>
-                <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
-                  <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-                </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
+                <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
                 <Text style={styles.likesText}>{review.likes}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -232,11 +234,11 @@ const styles = StyleSheet.create({
   },
   likesSection: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 10,
   },
   likesImage: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
   },
   likesText: {
     fontSize: 10,
@@ -267,7 +269,8 @@ ExpandableReviewWidget.propTypes = {
   review: PropTypes.object,
   likedReviews: PropTypes.array,
   location: PropTypes.object,
-  myReview: PropTypes.bool
+  myReview: PropTypes.bool,
+  removeLike: PropTypes.bool,
 };
 
 export default ExpandableReviewWidget;

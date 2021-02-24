@@ -1,17 +1,15 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
  * @format
  * @flow strict-local
- */
+*/
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -24,6 +22,7 @@ const YourReviews = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [reviewsData, setReviewsData] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +30,7 @@ const YourReviews = ({ navigation }) => {
     };
 
     fetchData();
+    setIsLoading(true);
   }, [isFocused]);
 
   const getReviews = async () => {
@@ -39,15 +39,17 @@ const YourReviews = ({ navigation }) => {
 
     if (response.success) {
       const likes = await getLikedReviews(response.body);
+      response.body.reviews.sort((a, b) => ((a.review.overall_rating > b.review.overall_rating) ? -1 : 1));
 
       setReviewsData(response.body.reviews);
       setLikedReviews(likes);
+      setIsLoading(false);
     } else {
       DropDownHolder.error('Error', response.error);
     }
   };
 
-  const getLikedReviews = (reviewsFull) => {
+  const getLikedReviews = async (reviewsFull) => {
     const reviewIDs = [];
 
     reviewsFull.liked_reviews.forEach((like) => {
@@ -57,29 +59,37 @@ const YourReviews = ({ navigation }) => {
     return reviewIDs;
   };
 
-  const alertMessage = (type, title, message) => {
-    DropDownHolder.any(type, title, message);
-  };
-
   return (
     <View style={styles.main}>
-      <FlatList
-        data={reviewsData}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('View Review', {
-            review: item.review, location: item.location, likedReviews, alertMessage,
-          })}
-          >
-            <ReviewWidget
-              review={item.review}
-              location={item.location}
-              myReview
-              likedReviews={likedReviews}
+      { isLoading
+        ? (
+          <>
+            <View style={{
+              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+            }}
+            >
+              <ActivityIndicator />
+            </View>
+          </>
+        ) : (
+          <>
+            <FlatList
+              data={reviewsData}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => navigation.navigate('View Review', { reviewID: item.review.review_id })}
+                >
+                  <ReviewWidget
+                    review={item.review}
+                    location={item.location}
+                    myReview
+                    likedReviews={likedReviews}
+                  />
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.review.review_id.toString()}
             />
-          </TouchableOpacity>
+          </>
         )}
-        keyExtractor={(item) => item.review.review_id.toString()}
-      />
     </View>
   );
 };

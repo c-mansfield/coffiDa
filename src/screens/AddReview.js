@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
@@ -21,6 +26,7 @@ import { FilterWords } from 'assets/globals.js';
 const AddReview = () => {
   const isFocused = useIsFocused();
   const [location, setLocation] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
   const [locationID, setLocationID] = useState(0);
   const [locations, setLocations] = React.useState([{ location_name: '', location_town: '' }]);
   const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
@@ -38,11 +44,25 @@ const AddReview = () => {
 
   const onSelectLocation = (index) => {
     setLocation(`${locations[index].location_name}, ${locations[index].location_town}`);
+    setSelectedLocation(`${locations[index].location_name}, ${locations[index].location_town}`);
     setLocationID(locations[index].location_id);
   };
 
-  const onChangeLocation = async (query) => {
+  const checkLocationSelect = async (query) => {
     setLocation(query);
+
+    if (query !== '') {
+      if (locationID === 0 || location !== selectedLocation) {
+        await onChangeLocation(query);
+      } else {
+        setLocation('');
+        setSelectedLocation('');
+        setLocationID(0);
+      }
+    }
+  };
+
+  const onChangeLocation = async (query) => {
     const sendQuery = {
       q: query,
     };
@@ -56,18 +76,22 @@ const AddReview = () => {
     }
   };
 
-  const renderLocations = (item, index) => (
-    <AutocompleteItem
-      key={index}
-      title={`${item.location_name}, ${item.location_town}`}
-    />
-  );
+  const renderLocations = (item, index) => {
+    if (item.location_name) {
+      return (
+        <AutocompleteItem
+          key={index}
+          title={`${item.location_name}, ${item.location_town}`}
+        />
+      );
+    }
+
+    return null;
+  };
 
   const checkReview = async () => {
-    if (checkReviewFields()) {
-      if (await checkReviewProfanity()) {
-        await addReview();
-      }
+    if (checkReviewFields() && checkLocationAdded() && await checkReviewProfanity()) {
+      await addReview();
     }
   };
 
@@ -81,7 +105,16 @@ const AddReview = () => {
       return true;
     }
 
-    DropDownHolder.error('error', 'Unexpected items', 'All fields are requried');
+    DropDownHolder.error('Error', 'Unexpected items, all fields are requried');
+    return false;
+  };
+
+  const checkLocationAdded = () => {
+    if (locationID !== 0) {
+      return true;
+    }
+
+    DropDownHolder.error('Error', 'Invalid location, please select a valid location');
     return false;
   };
 
@@ -160,7 +193,7 @@ const AddReview = () => {
         placeholder="Find Location"
         value={location}
         onSelect={onSelectLocation}
-        onChangeText={onChangeLocation}
+        onChangeText={checkLocationSelect}
       >
         {locations.map(renderLocations)}
       </Autocomplete>

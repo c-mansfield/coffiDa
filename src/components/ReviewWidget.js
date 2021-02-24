@@ -1,8 +1,12 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
 } from 'react-native';
 import { Text, Icon } from '@ui-kitten/components';
@@ -16,8 +20,8 @@ import DropDownHolder from 'src/services/DropdownHolder.js';
 const ReviewWidget = (props) => {
   const isFocused = useIsFocused();
   const [likeIcon, setLikeIcon] = useState('heart-outline');
-  const [like, setLike] = useState(null);
-  const {
+  const [like, setLike] = useState(false);
+  let {
     likedReviews,
     location,
     review,
@@ -28,40 +32,49 @@ const ReviewWidget = (props) => {
       await setReviewLike();
     };
 
+    setLikeIcon('heart-outline');
+    setLike(false);
     fetchData();
   }, [isFocused]);
 
   const setReviewLike = () => {
-    if (likedReviews) {
-      if (likedReviews.includes(review.review_id)) {
-        setLikeIcon('heart');
-        setLike(true);
-      }
-    } else {
-      setLikeIcon('heart-outline');
-      setLike(false);
+    if (likedReviews.includes(review.review_id)) {
+      setLikeIcon('heart');
+      setLike(true);
+
+      return true;
     }
+
+    setLikeIcon('heart-outline');
+    setLike(false);
+
+    return false;
   };
 
   const changeLike = async () => {
     let done = false;
 
     if (like) {
-      done = await likeReview();
-    } else {
       done = await unLikeReview();
+    } else {
+      done = await likeReview();
     }
 
     return done;
   };
 
-  const likeReview = async () => {
+  const unLikeReview = async () => {
     const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
 
     if (response.success) {
       review.likes--;
       setLikeIcon('heart-outline');
       setLike(false);
+
+      const index = likedReviews.indexOf(review.review_id);
+      if (index > -1) {
+        likedReviews.splice(index, 1);
+      }
 
       return true;
     }
@@ -70,13 +83,15 @@ const ReviewWidget = (props) => {
     return false;
   };
 
-  const unLikeReview = async () => {
+  const likeReview = async () => {
     const response = await LocationReviews.likeReview(location.location_id, review.review_id);
 
     if (response.success) {
       review.likes++;
       setLikeIcon('heart');
       setLike(true);
+      likedReviews.push(review.review_id);
+      console.log(likedReviews);
 
       return true;
     }
@@ -99,12 +114,10 @@ const ReviewWidget = (props) => {
           <RatingCircles rating={review.overall_rating} />
         </View>
 
-        <View style={styles.likesSection}>
-          <TouchableOpacity onPress={() => changeLike()} style={styles.detailsHeaderRHS}>
-            <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
+          <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
           <Text style={styles.likesText}>{review.likes}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.imageWrapper} />
     </View>
@@ -139,8 +152,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   likesImage: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
   },
   likesText: {
     fontSize: 10,
@@ -163,10 +176,9 @@ const styles = StyleSheet.create({
 });
 
 ReviewWidget.propTypes = {
-  review: PropTypes.object,
-  likedReviews: PropTypes.array,
-  location: PropTypes.object,
-  myReview: PropTypes.bool
+  review: PropTypes.object.isRequired,
+  likedReviews: PropTypes.array.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default ReviewWidget;

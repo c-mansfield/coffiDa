@@ -1,3 +1,8 @@
+/**
+ * @format
+ * @flow strict-local
+*/
+
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {
   View,
@@ -5,34 +10,50 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import PropTypes from 'prop-types';
 import { Icon, Text, Layout } from '@ui-kitten/components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
+import UserManagement from 'src/api/UserManagement.js';
 
 const ViewReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const {
-    location,
-    review,
+    reviewID,
     likedReviews,
   } = route.params;
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(null);
   const [photo, setPhoto] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [review, setReview] = useState(null);
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      setReviewLike();
+      setLike(false);
+      setLikeIcon('heart-outline');
+      await getReview();
+      setIsLoading(false);
+    };
+
+    setIsLoading(true);
+    fetchData();
+  }, [isFocused]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await setReviewLike();
       await getPhoto();
     };
 
     fetchData();
-  }, [isFocused]);
+  }, [review]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -49,6 +70,21 @@ const ViewReview = ({ navigation, route }) => {
       ),
     });
   }, [navigation]);
+
+  const getReview = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      const reviewData = await response.body.reviews.find((r) => { return r.review.review_id === reviewID; });
+
+      console.log(reviewData);
+      setReview(reviewData.review);
+      setLocation(reviewData.location);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   const deleteReview = async () => {
     const response = await LocationReviews.deleteReview(location.location_id, review.review_id);
@@ -76,31 +112,33 @@ const ViewReview = ({ navigation, route }) => {
     );
   };
 
-  const setReviewLike = () => {
-    if (likedReviews) {
-      if (likedReviews.includes(review.review_id)) {
-        setLikeIcon('heart');
-        setLike(true);
-      }
-    } else {
-      setLikeIcon('heart-outline');
-      setLike(false);
+  const setReviewLike = async () => {
+    if (await likedReviews.includes(review.review_id)) {
+      setLikeIcon('heart');
+      setLike(true);
+
+      return true;
     }
+
+    setLikeIcon('heart-outline');
+    setLike(false);
+
+    return false;
   };
 
   const changeLike = async () => {
     let done = false;
 
     if (like) {
-      done = await likeReview();
-    } else {
       done = await unLikeReview();
+    } else {
+      done = await likeReview();
     }
 
     return done;
   };
 
-  const likeReview = async () => {
+  const unLikeReview = async () => {
     const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
 
     if (response.success) {
@@ -115,7 +153,7 @@ const ViewReview = ({ navigation, route }) => {
     return false;
   };
 
-  const unLikeReview = async () => {
+  const likeReview = async () => {
     const response = await LocationReviews.likeReview(location.location_id, review.review_id);
 
     if (response.success) {
@@ -151,66 +189,80 @@ const ViewReview = ({ navigation, route }) => {
 
   return (
     <Layout level="2" style={styles.detailsMain}>
-      <View style={styles.detailsInformation}>
-        <View style={styles.imageWrapper}>
-          { photo ? (
-            <Image
-              style={styles.reviewImage}
-              source={{ uri: photo.uri }}
-            />
-          )
-            : null}
-        </View>
+      { isLoading
+        ? (
+          <>
+            <View style={{
+              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+            }}
+            >
+              <ActivityIndicator />
+            </View>
+          </>
+        ) : (
+          <View style={styles.detailsInformation}>
+            <View style={styles.imageWrapper}>
+              { photo ? (
+                <Image
+                  style={styles.reviewImage}
+                  source={{ uri: photo.uri }}
+                />
+              )
+                : null}
+            </View>
 
-        <View style={styles.sectionStyle}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 22 }}>{location.location_name}, {location.location_town}</Text>
+            <View style={styles.sectionStyle}>
+              <Text
+                style={{ fontFamily: 'Nunito-Bold', fontSize: 22 }}
+              >
+                {location.location_name}, {location.location_town}
+              </Text>
 
-          <Text style={{ fontFamily: 'Nunito-Regular', fontSize: 18, marginTop: 5 }}>"{review.review_body}"</Text>
-        </View>
+              <Text style={{ fontFamily: 'Nunito-Regular', fontSize: 18, marginTop: 5 }}>"{review.review_body}"</Text>
+            </View>
 
-        <View style={styles.sectionStyle}>
-          <Text style={{
-            fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10,
-          }}
-          >Overall rating
-          </Text>
-          <RatingCircles rating={review.overall_rating} />
-        </View>
+            <View style={styles.sectionStyle}>
+              <Text style={{
+                fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10,
+              }}
+              >Overall rating
+              </Text>
+              <RatingCircles rating={review.overall_rating} />
+            </View>
 
-        <View style={styles.sectionStyle}>
-          <Text style={{
-            fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-          }}
-          >Price rating
-          </Text>
-          <RatingCircles rating={review.price_rating} />
-        </View>
+            <View style={styles.sectionStyle}>
+              <Text style={{
+                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
+              }}
+              >Price rating
+              </Text>
+              <RatingCircles rating={review.price_rating} />
+            </View>
 
-        <View style={styles.sectionStyle}>
-          <Text style={{
-            fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-          }}
-          >Quality rating
-          </Text>
-          <RatingCircles rating={review.quality_rating} />
-        </View>
+            <View style={styles.sectionStyle}>
+              <Text style={{
+                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
+              }}
+              >Quality rating
+              </Text>
+              <RatingCircles rating={review.quality_rating} />
+            </View>
 
-        <View style={styles.sectionStyle}>
-          <Text style={{
-            fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-          }}
-          >Clenliness rating
-          </Text>
-          <RatingCircles rating={review.clenliness_rating} />
-        </View>
+            <View style={styles.sectionStyle}>
+              <Text style={{
+                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
+              }}
+              >Clenliness rating
+              </Text>
+              <RatingCircles rating={review.clenliness_rating} />
+            </View>
 
-        <View style={styles.likesSection}>
-          <TouchableOpacity onPress={() => changeLike()}>
-            <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-          </TouchableOpacity>
-          <Text style={styles.likesText}>{review.likes} likes</Text>
-        </View>
-      </View>
+            <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
+              <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
+              <Text style={styles.likesText}>{review.likes}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
     </Layout>
   );
 };
