@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 
 import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const ReviewWidget = (props) => {
   const isFocused = useIsFocused();
@@ -43,23 +44,45 @@ const ReviewWidget = (props) => {
   };
 
   const changeLike = async () => {
+    let done = false;
+
     if (like) {
-      const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
-
-      if (response) {
-        review.likes--;
-        setLikeIcon('heart-outline');
-        setLike(false);
-      }
+      done = await likeReview();
     } else {
-      const response = await LocationReviews.likeReview(location.location_id, review.review_id);
-
-      if (response) {
-        setLikeIcon('heart');
-        setLike(true);
-        review.likes++;
-      }
+      done = await unLikeReview();
     }
+
+    return done;
+  };
+
+  const likeReview = async () => {
+    const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
+
+    if (response.success) {
+      review.likes--;
+      setLikeIcon('heart-outline');
+      setLike(false);
+
+      return true;
+    }
+
+    DropDownHolder.error('Error', response.error);
+    return false;
+  };
+
+  const unLikeReview = async () => {
+    const response = await LocationReviews.likeReview(location.location_id, review.review_id);
+
+    if (response.success) {
+      review.likes++;
+      setLikeIcon('heart');
+      setLike(true);
+
+      return true;
+    }
+
+    DropDownHolder.error('Error', response.error);
+    return false;
   };
 
   return (

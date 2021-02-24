@@ -27,19 +27,25 @@ const YourReviews = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userID = await AsyncStorage.getItem('@userID');
-      const response = await UserManagement.getUser(userID);
-
-      if (response.success) {
-        const likes = await getLikedReviews(response.body);
-
-        setReviewsData(response.body.reviews);
-        setLikedReviews(likes);
-      }
+      await getReviews();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getReviews = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      const likes = await getLikedReviews(response.body);
+
+      setReviewsData(response.body.reviews);
+      setLikedReviews(likes);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   const getLikedReviews = (reviewsFull) => {
     const reviewIDs = [];

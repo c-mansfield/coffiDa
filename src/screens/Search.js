@@ -19,6 +19,7 @@ import { Icon, Input } from '@ui-kitten/components';
 
 import LocationTile from 'src/components/LocationTile.js';
 import LocationManagement from 'src/api/LocationManagement.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const Search = ({ navigation }) => {
   const [locationsData, setLocationsData] = useState([]);
@@ -26,18 +27,24 @@ const Search = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const sendQuery = {
-        overall_rating: 3,
-      };
-      const response = await LocationManagement.searchLocations(sendQuery);
-
-      if (response) {
-        setLocationsData(response);
-      }
+      await getTopLocations();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getTopLocations = async () => {
+    const sendQuery = {
+      overall_rating: 3,
+    };
+    const response = await LocationManagement.searchLocations(sendQuery);
+
+    if (response.success) {
+      setLocationsData(response.body);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   return (
     <ScrollView style={styles.main}>

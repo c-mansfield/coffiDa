@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
@@ -44,12 +45,9 @@ const LoginModal = ({ navigateHome, loginModalVisible, toggleLoginModal }) => {
 
       toggleLoginModal();
       navigateHome();
-    } else if (response.status === 400) {
-      // Error message username or password incorrect
-      updateErrorMessageState('Email or password incorrect, please try again!', 'main');
     } else {
-      // Server Error
-      updateErrorMessageState('Error on our end sorry, please try again later!', 'main');
+      Keyboard.dismiss();
+      updateErrorMessageState(response.error, 'main');
     }
   };
 

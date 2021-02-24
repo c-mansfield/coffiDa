@@ -14,6 +14,7 @@ import mapstyle from 'assets/theme/mapstyle.js';
 import { useIsFocused } from '@react-navigation/native';
 
 import LocationManagement from 'src/api/LocationManagement.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const NearbyLocations = ({ route }) => {
   const { location } = route.params;
@@ -22,19 +23,25 @@ const NearbyLocations = ({ route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const sendQuery = {
-        q: location.location_town,
-      };
-      let response = await LocationManagement.searchLocations(sendQuery);
-
-      if (response) {
-        response = await removeCurrentLocation(response);
-        setNearbyLocations(response);
-      }
+      await getNearbyLocations();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getNearbyLocations = async () => {
+    const sendQuery = {
+      q: location.location_town,
+    };
+    const response = await LocationManagement.searchLocations(sendQuery);
+
+    if (response.success) {
+      response.body = await removeCurrentLocation(response.body);
+      setNearbyLocations(response.body);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   const removeCurrentLocation = (locations) => {
     locations.forEach((result, index) => {

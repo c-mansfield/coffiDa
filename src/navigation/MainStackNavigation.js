@@ -9,9 +9,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Entry from 'src/screens/Entry.js';
+import NavigationService from 'src/services/NavigationService';
 import BottomTabNavigation from './BottomTabNavigation.js';
 
 const Stack = createStackNavigator();
@@ -34,7 +34,9 @@ const MainStackNavigation = () => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={(navigationRef) => NavigationService.setContainer(navigationRef)}
+    >
       <Stack.Navigator
         initialRouteName="Entry"
         screenOptions={{

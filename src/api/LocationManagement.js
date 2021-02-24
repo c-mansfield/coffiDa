@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const url = 'http://10.0.2.2:3333/api/1.0.0';
+import { url, handleUnauthorised } from 'src/api/api.js';
 
 const getLocation = async (locationID) => {
   try {
@@ -11,11 +10,16 @@ const getLocation = async (locationID) => {
       },
     });
 
-    if (response.status === 200) {
-      return await response.json();
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status, body: await response.json() };
+      case 404:
+        return { success: false, status: response.status, error: 'Location not found' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return null;
   } catch (error) {
     return error;
   }
@@ -31,11 +35,21 @@ const favouriteReview = async (locationID) => {
       },
     });
 
-    if (response.status === 200) {
-      return await response.json();
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status };
+      case 400:
+        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 404:
+        return { success: false, status: response.status, error: 'Location not found' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return null;
   } catch (error) {
     return error;
   }
@@ -51,11 +65,21 @@ const unfavouriteReview = async (locationID) => {
       },
     });
 
-    if (response.status === 200) {
-      return await response.json();
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 403:
+        return { success: false, status: response.status, error: 'Forbidden request' };
+      case 404:
+        return { success: false, status: response.status, error: 'Location not found' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return null;
   } catch (error) {
     return error;
   }
@@ -72,11 +96,19 @@ const searchLocations = async (urlQueries) => {
       },
     });
 
-    if (response.status === 200) {
-      return await response.json();
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status, body: await response.json() };
+      case 400:
+        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return null;
   } catch (error) {
     return error;
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Autocomplete,
@@ -48,9 +48,10 @@ const AddReview = () => {
     };
     const response = await LocationManagement.searchLocations(sendQuery);
 
-    if (response) {
-      setLocations(response);
+    if (response.success) {
+      setLocations(response.body);
     } else {
+      DropDownHolder.error('error', response.error);
       setLocations([{ location_name: '', location_town: '' }]);
     }
   };
@@ -100,10 +101,12 @@ const AddReview = () => {
   const addReview = async () => {
     const response = await LocationReviews.addReview(locationID, reviewData);
 
-    if (response) {
+    if (response.success) {
       await getReviewID();
       resetState();
       togglePhotoModal();
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
@@ -140,6 +143,8 @@ const AddReview = () => {
       });
 
       setReviewID(maxReviewID);
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 

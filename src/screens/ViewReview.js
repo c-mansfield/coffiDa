@@ -53,9 +53,11 @@ const ViewReview = ({ navigation, route }) => {
   const deleteReview = async () => {
     const response = await LocationReviews.deleteReview(location.location_id, review.review_id);
 
-    if (response) {
+    if (response.success) {
       navigation.navigate('ReviewsTabNavigation');
       DropDownHolder.success('Success', 'Review Deleted');
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
@@ -87,35 +89,59 @@ const ViewReview = ({ navigation, route }) => {
   };
 
   const changeLike = async () => {
+    let done = false;
+
     if (like) {
-      const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
-
-      if (response) {
-        review.likes--;
-        setLikeIcon('heart-outline');
-        setLike(false);
-      }
+      done = await likeReview();
     } else {
-      const response = await LocationReviews.likeReview(location.location_id, review.review_id);
-
-      if (response) {
-        setLikeIcon('heart');
-        setLike(true);
-        review.likes++;
-      }
+      done = await unLikeReview();
     }
+
+    return done;
+  };
+
+  const likeReview = async () => {
+    const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
+
+    if (response.success) {
+      review.likes--;
+      setLikeIcon('heart-outline');
+      setLike(false);
+
+      return true;
+    }
+
+    DropDownHolder.error('Error', response.error);
+    return false;
+  };
+
+  const unLikeReview = async () => {
+    const response = await LocationReviews.likeReview(location.location_id, review.review_id);
+
+    if (response.success) {
+      review.likes++;
+      setLikeIcon('heart');
+      setLike(true);
+
+      return true;
+    }
+
+    DropDownHolder.error('Error', response.error);
+    return false;
   };
 
   const getPhoto = async () => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
-    
-    if (response) {
+
+    if (response.success) {
       const reader = new FileReader();
-      reader.readAsDataURL(response);
+      reader.readAsDataURL(response.body);
 
       reader.onloadend = () => {
         setPhoto({ uri: reader.result });
       };
+    } else if (response.status === 500) {
+      DropDownHolder.error('Error', response.error);
     }
   };
 

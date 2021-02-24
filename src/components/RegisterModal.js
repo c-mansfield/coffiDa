@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Input, Icon } from '@ui-kitten/components';
@@ -56,10 +57,9 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
         password: '',
       });
       toggleRegisterModal();
-    } else if (response.status === 400) {
-      updateErrorMessageState('Error with signing up, email already in use!', 'main');
     } else {
-      updateErrorMessageState('Error with signing up, please try again!', 'main');
+      Keyboard.dismiss()
+      updateErrorMessageState(response.error, 'main');
     }
   };
 

@@ -27,6 +27,7 @@ import RatingCircles from 'src/components/RatingCircles.js';
 import UserManagement from 'src/api/UserManagement.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 import mapstyle from 'assets/theme/mapstyle.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const LocationDetails = ({ navigation, route }) => {
   const { locationID } = route.params;
@@ -40,7 +41,6 @@ const LocationDetails = ({ navigation, route }) => {
       await getLocationDetails();
     };
 
-    console.log('Hit once');
     fetchData();
   }, []);
 
@@ -57,8 +57,11 @@ const LocationDetails = ({ navigation, route }) => {
   const getLocationDetails = async () => {
     const response = await LocationManagement.getLocation(locationID);
 
-    if (response) {
-      setLocation(response);
+    if (response.success) {
+      setLocation(response.body);
+    } else {
+      navigation.goBack();
+      DropDownHolder.error('Error', response.error);
     }
   };
 
@@ -71,6 +74,8 @@ const LocationDetails = ({ navigation, route }) => {
         setFavouriteIcon('star');
         setFavourite(true);
       }
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
@@ -85,18 +90,22 @@ const LocationDetails = ({ navigation, route }) => {
   const favouriteLocation = async () => {
     const response = await LocationManagement.favouriteReview(location.location_id);
 
-    if (response) {
+    if (response.success) {
       setFavouriteIcon('star');
       setFavourite(true);
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
   const unfavouriteLocation = async () => {
     const response = await LocationManagement.unfavouriteReview(location.location_id);
 
-    if (response) {
+    if (response.success) {
       setFavouriteIcon('star-outline');
       setFavourite(false);
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 

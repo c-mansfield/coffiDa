@@ -12,6 +12,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import { RNCamera } from 'react-native-camera';
 
 import LocationReviews from 'src/api/LocationReviews.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const AddPhotoModal = ({
   modalPhotoVisible,
@@ -64,27 +65,37 @@ const AddPhotoModal = ({
   const uploadPhoto = async () => {
     const response = await LocationReviews.addReviewPhoto(locationID, reviewID, photo);
 
-    if (response) {
+    if (response.success) {
       togglePhotoModal();
+      DropDownHolder.success('Success', 'Photo uploaded to review!');
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
   const retakePhoto = async () => {
     const response = await LocationReviews.deleteReviewPhoto(locationID, reviewID);
 
-    if (response) {
+    if (response.success) {
       setPhoto(null);
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
   const getPhoto = async () => {
     const response = await LocationReviews.getReviewPhoto(locationID, reviewID);
-    const reader = new FileReader();
-    reader.readAsDataURL(response);
 
-    reader.onloadend = () => {
-      setPhoto({ uri: reader.result });
-    };
+    if (response.success) {
+      const reader = new FileReader();
+      reader.readAsDataURL(response.body);
+
+      reader.onloadend = () => {
+        setPhoto({ uri: reader.result });
+      };
+    } else if (response.status === 500) {
+      DropDownHolder.error('Error', response.error);
+    }
   };
 
   return (
@@ -135,7 +146,7 @@ const AddPhotoModal = ({
             <View style={styles.imageView}>
 
               <View style={styles.cameraPreview}>
-                <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} />
+                <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} captureAudio={false} />
               </View>
               <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
                 <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>

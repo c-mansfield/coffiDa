@@ -18,6 +18,7 @@ import { Icon, Input } from '@ui-kitten/components';
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
 import SearchFilterModal from 'src/components/SearchFilterModal.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const SearchResults = ({ navigation }) => {
   const [search, setSearch] = useState('');
@@ -44,9 +45,10 @@ const SearchResults = ({ navigation }) => {
 
     const response = await LocationManagement.searchLocations(sendQuery);
 
-    if (response) {
-      setCorrectLocation(response);
+    if (response.success) {
+      setCorrectLocation(response.body);
     } else {
+      DropDownHolder.error('Error', response.error);
       setLocations([]);
     }
 
@@ -55,7 +57,6 @@ const SearchResults = ({ navigation }) => {
 
   const setCorrectLocation = (response) => {
     if (page === 0) {
-      setLocations([]);
       setLocations(response);
     } else {
       setLocations([...locations, ...response]);

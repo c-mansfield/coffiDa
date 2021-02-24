@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const url = 'http://10.0.2.2:3333/api/1.0.0';
+import { url, handleUnauthorised } from 'src/api/api.js';
 
 const addUser = async (data) => {
   try {
@@ -12,12 +11,16 @@ const addUser = async (data) => {
       body: JSON.stringify(data),
     });
 
-    if (response.status === 201) {
-      const body = await response.json();
-      return { success: true, status: response.status, body };
+    switch (response.status) {
+      case 201:
+        return { success: true, status: response.status, body: await response.json() };
+      case 400:
+        return { success: false, status: response.status, error: 'Error with signing up, email already in use!' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -32,11 +35,17 @@ const login = async (data) => {
       },
       body: JSON.stringify(data),
     });
-    if (response.status === 200) {
-      return { success: true, status: response.status, body: await response.json() };
-    }
 
-    return { success: false, status: response.status };
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status, body: await response.json() };
+      case 400:
+        return { success: false, status: response.status, error: 'Email or password incorrect, please try again!' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
+    }
   } catch (error) {
     return error;
   }
@@ -53,11 +62,17 @@ const logout = async () => {
       },
     });
 
-    if (response.status === 200) {
-      return { success: true, status: response.status };
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -72,11 +87,19 @@ const getUser = async (userID) => {
       },
     });
 
-    if (response.status === 200) {
-      return { success: true, status: response.status, body: await response.json() };
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status, body: await response.json() };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 404:
+        return { success: false, status: response.status, error: 'User not found' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }
@@ -94,11 +117,21 @@ const updateUser = async (userID, data) => {
       body: JSON.stringify(data),
     });
 
-    if (response.status === 200) {
-      return { success: true, status: response.status };
+    switch (response.status) {
+      case 200:
+        return { success: true, status: response.status };
+      case 400:
+        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+      case 401:
+        handleUnauthorised();
+        return { success: false, status: response.status };
+      case 403:
+        return { success: false, status: response.status, error: 'Request forbidden' };
+      case 500:
+        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+      default:
+        return { success: false, status: response.status };
     }
-
-    return { success: false, status: response.status };
   } catch (error) {
     return error;
   }

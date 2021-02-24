@@ -18,6 +18,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import UserManagement from 'src/api/UserManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const YourFavourites = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -25,16 +26,22 @@ const YourFavourites = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userID = await AsyncStorage.getItem('@userID');
-      const response = await UserManagement.getUser(userID);
-
-      if (response.success && response.body.favourite_locations) {
-        setLocationsData(response.body.favourite_locations);
-      }
+      await getFavouriteLocations();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getFavouriteLocations = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      setLocationsData(response.body.favourite_locations);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   return (
     <View style={styles.main}>

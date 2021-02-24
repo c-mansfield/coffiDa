@@ -45,6 +45,8 @@ const EditDetailsModal = (props) => {
     if (response.success) {
       props.toggleModalDetails();
       DropDownHolder.success('Success', 'User updated');
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 

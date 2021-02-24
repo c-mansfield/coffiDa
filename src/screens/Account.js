@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserManagement from 'src/api/UserManagement.js';
 import EditDetailsModal from 'src/components/EditDetailsModal.js';
 import ChangePasswordModal from 'src/components/ChangePasswordModal.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const Account = ({ navigation }) => {
   const [userData, setUserData] = useState({});
@@ -22,17 +23,24 @@ const Account = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userID = await AsyncStorage.getItem('@userID');
-      const response = await UserManagement.getUser(userID);
+      await getCurrentUser();
 
-      if (response.success) {
-        setUserData(response.body);
-      }
       setIsLoading(false);
     };
 
     fetchData();
   }, [modalDetailsVisible]);
+
+  const getCurrentUser = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      setUserData(response.body);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   const logoutUser = async () => {
     setIsLoading(true);

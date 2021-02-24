@@ -20,6 +20,7 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
+import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationTile from 'src/components/LocationTile.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 import ImageCarouselItem from 'src/components/ImageCarouselItem.js';
@@ -59,13 +60,15 @@ const Home = ({ navigation }) => {
       q: getSearchString(),
     };
 
-    let response = await LocationManagement.searchLocations(sendQuery);
+    const response = await LocationManagement.searchLocations(sendQuery);
 
-    if (response) {
+    if (response.success) {
       if (geoLocationDetails.locationPermission) {
-        response = await getSurroundingLocations(response);
+        response.body = await getSurroundingLocations(response.body);
       }
-      setLocationsData(response);
+      setLocationsData(response.body);
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 
@@ -82,6 +85,7 @@ const Home = ({ navigation }) => {
     // Sort locations by distance
     closestLocations.sort((a, b) => ((a.distance > b.distance) ? 1 : -1));
 
+    // Return top 8 locations
     return closestLocations.slice(0, 8);
   };
 
@@ -132,15 +136,12 @@ const Home = ({ navigation }) => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can access location');
         setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: true }));
         return true;
       }
 
-      console.log('Permission denied');
       return false;
     } catch (err) {
-      console.log(err);
       return false;
     }
   };

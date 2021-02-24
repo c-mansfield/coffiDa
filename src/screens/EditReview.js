@@ -43,9 +43,11 @@ const EditReview = ({ navigation, route }) => {
     const updatedDetails = await getReviewUpdates();
     const response = await LocationReviews.updateReview(location.location_id, review.review_id, updatedDetails);
 
-    if (response) {
+    if (response.success) {
       DropDownHolder.success('Success', 'Review has been updated!');
-      navigation.setParams({ location });
+      // navigation.setParams({ location });
+    } else {
+      DropDownHolder.error('Error', response.error);
     }
   };
 

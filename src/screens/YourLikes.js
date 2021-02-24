@@ -9,6 +9,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 import UserManagement from 'src/api/UserManagement.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const YourLikes = () => {
   const isFocused = useIsFocused();
@@ -16,16 +17,22 @@ const YourLikes = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userID = await AsyncStorage.getItem('@userID')
-      const response = await UserManagement.getUser(userID);
-
-      if (response.success) {
-        setLikesData(response.body.liked_reviews);
-      }
+      await getLikedReview();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getLikedReview = async () => {
+    const userID = await AsyncStorage.getItem('@userID')
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      setLikesData(response.body.liked_reviews);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
+  };
 
   return (
     <View style={styles.main}>

@@ -27,7 +27,7 @@ const ChangePasswordModal = (props) => {
   const [secureTextEntryOld, setSecureTextEntryOld] = useState(true);
   const [secureTextEntryNew, setSecureTextEntryNew] = useState(true);
   const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
-  const [textStatus, setTextStatus] = useState({ oldPassword: 'basic', newPassword: 'basic', main: 'basic' });
+  const [textStatus, setTextStatus] = useState({ oldPassword: 'basic', newPassword: 'basic' });
   const [errorMessage, setErrorMessage] = useState({
     oldPassword: '', newPassword: newPasswordMessage, main: '',
   });
@@ -58,8 +58,7 @@ const ChangePasswordModal = (props) => {
       props.toggleModalPassword();
       DropDownHolder.success('Success', 'Password has been updated!');
     } else {
-      updateTextStatusState('danger', 'main');
-      updateErrorMessageState('Error with changing password, please try again later!', 'main');
+      updateErrorMessageState(response.error, 'main');
     }
   };
 
