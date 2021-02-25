@@ -29,7 +29,6 @@ const Search = ({ navigation }) => {
       await getTopLocations();
     };
 
-    setIsLoading(true);
     fetchData();
   }, [isFocused]);
 
@@ -83,8 +82,9 @@ const Search = ({ navigation }) => {
                           'LocationStackNavigationSearch',
                           { screen: 'LocationDetails', params: { locationID: location.location_id } },
                         )}
+                        key={`${location.location_id}_searchTouchableOpacity`}
                       >
-                        <LocationTile location={location} key={location.location_id} />
+                        <LocationTile location={location} key={`${location.location_id}_searchLocationTile`} />
                       </TouchableOpacity>
                     </>
                   ))}

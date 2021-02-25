@@ -20,6 +20,7 @@ const NearbyLocations = ({ route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('NearbyLocations ', route);
       await getNearbyLocations();
     };
 
@@ -101,7 +102,6 @@ const styles = StyleSheet.create({
 });
 
 NearbyLocations.propTypes = {
-  route: PropTypes.objects,
 };
 
 export default NearbyLocations;

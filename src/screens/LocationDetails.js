@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, Divider, Button } from '@ui-kitten/components';
-import PropTypes from 'prop-types';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { useIsFocused } from '@react-navigation/native';
 
 import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 import RatingCircles from 'src/components/RatingCircles.js';
@@ -32,24 +32,41 @@ const LocationDetails = ({ navigation, route }) => {
   const [favouriteIcon, setFavouriteIcon] = useState('star-outline');
   const [favourite, setFavourite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [likedReviews, setLikedReviews] = useState([]);
+  const isFocused = useIsFocused();
+
+  // Get liked locations each time page reloads
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('LocationDetails ', route);
+      await getLikedReviews();
+    };
+
+    setIsLoading(true);
+    fetchData();
+  }, [isFocused]);
 
   useEffect(() => {
     const fetchData = async () => {
+      await getLikedReviews();
       await getLocationDetails();
     };
 
+    setIsLoading(true);
     fetchData();
   }, []);
 
   // Get favourite location when location is added to state
   useEffect(() => {
-    const fetchData = async () => {
-      await setLocationFavourite();
-      setIsLoading(false);
-    };
+    if (location && likedReviews) {
+      const fetchData = async () => {
+        await setLocationFavourite();
+        setIsLoading(false);
+      };
 
-    fetchData();
-  }, [location]);
+      fetchData();
+    }
+  }, [location, likedReviews]);
 
   const getLocationDetails = async () => {
     const response = await LocationManagement.getLocation(locationID);
@@ -112,12 +129,30 @@ const LocationDetails = ({ navigation, route }) => {
     for (let i = 0; i < highlightsLength; i++) {
       if (location.location_reviews[i]) {
         reviews.push(
-          <ExpandableReviewWidget key={`Review ${i.toString()}`} review={location.location_reviews[i]} location={location} />
+          <ExpandableReviewWidget
+            key={`Review_${i.toString()}`}
+            review={location.location_reviews[i]}
+            location={location}
+            likedReviews={likedReviews}
+          />
         );
       }
     }
 
     return reviews;
+  };
+
+  const getLikedReviews = async () => {
+    const userID = await AsyncStorage.getItem('@userID');
+    const response = await UserManagement.getUser(userID);
+
+    if (response.success) {
+      const liked = response.body.liked_reviews.map((review) => review.review.review_id);
+
+      setLikedReviews(liked);
+    } else {
+      DropDownHolder.error('Error', response.error);
+    }
   };
 
   return (
@@ -247,7 +282,7 @@ const LocationDetails = ({ navigation, route }) => {
                       <Button
                         style={{ marginTop: 10 }}
                         status="primary"
-                        onPress={() => navigation.navigate('AllReviews', { location })}
+                        onPress={() => navigation.navigate('AllReviews', { location, likedReviews })}
                       >
                         See all reviews
                       </Button>

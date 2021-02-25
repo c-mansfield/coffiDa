@@ -63,7 +63,7 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
       });
       toggleRegisterModal();
     } else {
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       updateErrorMessageState(response.error, 'main');
     }
   };
@@ -72,9 +72,11 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
     const fields = await checkRequiredFields();
     const passwordCheck = await testPassword();
     const emailCheck = await testEmail();
-    
+
     if (!fields && !emailCheck && !passwordCheck) {
       await signUpUser();
+    } else {
+      Keyboard.dismiss();
     }
   };
 

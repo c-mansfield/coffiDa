@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,24 +12,27 @@ import {
 import { Text } from '@ui-kitten/components';
 
 const ImageCarouselItem = ({ location }) => {
-  const reviewCount = location.location_reviews.length;
-
   return (
     <View style={styles.tile}>
-      <ImageBackground source={{ uri: location.photo_path }} style={styles.image}>
-        <View style={styles.overlay}>
-          <Text style={{ fontSize: 48, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
-          <Text style={{ fontSize: 28, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
-        </View>
-      </ImageBackground>
-
+      { location ? (
+        <ImageBackground
+          source={location.photo_path ? { uri: location.photo_path } : null}
+          style={styles.image}
+        >
+          <View style={styles.overlay}>
+            <Text style={{ fontSize: 48, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
+            <Text style={{ fontSize: 28, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
+          </View>
+        </ImageBackground>
+      )
+        : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   tile: {
-    height: 250,
+    height: 280,
   },
   image: {
     flex: 1,

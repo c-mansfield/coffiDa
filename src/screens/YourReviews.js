@@ -29,8 +29,8 @@ const YourReviews = ({ navigation }) => {
       await getReviews();
     };
 
-    fetchData();
     setIsLoading(true);
+    fetchData();
   }, [isFocused]);
 
   const getReviews = async () => {
@@ -76,7 +76,11 @@ const YourReviews = ({ navigation }) => {
             <FlatList
               data={reviewsData}
               renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => navigation.navigate('View Review', { reviewID: item.review.review_id })}
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ReviewViewStackNavigation', {
+                    screen: 'ViewReview',
+                    params: { reviewID: item.review.review_id, likedReviews },
+                  })}
                 >
                   <ReviewWidget
                     review={item.review}

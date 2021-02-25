@@ -24,14 +24,14 @@ const YourLikes = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getLikedReview();
+      await getLikedReviews();
     };
 
     setIsLoading(true);
     fetchData();
   }, [isFocused]);
 
-  const getLikedReview = async () => {
+  const getLikedReviews = async () => {
     const userID = await AsyncStorage.getItem('@userID');
     const response = await UserManagement.getUser(userID);
 

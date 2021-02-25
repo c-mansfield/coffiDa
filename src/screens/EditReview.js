@@ -24,26 +24,20 @@ import LocationReviews from 'src/api/LocationReviews.js';
 const EditReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
-  const { location, review } = route.params;
-  const [reviewData, setReviewData] = useState({
-    review_body: '',
-    overall_rating: 0,
-    price_rating: 0,
-    quality_rating: 0,
-    clenliness_rating: 0,
-  });
+  const { locationData, reviewDefault } = route.params;
+  const [reviewData, setReviewData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setReviewData({
-      review_body: review.review_body,
-      overall_rating: review.overall_rating,
-      price_rating: review.price_rating,
-      quality_rating: review.quality_rating,
-      clenliness_rating: review.clenliness_rating,
-    });
+    console.log(route);
+    setReviewData(reviewDefault);
     setIsLoading(false);
   }, [isFocused]);
+
+  // useEffect(() => {
+  //   if (reviewDefault) {
+  //   }
+  // }, [reviewDefault]);
 
   const togglePhotoModal = () => {
     setModalPhotoVisible(!modalPhotoVisible);
@@ -51,7 +45,7 @@ const EditReview = ({ navigation, route }) => {
 
   const editReview = async () => {
     const updatedDetails = await getReviewUpdates();
-    const response = await LocationReviews.updateReview(location.location_id, review.review_id, updatedDetails);
+    const response = await LocationReviews.updateReview(locationData.location_id, reviewDefault.review_id, updatedDetails);
 
     if (response.success) {
       DropDownHolder.success('Success', 'Review has been updated!');
@@ -66,7 +60,7 @@ const EditReview = ({ navigation, route }) => {
     // Checks if element in review has been updated, if not then delete that element
     // so doesn't get patched
     await Object.entries(reviewData).forEach((property) => {
-      if (property[1] === review[property[0]]) {
+      if (property[1] === reviewDefault[property[0]]) {
         delete updatedDetails[property[0]];
       }
     });
@@ -94,7 +88,7 @@ const EditReview = ({ navigation, route }) => {
           <>
 
             <View style={styles.editMain}>
-              <Text style={styles.subHeadingBold}>{location.location_name}, {location.location_town}</Text>
+              <Text style={styles.subHeadingBold}>{locationData.location_name}, {locationData.location_town}</Text>
 
               <Input
                 multiline
@@ -178,8 +172,8 @@ const EditReview = ({ navigation, route }) => {
               <AddPhotoModal
                 modalPhotoVisible={modalPhotoVisible}
                 togglePhotoModal={togglePhotoModal}
-                reviewID={review.review_id}
-                locationID={location.location_id}
+                reviewID={reviewDefault.review_id}
+                locationID={locationData.location_id}
                 editPhoto
               />
             </View>

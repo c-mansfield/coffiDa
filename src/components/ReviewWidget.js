@@ -91,7 +91,6 @@ const ReviewWidget = (props) => {
       setLikeIcon('heart');
       setLike(true);
       likedReviews.push(review.review_id);
-      console.log(likedReviews);
 
       return true;
     }

@@ -9,6 +9,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text } from '@ui-kitten/components';
@@ -29,20 +30,61 @@ const AddPhotoModal = ({
   const [photo, setPhoto] = useState(null);
   let camera = useRef(null);
   const [photoTaken, setPhotoTaken] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      setPhoto(null);
-      setPhotoTaken(false);
-
-      if (editPhoto) {
-        setPhoto('');
-        await getPhoto();
-      }
+      await checkCameraEnabled();
     };
 
     fetchData();
   }, [modalPhotoVisible]);
+
+  useEffect(() => {
+    if (cameraPermission) {
+      const fetchData = async () => {
+        setPhoto(null);
+        setPhotoTaken(false);
+
+        if (editPhoto) {
+          setPhoto('');
+          await getPhoto();
+        }
+      };
+
+      fetchData();
+    }
+  }, [cameraPermission]);
+
+  const checkCameraEnabled = async () => {
+    const enabled = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+
+    // console.log(enabled);
+    setCameraPermission(enabled);
+  };
+
+  const requestCamera = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Coffida Camera Permission',
+          message:
+            'Coffida needs access to your camera '
+            + 'so you can add photos to your reviews.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        setCameraPermission(true);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const handleChoosePhoto = () => {
     const options = {
@@ -111,66 +153,81 @@ const AddPhotoModal = ({
       onBackdropPress={togglePhotoModal}
     >
       <View style={styles.modalContent}>
-
-        {photo ? (
+        {!cameraPermission ? (
           <>
-            <Text style={styles.title}>Edit review photo</Text>
+            <Text style={styles.title}>Camera not enabled</Text>
+            <TouchableOpacity style={styles.primaryButton} onPress={() => requestCamera()}>
+              <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                Enable Camera 📷
+              </Text>
+            </TouchableOpacity>
 
-            <View style={styles.imageView}>
-              <View style={styles.cameraPreview}>
-                <Image
-                  source={{ uri: photo.uri }}
-                  style={{ width: 240, height: 300 }}
-                />
-              </View>
-              { !editPhoto || photoTaken
-                ? (
-                  <>
-                    <TouchableOpacity style={styles.primaryButton} onPress={() => uploadPhoto()}>
-                      <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-                        Upload Photo
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                ) : null }
-              <TouchableOpacity style={styles.secondaryButton} onPress={() => retakePhoto()}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
-                  Retake photo
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+              <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Maybe Later</Text>
+            </TouchableOpacity>
           </>
         ) : (
           <>
+            {photo ? (
+              <>
+                <Text style={styles.title}>Edit review photo</Text>
 
-            <Text style={styles.title}>Add photo to review</Text>
-            <View style={styles.imageView}>
+                <View style={styles.imageView}>
+                  <View style={styles.cameraPreview}>
+                    <Image
+                      source={{ uri: photo.uri }}
+                      style={{ width: 240, height: 300 }}
+                    />
+                  </View>
+                  { !editPhoto || photoTaken
+                    ? (
+                      <>
+                        <TouchableOpacity style={styles.primaryButton} onPress={() => uploadPhoto()}>
+                          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                            Upload Photo
+                          </Text>
+                        </TouchableOpacity>
+                      </>
+                    ) : null }
+                  <TouchableOpacity style={styles.secondaryButton} onPress={() => retakePhoto()}>
+                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                      Retake photo
+                    </Text>
+                  </TouchableOpacity>
 
-              <View style={styles.cameraPreview}>
-                <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} captureAudio={false} />
-              </View>
-              <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-                  Take Photo 📷
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.secondaryButton} onPress={() => handleChoosePhoto()}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
-                  Choose From Library
-                </Text>
-              </TouchableOpacity>
+                  <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <>
 
-              <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
-              </TouchableOpacity>
-            </View>
+                <Text style={styles.title}>Add photo to review</Text>
+                <View style={styles.imageView}>
+
+                  <View style={styles.cameraPreview}>
+                    <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} captureAudio={false} />
+                  </View>
+                  <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
+                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                      Take Photo 📷
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.secondaryButton} onPress={() => handleChoosePhoto()}>
+                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                      Choose From Library
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
+                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
           </>
         )}
-
       </View>
     </Modal>
   );

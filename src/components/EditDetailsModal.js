@@ -31,27 +31,28 @@ const EditDetailsModal = (props) => {
     last_name: '',
     email: '',
   });
+  const { modalDetailsVisible, userData, toggleModalDetails } = props;
 
   useEffect(() => {
-    updateUserState(props.userData.first_name, 'first_name');
-    updateUserState(props.userData.last_name, 'last_name');
-    updateUserState(props.userData.email, 'email');
+    updateUserState(userData.first_name, 'first_name');
+    updateUserState(userData.last_name, 'last_name');
+    updateUserState(userData.email, 'email');
 
     setTextStatus({ first_name: 'basic', last_name: 'basic', email: 'basic' });
     setErrorMessage({
       main: '', first_name: '', last_name: '', email: '',
     });
-  }, [isFocused, props.modalDetailsVisible]);
+  }, [isFocused, modalDetailsVisible]);
 
   const updateUser = async () => {
     const updatedDetails = await getUserUpdates();
-    const response = await UserManagement.updateUser(props.userData.user_id, updatedDetails);
+    const response = await UserManagement.updateUser(userData.user_id, updatedDetails);
 
     if (response.success) {
-      props.toggleModalDetails();
+      toggleModalDetails();
       DropDownHolder.success('Success', 'User updated');
     } else {
-      DropDownHolder.error('Error', response.error);
+      updateErrorMessageState(response.error, 'main');
     }
   };
 
@@ -61,7 +62,7 @@ const EditDetailsModal = (props) => {
     // Checks if element in user has been updated, if not then delete that element
     // so doesn't get patched
     await Object.entries(user).forEach((property) => {
-      if (property[1] === props.userData[property[0]]) {
+      if (property[1] === userData[property[0]]) {
         delete updatedDetails[property[0]];
       }
     });
@@ -124,10 +125,10 @@ const EditDetailsModal = (props) => {
 
   return (
     <Modal
-      isVisible={props.modalDetailsVisible}
+      isVisible={modalDetailsVisible}
       swipeDirection={['down']}
       style={styles.modalMain}
-      onBackdropPress={props.toggleModalDetails}
+      onBackdropPress={toggleModalDetails}
     >
       <View style={styles.modalContent}>
         <Text style={styles.title}>Edit Details</Text>
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   sectionStyle: {
-    marginTop: 20,
+    marginTop: 25,
   },
   sectionHeading: {
     fontSize: 14,

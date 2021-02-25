@@ -21,35 +21,38 @@ const LocationTile = ({ location }) => {
 
   return (
     <View style={styles.tile}>
-      <ImageBackground source={{ uri: location.photo_path }} style={styles.image}>
-        <View style={styles.overlay}>
-          <Text style={{ fontSize: 20, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
-          <Text style={{ fontSize: 14, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
+      { location ? (
+        <ImageBackground source={{ uri: location.photo_path }} style={styles.image}>
+          <View style={styles.overlay}>
+            <Text style={{ fontSize: 20, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
+            <Text style={{ fontSize: 14, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
 
-          <View>
-            <View style={styles.sectionRow}>
-              <RatingCircles rating={location.avg_overall_rating} />
-              <Text style={{ fontSize: 12, marginLeft: 5 }}>({reviewCount})</Text>
-            </View>
-          </View>
-
-          { location.distance ? (
-            <>
-              <View style={{ marginTop: 5 }}>
-                <View style={styles.sectionRow}>
-                  <Icon
-                    style={styles.pinIcon}
-                    name="pin"
-                    fill="#000000"
-                  />
-                  <Text style={{ fontSize: 12, marginLeft: 5 }}>{location.distance.toFixed(1)} Miles</Text>
-                </View>
+            <View>
+              <View style={styles.sectionRow}>
+                <RatingCircles rating={location.avg_overall_rating} />
+                <Text style={{ fontSize: 12, marginLeft: 5 }}>({reviewCount})</Text>
               </View>
-            </>
-          )
-            : null}
-        </View>
-      </ImageBackground>
+            </View>
+
+            { location.distance ? (
+              <>
+                <View style={{ marginTop: 5 }}>
+                  <View style={styles.sectionRow}>
+                    <Icon
+                      style={styles.pinIcon}
+                      name="pin"
+                      fill="#000000"
+                    />
+                    <Text style={{ fontSize: 12, marginLeft: 5 }}>{location.distance.toFixed(1)} Miles</Text>
+                  </View>
+                </View>
+              </>
+            )
+              : null}
+          </View>
+        </ImageBackground>
+      )
+        : null}
     </View>
   );
 };

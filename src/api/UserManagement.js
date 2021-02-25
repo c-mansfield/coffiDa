@@ -121,7 +121,7 @@ const updateUser = async (userID, data) => {
       case 200:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: 'Email already in use, please try again!' };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };

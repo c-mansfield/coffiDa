@@ -23,43 +23,50 @@ import UserManagement from 'src/api/UserManagement.js';
 
 const ViewReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
-  const {
-    reviewID,
-    likedReviews,
-  } = route.params;
+  // const {
+  //   reviewID,
+  //   likedReviews,
+  // } = route.params;
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [review, setReview] = useState(null);
   const [location, setLocation] = useState(null);
+  const [dataLoading, setDataLoading] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('View', route);
       setLike(false);
       setLikeIcon('heart-outline');
       await getReview();
-      setIsLoading(false);
+      setDataLoading(true);
     };
 
-    setIsLoading(true);
     fetchData();
   }, [isFocused]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await setReviewLike();
-      await getPhoto();
-    };
+    if (dataLoading) {
+      const fetchData = async () => {
+        await setReviewLike();
 
-    fetchData();
-  }, [review]);
+        await getPhoto();
+        setIsLoading(false);
+      };
+
+      fetchData();
+    }
+  }, [dataLoading]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <View style={{ flex: 1, flexDirection: 'row', padding: 15 }}>
-          <TouchableOpacity onPress={() => navigateToEdit()}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EditReviewScreen', { reviewDefault: review, locationData: location })}
+          >
             <Icon style={{ height: 28, width: 28 }} fill="#000000" name="edit" />
           </TouchableOpacity>
 
@@ -76,11 +83,10 @@ const ViewReview = ({ navigation, route }) => {
     const response = await UserManagement.getUser(userID);
 
     if (response.success) {
-      const reviewData = await response.body.reviews.find((r) => { return r.review.review_id === reviewID; });
+      const reviewData = await response.body.reviews.find((r) => { return r.review.review_id === route.params.reviewID; });
 
-      console.log(reviewData);
-      setReview(reviewData.review);
       setLocation(reviewData.location);
+      setReview(reviewData.review);
     } else {
       DropDownHolder.error('Error', response.error);
     }
@@ -113,7 +119,7 @@ const ViewReview = ({ navigation, route }) => {
   };
 
   const setReviewLike = async () => {
-    if (await likedReviews.includes(review.review_id)) {
+    if (await route.params.likedReviews.includes(review.review_id)) {
       setLikeIcon('heart');
       setLike(true);
 
@@ -183,10 +189,6 @@ const ViewReview = ({ navigation, route }) => {
     }
   };
 
-  const navigateToEdit = () => {
-    navigation.navigate('Edit Review', { review, location });
-  };
-
   return (
     <Layout level="2" style={styles.detailsMain}>
       { isLoading
@@ -210,6 +212,12 @@ const ViewReview = ({ navigation, route }) => {
               )
                 : null}
             </View>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EditReviewScreen', { reviewDefault: review, locationData: location })}
+            >
+              <Icon style={{ height: 28, width: 28 }} fill="#000000" name="edit" />
+            </TouchableOpacity>
 
             <View style={styles.sectionStyle}>
               <Text

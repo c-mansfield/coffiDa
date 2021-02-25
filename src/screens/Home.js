@@ -6,7 +6,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   PermissionsAndroid,
@@ -17,6 +16,7 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useIsFocused } from '@react-navigation/native';
+import { Layout, Text } from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationTile from 'src/components/LocationTile.js';
@@ -29,20 +29,19 @@ const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
   const [locationsData, setLocationsData] = useState([]);
+  const [surroundingLocations, setSurroundingLocations] = useState([]);
+  const [carouselLocations, setCarouselLocations] = useState([]);
   const [geoLocationDetails, setGeoLocationDetails] = useState({ location: null, locationPermission: false });
   const [isLoading, setIsLoading] = useState(true);
   const carousel = useRef(null);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setIsLoading(true);
-
     const fetchData = async () => {
       await findCoordinates();
-
-      setIsLoading(false);
     };
 
+    setIsLoading(true);
     fetchData();
   }, []);
 
@@ -51,30 +50,64 @@ const Home = ({ navigation }) => {
       await getLocations();
     };
 
+    setIsLoading(true);
     fetchData();
-  }, [geoLocationDetails, isFocused]);
+  }, [isFocused]);
 
-  const getLocations = async () => {
-    const sendQuery = {
-      q: getSearchString(),
+  useEffect(() => {
+    const fetchData = async () => {
+      await getCarouselLocations(3);
+
+      setIsLoading(false);
     };
 
+    setIsLoading(true);
+    fetchData();
+  }, [locationsData]);
+
+  useEffect(() => {
+    if (geoLocationDetails.locationPermission) {
+      setIsLoading(true);
+
+      const fetchData = async () => {
+        const closestLocation = await getSurroundingLocations();
+
+        setSurroundingLocations(closestLocation);
+        setIsLoading(false);
+      };
+
+      fetchData();
+    }
+  }, [geoLocationDetails]);
+
+  const getLocations = async () => {
+    const sendQuery = { q: '' };
     const response = await LocationManagement.searchLocations(sendQuery);
 
     if (response.success) {
-      if (geoLocationDetails.locationPermission && geoLocationDetails.location) {
-        response.body = await getSurroundingLocations(response.body);
-      }
       setLocationsData(response.body);
     } else {
       DropDownHolder.error('Error', response.error);
     }
   };
 
-  const getSurroundingLocations = async (locations) => {
+  // Get carsouselNumber of locations for top carousel spotlight
+  const getCarouselLocations = (carsouselNumber) => {
+    const locations = [];
+
+    while (locations.length < carsouselNumber) {
+      const randomLocation = locationsData[Math.floor(Math.random() * locationsData.length)];
+
+      locations.push(randomLocation);
+    }
+
+    setCarouselLocations(locations);
+  };
+
+  const getSurroundingLocations = async () => {
     const closestLocations = [];
 
-    locations.forEach((location) => {
+    locationsData.forEach((location) => {
       const locationCopy = location;
 
       locationCopy.distance = getDistanceToLocation({ latitude: locationCopy.latitude, longitude: locationCopy.longitude });
@@ -98,21 +131,13 @@ const Home = ({ navigation }) => {
     { unit: 'mile' });
   };
 
-  const getSearchString = () => {
-    if (geoLocationDetails.locationPermission) {
-      return '';
-    }
-
-    return 'Manchester';
-  };
-
   const findCoordinates = async () => {
-    if (!geoLocationDetails.locationPermission) {
-      await requestLocationPermission();
-    }
+    const enabled = await requestLocationPermission();
 
-    const locationStr = await getCurrentLocation();
-    setGeoLocationDetails((prevState) => ({ ...prevState, location: locationStr }));
+    if (enabled) {
+      const locationStr = await getCurrentLocation();
+      setGeoLocationDetails((prevState) => ({ ...prevState, location: locationStr }));
+    }
   };
 
   const getCurrentLocation = () => {
@@ -124,12 +149,23 @@ const Home = ({ navigation }) => {
 
   const requestLocationPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Coffida Location Permission',
+          message:
+            'Coffida needs access to your location '
+            + 'so you can see all the awesome locations near you!',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        });
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: true }));
         return true;
       }
 
+      setGeoLocationDetails((prevState) => ({ ...prevState, locationPermission: false }));
       return false;
     } catch (err) {
       return false;
@@ -138,53 +174,74 @@ const Home = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.main}>
-      { isLoading
-        ? (
-          <>
-            <View style={{
-              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
-            }}
-            >
-              <ActivityIndicator />
-            </View>
-          </>
-        ) : (
-          <>
-            <Carousel
-              ref={carousel}
-              data={locationsData}
-              renderItem={({ item }) => (
-                <ImageCarouselItem location={item} />
-              )}
-              itemWidth={screenWidth}
-              sliderWidth={screenWidth}
-            />
-            <View style={{ padding: 15 }}>
-              <Text style={styles.title}>Explore</Text>
+      <Layout level="1" style={styles.main}>
+        { isLoading
+          ? (
+            <>
+              <View style={{
+                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+              }}
+              >
+                <ActivityIndicator />
+              </View>
+            </>
+          ) : (
+            <View>
+              <Carousel
+                ref={carousel}
+                data={carouselLocations}
+                renderItem={({ item }) => (
+                  <ImageCarouselItem location={item} />
+                )}
+                itemWidth={screenWidth}
+                sliderWidth={screenWidth}
+              />
               { geoLocationDetails.locationPermission
-                ? <Text style={styles.subHeading}>Nearby Places</Text>
-                : <Text style={styles.subHeading}>Manchester, UK</Text>}
-
-              <View style={styles.tileWrapper}>
-                { locationsData !== null ? (
+                ? (
                   <>
-                    {locationsData.map((location) => (
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate(
-                          'LocationStackNavigation',
-                          { screen: 'LocationDetails', params: { locationID: location.location_id } },
-                        )}
-                      >
-                        <LocationTile location={location} />
-                      </TouchableOpacity>
-                    ))}
+                    <View style={{ padding: 15 }}>
+                      <Text style={styles.title}>Explore</Text>
+                      { geoLocationDetails.locationPermission
+                        ? <Text style={styles.subHeading}>Nearby Places</Text>
+                        : <Text style={styles.subHeading}>Manchester, UK</Text>}
+
+                      <View style={styles.tileWrapper}>
+                        {surroundingLocations.map((location) => (
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate(
+                              'LocationStackNavigation',
+                              { screen: 'LocationDetails', params: { locationID: location.location_id } },
+                            )}
+                            key={`${location.location_id}_touchableOpacity`}
+                          >
+                            <LocationTile location={location} key={`${location.location_id}_locationTile`} />
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </View>
                   </>
                 )
-                  : null}
-              </View>
+                : (
+                  <>
+                    <View style={styles.locationOverlay}>
+                      <Layout level="2" style={styles.locationOverlayWrapper}>
+                        <Text style={styles.subtitle}>Explore places nearby to you</Text>
+                        <Text style={styles.locationText}>
+                          Enable your location services so you can get the best
+                          out of the app and explore all the places near you!
+                        </Text>
+                        <TouchableOpacity style={styles.primaryButton} onPress={() => requestLocationPermission()}>
+                          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                            Enable Location 🗺️
+                          </Text>
+                        </TouchableOpacity>
+                      </Layout>
+                    </View>
+                  </>
+                )}
             </View>
-          </>
-        )}
+          )}
+      </Layout>
     </ScrollView>
   );
 };
@@ -195,6 +252,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 36,
+    fontFamily: 'Nunito-Bold',
+  },
+  subtitle: {
+    fontSize: 24,
     fontFamily: 'Nunito-Bold',
   },
   subHeading: {
@@ -208,18 +269,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
   },
+  locationOverlay: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 10,
+    textAlign: 'center',
+  },
+  locationOverlayWrapper: {
+    padding: 20,
+  },
+  locationText: {
+    marginTop: 10,
+    fontSize: 14,
+    fontFamily: 'Nunito-Regular',
+  },
+  primaryButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
 });
 
 export default Home;
-
-// <FlatList
-//   columnWrapperStyle={{ justifyContent: 'space-between' }}
-//   data={locationsData}
-//   renderItem={({ item }) => (
-//     <TouchableOpacity onPress={() => navigation.navigate('LocationDetails', { locationID: item.location_id })}>
-//       <LocationTile location={item} />
-//     </TouchableOpacity>
-//   )}
-//   keyExtractor={(item) => item.location_name}
-//   numColumns={numColumns}
-// />

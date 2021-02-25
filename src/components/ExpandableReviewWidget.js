@@ -57,21 +57,26 @@ const ExpandableReviewWidget = (props) => {
     let done = false;
 
     if (like) {
-      done = await likeReview();
-    } else {
       done = await unLikeReview();
+    } else {
+      done = await likeReview();
     }
 
     return done;
   };
 
-  const likeReview = async () => {
+  const unLikeReview = async () => {
     const response = await LocationReviews.removeLikeReview(location.location_id, review.review_id);
 
     if (response.success) {
       review.likes--;
       setLikeIcon('heart-outline');
       setLike(false);
+      
+      const index = likedReviews.indexOf(review.review_id);
+      if (index > -1) {
+        likedReviews.splice(index, 1);
+      }
 
       return true;
     }
@@ -80,13 +85,14 @@ const ExpandableReviewWidget = (props) => {
     return false;
   };
 
-  const unLikeReview = async () => {
+  const likeReview = async () => {
     const response = await LocationReviews.likeReview(location.location_id, review.review_id);
 
     if (response.success) {
+      review.likes++;
       setLikeIcon('heart');
       setLike(true);
-      review.likes++;
+      likedReviews.push(review.review_id);
 
       return true;
     }

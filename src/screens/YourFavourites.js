@@ -65,7 +65,7 @@ const YourFavourites = ({ navigation }) => {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => navigation.navigate(
-                    'LocationStackNavigation',
+                    'LocationStackReviews',
                     { screen: 'LocationDetails', params: { locationID: item.location_id } },
                   )}
                 >
