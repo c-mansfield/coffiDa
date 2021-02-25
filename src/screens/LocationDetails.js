@@ -6,7 +6,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
@@ -15,7 +14,9 @@ import {
   StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Icon, Divider, Button } from '@ui-kitten/components';
+import {
+  Icon, Divider, Layout, Text,
+} from '@ui-kitten/components';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -38,7 +39,6 @@ const LocationDetails = ({ navigation, route }) => {
   // Get liked locations each time page reloads
   useEffect(() => {
     const fetchData = async () => {
-      console.log('LocationDetails ', route);
       await getLikedReviews();
     };
 
@@ -156,144 +156,152 @@ const LocationDetails = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.detailsMain}>
-      { isLoading
-        ? (
-          <>
-            <View style={{
-              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
-            }}
-            >
-              <ActivityIndicator />
-            </View>
-          </>
-        )
-        : (
-          <>
-            <StatusBar />
-            <View style={styles.detailsHeader}>
-              <ImageBackground source={{ uri: location.photo_path }} style={styles.detailsImage}>
-                <View style={styles.detailsOverlay}>
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
-                  </TouchableOpacity>
+    <Layout level="1" style={styles.detailsMain}>
+      <ScrollView>
+        { isLoading
+          ? (
+            <>
+              <View style={{
+                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+              }}
+              >
+                <ActivityIndicator />
+              </View>
+            </>
+          )
+          : (
+            <>
+              <StatusBar />
+              <View style={styles.detailsHeader}>
+                <ImageBackground
+                  source={{ uri: location.photo_path }}
+                  style={styles.detailsImage}
+                  imageStyle={{ opacity: 0.4 }}
+                >
+                  <View style={styles.detailsOverlay}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
+                    </TouchableOpacity>
 
-                  <View style={styles.detailsHeaderText}>
-                    <View style={styles.detailsHeaderTextWrapper}>
-                      <View style={styles.detailsHeaderLHS}>
-                        <Text style={{ fontSize: 36, fontFamily: 'Nunito-Bold' }}>{location.location_name}</Text>
-                        <Text
-                          style={{ fontSize: 24, fontFamily: 'Nunito-Regular', color: '#504F4F' }}
-                        >{location.location_town}
-                        </Text>
+                    <View style={styles.detailsHeaderText}>
+                      <View style={styles.detailsHeaderTextWrapper}>
+                        <View style={styles.detailsHeaderLHS}>
+                          <Text category="h1">{location.location_name}</Text>
+                          <Text
+                            category="s1"
+                          >{location.location_town}
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
+                          <Icon style={styles.iconSize} fill="#000000" name={favouriteIcon} />
+                        </TouchableOpacity>
                       </View>
-
-                      <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
-                        <Icon style={styles.iconSize} fill="#000000" name={favouriteIcon} />
-                      </TouchableOpacity>
                     </View>
                   </View>
-                </View>
-              </ImageBackground>
-            </View>
-            <View style={styles.detailsBody}>
-              <Text style={{
-                fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10,
-              }}
-              >Overall rating
-              </Text>
-
-              <View style={styles.overallRating}>
-                <RatingCircles rating={location.avg_overall_rating} />
-                <Text style={{
-                  fontSize: 12, fontFamily: 'Nunito-Regular', color: '#707070', marginLeft: 5,
-                }}
-                >({location.location_reviews.length} reviews)
+                </ImageBackground>
+              </View>
+              <View style={styles.detailsBody}>
+                <Text
+                  style={{ marginTop: 10 }}
+                  category="h6"
+                >Overall rating
                 </Text>
-              </View>
 
-              <View style={styles.detailsPrice}>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Price rating</Text>
-
-                <View style={{ marginLeft: 'auto' }}>
-                  <RatingCircles rating={location.avg_price_rating} />
+                <View style={styles.overallRating}>
+                  <RatingCircles rating={location.avg_overall_rating} />
+                  <Text
+                    style={{ marginLeft: 5 }}
+                    category="c2"
+                  >({location.location_reviews.length} reviews)
+                  </Text>
                 </View>
-              </View>
 
-              <View style={styles.detailsQuality}>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Quality rating</Text>
+                <View style={styles.detailsPrice}>
+                  <Text category="s1">Price rating</Text>
 
-                <View style={{ marginLeft: 'auto' }}>
-                  <RatingCircles rating={location.avg_quality_rating} />
+                  <View style={{ marginLeft: 'auto' }}>
+                    <RatingCircles rating={location.avg_price_rating} />
+                  </View>
                 </View>
-              </View>
 
-              <View style={styles.detailsClenliness}>
-                <Text style={{ fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070' }}>Clenliness rating</Text>
+                <View style={styles.detailsQuality}>
+                  <Text category="s1">Quality rating</Text>
 
-                <View style={{ marginLeft: 'auto' }}>
-                  <RatingCircles rating={location.avg_clenliness_rating} />
+                  <View style={{ marginLeft: 'auto' }}>
+                    <RatingCircles rating={location.avg_quality_rating} />
+                  </View>
                 </View>
-              </View>
 
-              <Divider />
+                <View style={styles.detailsClenliness}>
+                  <Text category="s1">Clenliness rating</Text>
 
-              <TouchableOpacity style={styles.detailsMap} onPress={() => navigation.navigate('NearbyLocations', { location })}>
-                <MapView
-                  provider={PROVIDER_GOOGLE}
-                  style={styles.map}
-                  region={{
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    longitudeDelta: 0.002,
-                    latitudeDelta: 0.002,
-                  }}
-                  tracksViewChanges={false}
-                  scrollEnabled={false}
-                  zoomEnabled={false}
-                  customMapStyle={mapstyle}
+                  <View style={{ marginLeft: 'auto' }}>
+                    <RatingCircles rating={location.avg_clenliness_rating} />
+                  </View>
+                </View>
+
+                <Divider />
+
+                <TouchableOpacity
+                  style={styles.detailsMap}
+                  onPress={() => navigation.navigate('NearbyLocations', { location })}
                 >
-                  <Marker
-                    coordinate={{
+                  <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={styles.map}
+                    region={{
                       latitude: location.latitude,
                       longitude: location.longitude,
+                      longitudeDelta: 0.002,
+                      latitudeDelta: 0.002,
                     }}
-                    key={location.location_id}
-                    title={location.location_name}
-                    pinColor="#247BA0"
-                  />
-                </MapView>
-              </TouchableOpacity>
+                    tracksViewChanges={false}
+                    scrollEnabled={false}
+                    zoomEnabled={false}
+                    customMapStyle={mapstyle}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                      }}
+                      key={location.location_id}
+                      title={location.location_name}
+                      pinColor="#247BA0"
+                    />
+                  </MapView>
+                </TouchableOpacity>
 
-              <Divider />
+                <Divider />
 
-              <View style={styles.detailsReviews}>
-                <Text style={{
-                  fontSize: 22, fontFamily: 'Nunito-Bold', color: '#504F4F', marginBottom: 5,
-                }}
-                >
-                  Reviews
-                </Text>
+                <View style={styles.detailsReviews}>
+                  <Text style={{ marginBottom: 5 }} category="h4">
+                    Reviews
+                  </Text>
 
-                {getHighlightReviews(3)}
-                { location.location_reviews.length > 0
-                  ? (
-                    <>
-                      <Button
-                        style={{ marginTop: 10 }}
-                        status="primary"
-                        onPress={() => navigation.navigate('AllReviews', { location, likedReviews })}
-                      >
-                        See all reviews
-                      </Button>
-                    </>
-                  )
-                  : <Text style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>No reviews yet</Text>}
+                  {getHighlightReviews(3)}
+                  { location.location_reviews.length > 0
+                    ? (
+                      <>
+                        <TouchableOpacity
+                          style={styles.allReviewsButton}
+                          onPress={() => navigation.navigate('AllReviews', { location, likedReviews })}
+                        >
+                          <Text style={{ color: '#FFFFFF' }} category="h6">
+                            See all reviews
+                          </Text>
+                        </TouchableOpacity>
+
+                      </>
+                    )
+                    : <Text style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>No reviews yet</Text>}
+                </View>
               </View>
-            </View>
-          </>
-        )}
-    </ScrollView>
+            </>
+          )}
+      </ScrollView>
+    </Layout>
   );
 };
 
@@ -311,7 +319,6 @@ const styles = StyleSheet.create({
   },
   detailsOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.7)',
     padding: 10,
   },
   iconSize: {
@@ -335,7 +342,9 @@ const styles = StyleSheet.create({
   },
   detailsBody: {
     flex: 2,
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 20,
     flexDirection: 'column',
   },
   overallRating: {
@@ -353,6 +362,7 @@ const styles = StyleSheet.create({
   detailsClenliness: {
     flexDirection: 'row',
     marginTop: 25,
+    paddingBottom: 20,
   },
   detailsReviews: {
     flexDirection: 'column',
@@ -364,6 +374,15 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 180,
+  },
+  allReviewsButton: {
+    backgroundColor: '#247BA0',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
 

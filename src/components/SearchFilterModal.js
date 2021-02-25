@@ -12,6 +12,7 @@ import {
   Text,
   RadioGroup,
   Radio,
+  Layout,
 } from '@ui-kitten/components';
 
 const SearchFilterModal = (props) => {
@@ -78,12 +79,12 @@ const SearchFilterModal = (props) => {
       style={styles.modalMain}
       onBackdropPress={props.toggleModal}
     >
-      <View style={styles.modalContent}>
-        <Text style={styles.title}>Filter by</Text>
+      <Layout style={styles.modalContent} level="1">
+        <Text category="h3">Filter by</Text>
 
         <View style={styles.filterSection}>
           <View style={styles.filterTitleToggle}>
-            <Text style={styles.subHeadingBold}>Overall Rating</Text>
+            <Text category="h6">Overall Rating</Text>
             <Toggle
               checked={filterChecked.overall_rating_checked}
               onChange={(overallCheck) => updateFilterChecker(overallCheck, 'overall_rating_checked')}
@@ -102,7 +103,7 @@ const SearchFilterModal = (props) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{filters.overall_rating}</Text>
+                    <Text style={styles.sliderText} category="s1">{filters.overall_rating}</Text>
                   ),
                 }}
               />
@@ -110,7 +111,7 @@ const SearchFilterModal = (props) => {
             : null}
 
           <View style={styles.filterTitleToggle}>
-            <Text style={styles.subHeadingBold}>Price Rating</Text>
+            <Text category="h6">Price Rating</Text>
             <Toggle
               checked={filterChecked.price_rating_checked}
               onChange={(priceCheck) => updateFilterChecker(priceCheck, 'price_rating_checked')}
@@ -129,7 +130,7 @@ const SearchFilterModal = (props) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{filters.price_rating}</Text>
+                    <Text style={styles.sliderText} category="s1">{filters.price_rating}</Text>
                   ),
                 }}
               />
@@ -137,7 +138,7 @@ const SearchFilterModal = (props) => {
             : null}
 
           <View style={styles.filterTitleToggle}>
-            <Text style={styles.subHeadingBold}>Quality Rating</Text>
+            <Text category="h6">Quality Rating</Text>
             <Toggle
               checked={filterChecked.quality_rating_checked}
               onChange={(qualityCheck) => updateFilterChecker(qualityCheck, 'quality_rating_checked')}
@@ -155,7 +156,7 @@ const SearchFilterModal = (props) => {
               thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
               thumbProps={{
                 children: (
-                  <Text style={styles.sliderText}>{filters.quality_rating}</Text>
+                  <Text style={styles.sliderText} category="s1">{filters.quality_rating}</Text>
                 ),
               }}
             />
@@ -163,7 +164,7 @@ const SearchFilterModal = (props) => {
             : null}
 
           <View style={styles.filterTitleToggle}>
-            <Text style={styles.subHeadingBold}>Cleanliness Rating</Text>
+            <Text category="h6">Cleanliness Rating</Text>
             <Toggle
               checked={filterChecked.cleanliness_rating_checked}
               onChange={(cleanlinessCheck) => updateFilterChecker(cleanlinessCheck, 'cleanliness_rating_checked')}
@@ -182,7 +183,7 @@ const SearchFilterModal = (props) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{filters.cleanliness_rating}</Text>
+                    <Text style={styles.sliderText} category="s1">{filters.cleanliness_rating}</Text>
                   ),
                 }}
               />
@@ -190,7 +191,7 @@ const SearchFilterModal = (props) => {
             : null}
 
           <View style={styles.filterTitleToggle}>
-            <Text style={styles.subHeadingBold}>Only Include</Text>
+            <Text category="h6">Only Include</Text>
             <Toggle
               checked={filterChecked.search_in_checked}
               onChange={(includedCheck) => updateFilterChecker(includedCheck, 'search_in_checked')}
@@ -221,7 +222,7 @@ const SearchFilterModal = (props) => {
           </Text>
         </TouchableOpacity>
 
-      </View>
+      </Layout>
     </Modal>
   );
 };
@@ -237,19 +238,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: 26,
-    fontFamily: 'Nunito-Bold',
-  },
-  subHeadingBold: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Regular',
   },
   filterSection: {
     marginTop: 10,
@@ -270,7 +262,6 @@ const styles = StyleSheet.create({
   sliderText: {
     marginTop: 30,
     alignSelf: 'center',
-    fontFamily: 'Nunito-Regular',
   },
   applyButton: {
     backgroundColor: '#247BA0',

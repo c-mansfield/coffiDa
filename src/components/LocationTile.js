@@ -22,15 +22,19 @@ const LocationTile = ({ location }) => {
   return (
     <View style={styles.tile}>
       { location ? (
-        <ImageBackground source={{ uri: location.photo_path }} style={styles.image}>
+        <ImageBackground
+          source={{ uri: location.photo_path }}
+          style={styles.image}
+          imageStyle={{ opacity: 0.3 }}
+        >
           <View style={styles.overlay}>
-            <Text style={{ fontSize: 20, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
-            <Text style={{ fontSize: 14, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
+            <Text category="h4" numberOfLines={1}>{location.location_name}</Text>
+            <Text category="s2" numberOfLines={1}>{location.location_town}</Text>
 
             <View>
               <View style={styles.sectionRow}>
                 <RatingCircles rating={location.avg_overall_rating} />
-                <Text style={{ fontSize: 12, marginLeft: 5 }}>({reviewCount})</Text>
+                <Text style={{ marginLeft: 5 }} category="c2">({reviewCount})</Text>
               </View>
             </View>
 
@@ -41,9 +45,9 @@ const LocationTile = ({ location }) => {
                     <Icon
                       style={styles.pinIcon}
                       name="pin"
-                      fill="#000000"
+                      fill="#247BA0"
                     />
-                    <Text style={{ fontSize: 12, marginLeft: 5 }}>{location.distance.toFixed(1)} Miles</Text>
+                    <Text style={{ marginLeft: 5 }} category="c2">{location.distance.toFixed(1)} Miles</Text>
                   </View>
                 </View>
               </>
@@ -69,12 +73,12 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.7)',
     justifyContent: 'flex-end',
     padding: 5,
   },
   sectionRow: {
     flexDirection: 'row',
+    alignItems: 'center'
   },
   pinIcon: {
     height: 16,

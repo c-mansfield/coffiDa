@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import {
+  Layout,
+} from '@ui-kitten/components';
 
 import UserManagement from 'src/api/UserManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
@@ -47,7 +50,7 @@ const YourFavourites = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.main}>
+    <Layout level="1" style={styles.main}>
       { isLoading
         ? (
           <>
@@ -60,29 +63,34 @@ const YourFavourites = ({ navigation }) => {
           </>
         ) : (
           <>
-            <FlatList
-              data={locationsData}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate(
-                    'LocationStackReviews',
-                    { screen: 'LocationDetails', params: { locationID: item.location_id } },
-                  )}
-                >
-                  <LocationWidget location={item} />
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.location_id.toString()}
-            />
+            <View style={{ marginTop: 10 }}>
+              <FlatList
+                data={locationsData}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(
+                      'LocationStackReviews',
+                      { screen: 'LocationDetails', params: { locationID: item.location_id } },
+                    )}
+                    style={{ marginBottom: 10 }}
+                  >
+                    <LocationWidget location={item} />
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.location_id.toString()}
+              />
+            </View>
           </>
         )}
-    </View>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1,
   },
 });
 

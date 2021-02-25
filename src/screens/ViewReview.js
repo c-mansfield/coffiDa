@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,7 +13,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Icon, Text, Layout } from '@ui-kitten/components';
+import {
+  Icon, Text, Layout, TopNavigationAction, TopNavigation, Button,
+} from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
@@ -21,12 +23,10 @@ import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 import UserManagement from 'src/api/UserManagement.js';
 
+const placeholderImage = require('assets/images/reviews_placeholder.png');
+
 const ViewReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
-  // const {
-  //   reviewID,
-  //   likedReviews,
-  // } = route.params;
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(null);
   const [photo, setPhoto] = useState(null);
@@ -37,7 +37,6 @@ const ViewReview = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('View', route);
       setLike(false);
       setLikeIcon('heart-outline');
       await getReview();
@@ -59,24 +58,6 @@ const ViewReview = ({ navigation, route }) => {
       fetchData();
     }
   }, [dataLoading]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={{ flex: 1, flexDirection: 'row', padding: 15 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('EditReviewScreen', { reviewDefault: review, locationData: location })}
-          >
-            <Icon style={{ height: 28, width: 28 }} fill="#000000" name="edit" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => checkUserDeleteReview()} style={{ marginLeft: 10 }}>
-            <Icon style={{ height: 28, width: 28 }} fill="#000000" name="trash" />
-          </TouchableOpacity>
-        </View>
-      ),
-    });
-  }, [navigation]);
 
   const getReview = async () => {
     const userID = await AsyncStorage.getItem('@userID');
@@ -189,8 +170,50 @@ const ViewReview = ({ navigation, route }) => {
     }
   };
 
+
+  const renderRightActions = () => {
+    return (
+      <>
+        <TopNavigationAction icon={EditIcon} />
+        <TopNavigationAction icon={TrashIcon} />
+      </>
+    );
+  };
+
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} />
+  );
+
+  const BackIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Icon {...props} name="arrow-back" />
+    </TouchableOpacity>
+  );
+
+  const EditIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.navigate('EditReview', { reviewDefault: review, locationData: location })}>
+      <Icon {...props} name="edit" />
+    </TouchableOpacity>
+  );
+
+  const TrashIcon = (props) => (
+    <TouchableOpacity onPress={() => checkUserDeleteReview()}>
+      <Icon {...props} name="trash" />
+    </TouchableOpacity>
+  );
+
+  const HeartIcon = (props) => (
+    <Icon {...props} name={likeIcon} />
+  );
+
   return (
     <Layout level="2" style={styles.detailsMain}>
+      <TopNavigation
+        accessoryLeft={BackAction}
+        alignment="center"
+        title="View Review"
+        accessoryRight={renderRightActions}
+      />
       { isLoading
         ? (
           <>
@@ -210,65 +233,52 @@ const ViewReview = ({ navigation, route }) => {
                   source={{ uri: photo.uri }}
                 />
               )
-                : null}
+                : (
+                  <Image
+                    style={styles.reviewImage}
+                    source={placeholderImage}
+                  />
+                )}
             </View>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate('EditReviewScreen', { reviewDefault: review, locationData: location })}
-            >
-              <Icon style={{ height: 28, width: 28 }} fill="#000000" name="edit" />
-            </TouchableOpacity>
-
             <View style={styles.sectionStyle}>
-              <Text
-                style={{ fontFamily: 'Nunito-Bold', fontSize: 22 }}
-              >
+              <Text category="h4" numberOfLines={1}>
                 {location.location_name}, {location.location_town}
               </Text>
 
-              <Text style={{ fontFamily: 'Nunito-Regular', fontSize: 18, marginTop: 5 }}>"{review.review_body}"</Text>
+              <Text category="s1" style={{ marginTop: 5 }}>"{review.review_body}"</Text>
             </View>
 
             <View style={styles.sectionStyle}>
-              <Text style={{
-                fontSize: 18, fontFamily: 'Nunito-Bold', color: '#707070', marginTop: 10,
-              }}
-              >Overall rating
-              </Text>
+              <Text style={{ marginBottom: 5 }} category="h6" appearance="hint">Overall rating</Text>
               <RatingCircles rating={review.overall_rating} />
             </View>
 
             <View style={styles.sectionStyle}>
-              <Text style={{
-                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-              }}
-              >Price rating
-              </Text>
+              <Text style={{ marginBottom: 5 }} category="s1" appearance="hint">Price rating</Text>
               <RatingCircles rating={review.price_rating} />
             </View>
 
             <View style={styles.sectionStyle}>
-              <Text style={{
-                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-              }}
-              >Quality rating
-              </Text>
+              <Text style={{ marginBottom: 5 }} category="s1" appearance="hint">Quality rating</Text>
               <RatingCircles rating={review.quality_rating} />
             </View>
 
             <View style={styles.sectionStyle}>
-              <Text style={{
-                fontSize: 18, fontFamily: 'Nunito-Regular', color: '#707070', marginTop: 10,
-              }}
-              >Clenliness rating
-              </Text>
+              <Text style={{ marginBottom: 5 }} category="s1" appearance="hint">Clenliness rating</Text>
               <RatingCircles rating={review.clenliness_rating} />
             </View>
 
-            <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
-              <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-              <Text style={styles.likesText}>{review.likes}</Text>
-            </TouchableOpacity>
+            <View style={styles.likeButton}>
+              <Button
+                accessoryLeft={HeartIcon}
+                status="danger"
+                onPress={() => changeLike()}
+                appearance="outline"
+              >
+                {review.likes}
+              </Button>
+            </View>
           </View>
         )}
     </Layout>
@@ -298,19 +308,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   likesSection: {
-    flexDirection: 'row',
-    marginTop: 15,
   },
   likesImage: {
     width: 32,
     height: 32,
   },
   likesText: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
     marginLeft: 5,
   },
+  likeButton: {
+    marginTop: 15,
+    flexDirection: 'row',
+  }
 });
 
 ViewReview.propTypes = {

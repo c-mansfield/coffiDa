@@ -10,7 +10,9 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { Text, Icon } from '@ui-kitten/components';
+import {
+  Text, Icon, Layout, Button,
+} from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
@@ -72,7 +74,7 @@ const ExpandableReviewWidget = (props) => {
       review.likes--;
       setLikeIcon('heart-outline');
       setLike(false);
-      
+
       const index = likedReviews.indexOf(review.review_id);
       if (index > -1) {
         likedReviews.splice(index, 1);
@@ -129,89 +131,109 @@ const ExpandableReviewWidget = (props) => {
     }
   };
 
+  const HeartIcon = (props) => (
+    <Icon {...props} name={likeIcon} />
+  );
+
   return (
-    <TouchableOpacity onPress={() => expandWidget()} style={styles.widgetMain}>
-      { expanded
-        ? (
-          <>
-            <View style={styles.textWrapper}>
-              <Text style={styles.header}>"{review.review_body}"</Text>
-              {
-                myReview
-                  ? (
-                    <Text style={styles.subHeading}>
-                      {location.location_name}
-                      ,
-                      {' '}
-                      {location.location_town}
-                    </Text>
-                  )
-                  : null
-              }
-              <View style={styles.ratingStyleOverall}>
-                <RatingCircles rating={review.overall_rating} />
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Bold', marginLeft: 10 }}>Overall rating</Text>
-              </View>
+    <Layout level="3" style={styles.widgetMain}>
+      <TouchableOpacity onPress={() => expandWidget()} style={{ flex: 1, flexDirection: 'row' }}>
+        { expanded
+          ? (
+            <>
+              <View style={styles.textWrapper}>
+                <Text category="h6">"{review.review_body}"</Text>
+                {
+                  myReview
+                    ? (
+                      <Text category="s1" appearance="hint">
+                        {location.location_name}
+                        ,
+                        {' '}
+                        {location.location_town}
+                      </Text>
+                    )
+                    : null
+                }
+                <View style={styles.ratingStyleOverall}>
+                  <RatingCircles rating={review.overall_rating} />
+                  <Text style={{ marginLeft: 10 }} category="h6">Overall rating</Text>
+                </View>
 
-              <View style={styles.ratingStyle}>
-                <RatingCircles rating={review.price_rating} />
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', marginLeft: 10 }}>Price rating</Text>
-              </View>
+                <View style={styles.ratingStyle}>
+                  <RatingCircles rating={review.price_rating} />
+                  <Text style={{ marginLeft: 10 }} category="s1">Price rating</Text>
+                </View>
 
-              <View style={styles.ratingStyle}>
-                <RatingCircles rating={review.quality_rating} />
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', marginLeft: 10 }}>Quality rating</Text>
-              </View>
+                <View style={styles.ratingStyle}>
+                  <RatingCircles rating={review.quality_rating} />
+                  <Text style={{ marginLeft: 10 }} category="s1">Quality rating</Text>
+                </View>
 
-              <View style={styles.ratingStyle}>
-                <RatingCircles rating={review.clenliness_rating} />
-                <Text style={{ fontSize: 14, fontFamily: 'Nunito-Regular', marginLeft: 10 }}>Cleanliness rating</Text>
-              </View>
+                <View style={styles.ratingStyle}>
+                  <RatingCircles rating={review.clenliness_rating} />
+                  <Text style={{ marginLeft: 10 }} category="s1">Cleanliness rating</Text>
+                </View>
 
-              <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
-                <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-                <Text style={styles.likesText}>{review.likes}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.imageWrapper}>
-              { photo ? (
-                <Image
-                  style={styles.reviewImage}
-                  source={{ uri: photo.uri }}
-                />
-              )
-                : null }
-            </View>
-          </>
-        )
-        : (
-          <>
-            <View style={styles.textWrapper}>
-              <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
-              {
-                myReview
-                  ? (
-                    <Text style={styles.subHeading}>
-                      {location.location_name}
-                      ,
-                      {' '}
-                      {location.location_town}
-                    </Text>
-                  )
-                  : null
-              }
-              <View style={styles.ratingStyleOverall}>
-                <RatingCircles rating={review.overall_rating} />
+                <View style={styles.likeButton}>
+                  <Button
+                    accessoryLeft={HeartIcon}
+                    status="danger"
+                    onPress={() => changeLike()}
+                    size="tiny"
+                    appearance="outline"
+                  >
+                    {review.likes}
+                  </Button>
+                </View>
               </View>
+              <View style={styles.imageWrapper}>
+                { photo ? (
+                  <Image
+                    style={styles.reviewImage}
+                    source={{ uri: photo.uri }}
+                  />
+                )
+                  : null }
+              </View>
+            </>
+          )
+          : (
+            <>
+              <View style={styles.textWrapper}>
+                <Text numberOfLines={1} category="h6">"{review.review_body}"</Text>
+                {
+                  myReview
+                    ? (
+                      <Text category="s1" appearance="hint">
+                        {location.location_name}
+                        ,
+                        {' '}
+                        {location.location_town}
+                      </Text>
+                    )
+                    : null
+                }
+                <View style={styles.ratingStyleOverall}>
+                  <RatingCircles rating={review.overall_rating} />
+                </View>
 
-              <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
-                <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-                <Text style={styles.likesText}>{review.likes}</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-    </TouchableOpacity>
+                <View style={styles.likeButton}>
+                  <Button
+                    accessoryLeft={HeartIcon}
+                    status="danger"
+                    onPress={() => changeLike()}
+                    size="tiny"
+                    appearance="outline"
+                  >
+                    {review.likes}
+                  </Button>
+                </View>
+              </View>
+            </>
+          )}
+      </TouchableOpacity>
+    </Layout>
   );
 };
 
@@ -220,36 +242,18 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: '#FFFFFF',
     padding: 15,
-    borderColor: 'rgb(224, 224, 224)',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderRadius: 4,
+    borderColor: 'rgb(224, 224, 224)',
   },
-  textWrapper: {
-  },
-  header: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Bold',
-    color: '#707070',
-  },
-  subHeading: {
-    fontSize: 16,
-    fontFamily: 'Nunito-Regular',
-    color: '#707070',
-  },
-  likesSection: {
+  likeButton: {
+    marginTop: 15,
     flexDirection: 'row',
-    marginTop: 10,
   },
   likesImage: {
     width: 30,
     height: 30,
-  },
-  likesText: {
-    fontSize: 10,
-    fontFamily: 'Nunito-Regular',
-    alignSelf: 'center',
   },
   imageWrapper: {
     alignItems: 'flex-end',
@@ -264,6 +268,7 @@ const styles = StyleSheet.create({
   ratingStyleOverall: {
     flexDirection: 'row',
     marginTop: 10,
+    alignItems: 'center',
   },
   ratingStyle: {
     flexDirection: 'row',

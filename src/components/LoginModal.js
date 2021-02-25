@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {
-  Text, Input, Icon,
+  Text, Input, Icon, Layout,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -126,38 +126,40 @@ const LoginModal = ({ navigateHome, loginModalVisible, toggleLoginModal }) => {
       style={styles.modalMain}
       onBackdropPress={toggleLoginModal}
     >
-      <KeyboardAvoidingView style={styles.modalContent} keyboardVerticalOffset={200}>
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.errorMain}>{errorMessage.main}</Text>
+      <Layout style={styles.modalContent} level="1">
+        <KeyboardAvoidingView keyboardVerticalOffset={200}>
+          <Text category="h4">Welcome Back</Text>
+          <Text category="c1" status="danger">{errorMessage.main}</Text>
 
-        <Text style={styles.inputHeader}>Email</Text>
-        <Input
-          style={styles.inputStyle}
-          placeholder="Email"
-          onChangeText={(emailValue) => updateUserDetailsState(emailValue, 'email')}
-          defaultValue={userDetails.email}
-          status={textStatus.email}
-          caption={errorMessage.email}
-        />
+          <Text category="c1" style={styles.inputHeader}>Email</Text>
+          <Input
+            style={styles.inputStyle}
+            placeholder="Email"
+            onChangeText={(emailValue) => updateUserDetailsState(emailValue, 'email')}
+            defaultValue={userDetails.email}
+            status={textStatus.email}
+            caption={errorMessage.email}
+          />
 
-        <Text style={styles.inputHeader}>Password</Text>
-        <Input
-          style={styles.inputStyle}
-          placeholder="Password"
-          secureTextEntry={secureTextEntry}
-          onChangeText={(passwordValue) => updateUserDetailsState(passwordValue, 'password')}
-          defaultValue={userDetails.password}
-          accessoryRight={renderIcon}
-          status={textStatus.password}
-          caption={errorMessage.password}
-        />
+          <Text category="c1" style={styles.inputHeader}>Password</Text>
+          <Input
+            style={styles.inputStyle}
+            placeholder="Password"
+            secureTextEntry={secureTextEntry}
+            onChangeText={(passwordValue) => updateUserDetailsState(passwordValue, 'password')}
+            defaultValue={userDetails.password}
+            accessoryRight={renderIcon}
+            status={textStatus.password}
+            caption={errorMessage.password}
+          />
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => checkCanLogin()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-            LOGIN
-          </Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+          <TouchableOpacity style={styles.loginButton} onPress={() => checkCanLogin()}>
+            <Text style={{ color: '#FFFFFF' }} category="h6">
+              LOGIN
+            </Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </Layout>
     </Modal>
   );
 };
@@ -168,27 +170,14 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: 26,
-    fontFamily: 'Nunito-Bold',
-  },
-  errorMain: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
-    marginBottom: 15,
-    color: '#B74171',
-    marginTop: 5,
   },
   inputHeader: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 14,
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop: 5,
   },
   inputStyle: {
     height: 40,

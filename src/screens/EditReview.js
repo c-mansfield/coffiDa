@@ -13,6 +13,10 @@ import {
 import {
   Input,
   Text,
+  TopNavigationAction,
+  TopNavigation,
+  Icon,
+  Layout,
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
@@ -20,6 +24,7 @@ import { useIsFocused } from '@react-navigation/native';
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import LocationReviews from 'src/api/LocationReviews.js';
+import { FilterWords } from 'assets/globals.js';
 
 const EditReview = ({ navigation, route }) => {
   const isFocused = useIsFocused();
@@ -29,15 +34,9 @@ const EditReview = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log(route);
     setReviewData(reviewDefault);
     setIsLoading(false);
-  }, [isFocused]);
-
-  // useEffect(() => {
-  //   if (reviewDefault) {
-  //   }
-  // }, [reviewDefault]);
+  }, []);
 
   const togglePhotoModal = () => {
     setModalPhotoVisible(!modalPhotoVisible);
@@ -54,8 +53,13 @@ const EditReview = ({ navigation, route }) => {
     }
   };
 
+  const checkEditReview = async () => {
+    if (checkReviewFields() && await checkReviewProfanity()) {
+      await editReview();
+    }
+  };
   const getReviewUpdates = async () => {
-    const updatedDetails = reviewData;
+    const updatedDetails = { ...reviewData };
 
     // Checks if element in review has been updated, if not then delete that element
     // so doesn't get patched
@@ -68,12 +72,53 @@ const EditReview = ({ navigation, route }) => {
     return updatedDetails;
   };
 
+  const checkReviewFields = () => {
+    if (reviewData.review_body !== ''
+        && reviewData.overall_rating > 0
+        && reviewData.price_rating > 0
+        && reviewData.quality_rating > 0
+        && reviewData.clenliness_rating > 0) {
+      return true;
+    }
+
+    DropDownHolder.error('Error', 'Unexpected items, all fields are requried');
+    return false;
+  };
+
+  // Checks if message contains any word that wish to be filtered out
+  const checkReviewProfanity = async () => {
+    const filterRegex = new RegExp(`\\b(${FilterWords.join('|')})\\b`);
+
+    if (!await filterRegex.test(reviewData.review_body.toLowerCase())) {
+      return true;
+    }
+
+    DropDownHolder.error('Unexpected items',
+      'Cannot add review due to mention of other aspects of the cafe experience that isn\'t coffee. Please try again!');
+    return false;
+  };
+
   const updateReviewDataState = (val, field) => {
     setReviewData((prevState) => ({ ...prevState, [field]: val }));
   };
 
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} />
+  );
+
+  const BackIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Icon {...props} name="arrow-back" />
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.main}>
+    <Layout level="2" style={styles.main}>
+      <TopNavigation
+        accessoryLeft={BackAction}
+        alignment="center"
+        title="Edit Review"
+      />
       { isLoading
         ? (
           <>
@@ -86,9 +131,13 @@ const EditReview = ({ navigation, route }) => {
           </>
         ) : (
           <>
-
             <View style={styles.editMain}>
-              <Text style={styles.subHeadingBold}>{locationData.location_name}, {locationData.location_town}</Text>
+              <Text
+                style={styles.subHeadingBold}
+                category="h5"
+              >
+                {locationData.location_name}, {locationData.location_town}
+              </Text>
 
               <Input
                 multiline
@@ -101,7 +150,7 @@ const EditReview = ({ navigation, route }) => {
                 {reviewData.review_body.length}/200
               </Text>
 
-              <Text style={styles.subHeadingOverall}>Overall Rating</Text>
+              <Text style={styles.subHeadingOverall} category="h6">Overall Rating</Text>
               <Slider
                 value={reviewData.overall_rating}
                 onValueChange={(overall) => updateReviewDataState(overall, 'overall_rating')}
@@ -111,11 +160,11 @@ const EditReview = ({ navigation, route }) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{reviewData.overall_rating}</Text>
+                    <Text style={styles.sliderText} category="s2">{reviewData.overall_rating}</Text>
                   ),
                 }}
               />
-              <Text style={styles.subHeading}>Price Rating</Text>
+              <Text style={styles.subHeading} category="s1">Price Rating</Text>
               <Slider
                 value={reviewData.price_rating}
                 onValueChange={(price) => updateReviewDataState(price, 'price_rating')}
@@ -125,11 +174,11 @@ const EditReview = ({ navigation, route }) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{reviewData.price_rating}</Text>
+                    <Text style={styles.sliderText} category="s2">{reviewData.price_rating}</Text>
                   ),
                 }}
               />
-              <Text style={styles.subHeading}>Quality Rating</Text>
+              <Text style={styles.subHeading} category="s1">Quality Rating</Text>
               <Slider
                 value={reviewData.quality_rating}
                 onValueChange={(quality) => updateReviewDataState(quality, 'quality_rating')}
@@ -139,11 +188,11 @@ const EditReview = ({ navigation, route }) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{reviewData.quality_rating}</Text>
+                    <Text style={styles.sliderText} category="s2">{reviewData.quality_rating}</Text>
                   ),
                 }}
               />
-              <Text style={styles.subHeading}>Cleanliness Rating</Text>
+              <Text style={styles.subHeading} category="s1">Cleanliness Rating</Text>
               <Slider
                 value={reviewData.clenliness_rating}
                 onValueChange={(clenliness) => updateReviewDataState(clenliness, 'clenliness_rating')}
@@ -153,7 +202,7 @@ const EditReview = ({ navigation, route }) => {
                 thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
                 thumbProps={{
                   children: (
-                    <Text style={styles.sliderText}>{reviewData.clenliness_rating}</Text>
+                    <Text style={styles.sliderText} category="s2">{reviewData.clenliness_rating}</Text>
                   ),
                 }}
               />
@@ -163,7 +212,7 @@ const EditReview = ({ navigation, route }) => {
                   Edit Photo 📷
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.primaryButton} onPress={() => editReview()}>
+              <TouchableOpacity style={styles.primaryButton} onPress={() => checkEditReview()}>
                 <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
                   Update Review
                 </Text>
@@ -179,7 +228,7 @@ const EditReview = ({ navigation, route }) => {
             </View>
           </>
         )}
-    </View>
+    </Layout>
   );
 };
 
@@ -197,25 +246,18 @@ const styles = StyleSheet.create({
     width: 38,
   },
   subHeadingBold: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Bold',
     marginBottom: 10,
     marginTop: 10,
   },
   subHeadingOverall: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Bold',
-    marginTop: 10,
+    marginTop: 5,
   },
   subHeading: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Regular',
     marginTop: 15,
   },
   sliderText: {
     marginTop: 30,
     alignSelf: 'center',
-    fontFamily: 'Nunito-Regular',
   },
   primaryButton: {
     backgroundColor: '#247BA0',

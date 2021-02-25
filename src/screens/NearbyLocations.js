@@ -4,16 +4,19 @@
 */
 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import mapstyle from 'assets/theme/mapstyle.js';
 import { useIsFocused } from '@react-navigation/native';
+import {
+  Icon, TopNavigationAction, TopNavigation, Layout,
+} from '@ui-kitten/components';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import DropDownHolder from 'src/services/DropdownHolder.js';
 
-const NearbyLocations = ({ route }) => {
+const NearbyLocations = ({ navigation, route }) => {
   const { location } = route.params;
   const [nearbyLocations, setNearbyLocations] = useState([]);
   const isFocused = useIsFocused();
@@ -51,8 +54,23 @@ const NearbyLocations = ({ route }) => {
     return locations;
   };
 
+  const BackIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Icon {...props} name="arrow-back" />
+    </TouchableOpacity>
+  );
+
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} />
+  );
+
   return (
-    <View style={styles.main}>
+    <Layout style={styles.main} level='1'>
+      <TopNavigation
+        accessoryLeft={BackAction}
+        alignment="center"
+        title="Nearby Locations"
+      />
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -88,7 +106,7 @@ const NearbyLocations = ({ route }) => {
         )
           : null}
       </MapView>
-    </View>
+    </Layout>
   );
 };
 

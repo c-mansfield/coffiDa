@@ -10,7 +10,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { Icon, Input } from '@ui-kitten/components';
+import { Icon, Input, Layout } from '@ui-kitten/components';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
@@ -76,24 +76,23 @@ const SearchResults = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.searchBarContainer}>
+    <Layout level="1" style={{ flex: 1 }}>
+      <Layout level="3" style={styles.searchBarContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10 }}>
-          <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
+          <Icon style={styles.iconSize} fill="#50514F" name="arrow-back" />
         </TouchableOpacity>
         <Input
           placeholder="Search"
           accessoryLeft={searchIcon}
-          status="info"
           value={search}
           onChangeText={(value) => setSearch(value)}
           style={styles.searchBarStyle}
           autoFocus
         />
         <TouchableOpacity onPress={toggleModal}>
-          <Icon style={styles.iconSize} fill="#000000" name="funnel-outline" />
+          <Icon style={styles.iconSize} fill="#50514F" name="funnel" />
         </TouchableOpacity>
-      </View>
+      </Layout>
 
       <SearchFilterModal
         modalVisible={modalVisible}
@@ -121,7 +120,7 @@ const SearchResults = ({ navigation }) => {
           onEndReachedThreshold={0}
         />
       </View>
-    </View>
+    </Layout>
   );
 };
 
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   searchBarContainer: {
-    backgroundColor: '#FFFFFF',
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',

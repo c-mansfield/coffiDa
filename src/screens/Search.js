@@ -6,14 +6,15 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Icon, Input } from '@ui-kitten/components';
+import {
+  Icon, Input, Layout, Text,
+} from '@ui-kitten/components';
 
 import LocationTile from 'src/components/LocationTile.js';
 import LocationManagement from 'src/api/LocationManagement.js';
@@ -26,13 +27,13 @@ const Search = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getTopLocations();
+      await getTopLocations(10);
     };
 
     fetchData();
   }, [isFocused]);
 
-  const getTopLocations = async () => {
+  const getTopLocations = async (numberOfLocations) => {
     const sendQuery = {
       overall_rating: 0,
     };
@@ -40,7 +41,7 @@ const Search = ({ navigation }) => {
 
     if (response.success) {
       response.body.sort((a, b) => ((a.avg_overall_rating > b.avg_overall_rating) ? -1 : 1));
-      setLocationsData(response.body.slice(0, 8)); // Get top 8 locations
+      setLocationsData(response.body.slice(0, numberOfLocations)); // Get top 8 locations
       setIsLoading(false);
     } else {
       DropDownHolder.error('Error', response.error);
@@ -48,54 +49,55 @@ const Search = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.main}>
-      { isLoading
-        ? (
-          <>
-            <View style={{
-              flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
-            }}
-            >
-              <ActivityIndicator />
-            </View>
-          </>
-        ) : (
-          <>
-            <Text style={styles.title}>Search</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('SearchResults')} style={styles.searchBar}>
-              <Input
-                placeholder="Name, Location, rating..."
-                accessoryLeft={searchIcon}
-                status="info"
-                disabled
-              />
-            </TouchableOpacity>
+    <Layout level="1" style={styles.main}>
+      <ScrollView>
+        { isLoading
+          ? (
+            <>
+              <View style={{
+                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+              }}
+              >
+                <ActivityIndicator />
+              </View>
+            </>
+          ) : (
+            <>
+              <Text category="h1" style={{ marginTop: 15 }}>Search</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('SearchResults')} style={styles.searchBar}>
+                <Input
+                  placeholder="Name, Location, rating..."
+                  accessoryLeft={searchIcon}
+                  status="info"
+                  disabled
+                />
+              </TouchableOpacity>
 
-            <Text style={styles.subHeading}>Top Rated Locations</Text>
-            <View style={styles.tileWrapper}>
-              { locationsData !== null ? (
-                <>
-                  {locationsData.map((location) => (
-                    <>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate(
-                          'LocationStackNavigationSearch',
-                          { screen: 'LocationDetails', params: { locationID: location.location_id } },
-                        )}
-                        key={`${location.location_id}_searchTouchableOpacity`}
-                      >
-                        <LocationTile location={location} key={`${location.location_id}_searchLocationTile`} />
-                      </TouchableOpacity>
-                    </>
-                  ))}
-                </>
-              )
-                : null}
-            </View>
-          </>
-        )}
-
-    </ScrollView>
+              <Text style={styles.subHeading} category="h6" appearance="hint">Top Rated Locations</Text>
+              <View style={styles.tileWrapper}>
+                { locationsData !== null ? (
+                  <>
+                    {locationsData.map((location) => (
+                      <>
+                        <TouchableOpacity
+                          onPress={() => navigation.navigate(
+                            'LocationStackNavigationSearch',
+                            { screen: 'LocationDetails', params: { locationID: location.location_id } },
+                          )}
+                          key={`${location.location_id}_searchTouchableOpacity`}
+                        >
+                          <LocationTile location={location} key={`${location.location_id}_searchLocationTile`} />
+                        </TouchableOpacity>
+                      </>
+                    ))}
+                  </>
+                )
+                  : null}
+              </View>
+            </>
+          )}
+      </ScrollView>
+    </Layout>
   );
 };
 
@@ -105,20 +107,14 @@ const searchIcon = (props) => (
 
 const styles = StyleSheet.create({
   main: {
-    padding: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
     flex: 1,
-  },
-  title: {
-    fontSize: 36,
-    fontFamily: 'Nunito-Bold',
   },
   searchBar: {
     marginTop: 5,
   },
   subHeading: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Regular',
-    color: '#707070',
     marginTop: 10,
   },
   tileWrapper: {

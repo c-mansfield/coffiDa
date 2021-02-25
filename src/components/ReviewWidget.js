@@ -7,9 +7,10 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
-import { Text, Icon } from '@ui-kitten/components';
+import {
+  Text, Icon, Layout, Button,
+} from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
@@ -99,11 +100,15 @@ const ReviewWidget = (props) => {
     return false;
   };
 
+  const HeartIcon = (props) => (
+    <Icon {...props} name={likeIcon} />
+  );
+
   return (
-    <View style={styles.widgetMain}>
-      <View style={styles.textWrapper}>
-        <Text style={styles.header} numberOfLines={1}>"{review.review_body}"</Text>
-        <Text style={styles.subHeading}>
+    <Layout level="3" style={styles.widgetMain}>
+      <View style={styles.widgetWrapper}>
+        <Text category="h6" numberOfLines={1}>"{review.review_body}"</Text>
+        <Text category="s1" appearance="hint">
           {location.location_name}
           ,
           {' '}
@@ -113,13 +118,20 @@ const ReviewWidget = (props) => {
           <RatingCircles rating={review.overall_rating} />
         </View>
 
-        <TouchableOpacity onPress={() => changeLike()} style={styles.likesSection}>
-          <Icon style={styles.likesImage} fill="#000000" name={likeIcon} />
-          <Text style={styles.likesText}>{review.likes}</Text>
-        </TouchableOpacity>
+        <View style={styles.likeButton}>
+          <Button
+            accessoryLeft={HeartIcon}
+            status="danger"
+            onPress={() => changeLike()}
+            size="tiny"
+            appearance="outline"
+          >
+            {review.likes}
+          </Button>
+        </View>
       </View>
       <View style={styles.imageWrapper} />
-    </View>
+    </Layout>
   );
 };
 
@@ -128,36 +140,19 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: '#FFFFFF',
     padding: 15,
     borderColor: 'rgb(224, 224, 224)',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderRadius: 4,
-  },
-  textWrapper: {
-  },
-  header: {
-    fontSize: 18,
-    fontFamily: 'Nunito-Bold',
-    color: '#707070',
-  },
-  subHeading: {
-    fontSize: 16,
-    fontFamily: 'Nunito-Regular',
-    color: '#707070',
   },
   likesSection: {
     flexDirection: 'row',
     marginTop: 10,
+    alignItems: 'center',
   },
   likesImage: {
     width: 30,
     height: 30,
-  },
-  likesText: {
-    fontSize: 10,
-    fontFamily: 'Nunito-Regular',
-    alignSelf: 'center',
   },
   imageWrapper: {
     alignItems: 'flex-end',
@@ -170,8 +165,13 @@ const styles = StyleSheet.create({
     borderRadius: 80 / 2,
   },
   ratingStyle: {
+    flexDirection: 'row',
     marginTop: 10,
   },
+  likeButton: {
+    marginTop: 15,
+    flexDirection: 'row',
+  }
 });
 
 ReviewWidget.propTypes = {

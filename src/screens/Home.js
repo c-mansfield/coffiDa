@@ -14,7 +14,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 import { useIsFocused } from '@react-navigation/native';
 import { Layout, Text } from '@ui-kitten/components';
 
@@ -173,8 +173,8 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.main}>
-      <Layout level="1" style={styles.main}>
+    <Layout level="1" style={styles.main}>
+      <ScrollView>
         { isLoading
           ? (
             <>
@@ -200,10 +200,10 @@ const Home = ({ navigation }) => {
                 ? (
                   <>
                     <View style={{ padding: 15 }}>
-                      <Text style={styles.title}>Explore</Text>
+                      <Text category="h2">Explore</Text>
                       { geoLocationDetails.locationPermission
-                        ? <Text style={styles.subHeading}>Nearby Places</Text>
-                        : <Text style={styles.subHeading}>Manchester, UK</Text>}
+                        ? <Text category="s1">Nearby Places</Text>
+                        : <Text category="s1">Manchester, UK</Text>}
 
                       <View style={styles.tileWrapper}>
                         {surroundingLocations.map((location) => (
@@ -225,8 +225,8 @@ const Home = ({ navigation }) => {
                   <>
                     <View style={styles.locationOverlay}>
                       <Layout level="2" style={styles.locationOverlayWrapper}>
-                        <Text style={styles.subtitle}>Explore places nearby to you</Text>
-                        <Text style={styles.locationText}>
+                        <Text category="h2">Explore places nearby to you</Text>
+                        <Text style={styles.locationText} category="c1">
                           Enable your location services so you can get the best
                           out of the app and explore all the places near you!
                         </Text>
@@ -241,26 +241,14 @@ const Home = ({ navigation }) => {
                 )}
             </View>
           )}
-      </Layout>
-    </ScrollView>
+      </ScrollView>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-  },
-  title: {
-    fontSize: 36,
-    fontFamily: 'Nunito-Bold',
-  },
-  subtitle: {
-    fontSize: 24,
-    fontFamily: 'Nunito-Bold',
-  },
-  subHeading: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
   },
   tileWrapper: {
     flex: 1,
@@ -280,8 +268,6 @@ const styles = StyleSheet.create({
   },
   locationText: {
     marginTop: 10,
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
   },
   primaryButton: {
     backgroundColor: '#247BA0',

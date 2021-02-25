@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import {
+  Layout,
+} from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import ReviewWidget from 'src/components/ReviewWidget.js';
@@ -60,7 +63,7 @@ const YourReviews = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.main}>
+    <Layout level="1" style={styles.main}>
       { isLoading
         ? (
           <>
@@ -73,34 +76,36 @@ const YourReviews = ({ navigation }) => {
           </>
         ) : (
           <>
-            <FlatList
-              data={reviewsData}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('ReviewViewStackNavigation', {
-                    screen: 'ViewReview',
-                    params: { reviewID: item.review.review_id, likedReviews },
-                  })}
-                >
-                  <ReviewWidget
-                    review={item.review}
-                    location={item.location}
-                    myReview
-                    likedReviews={likedReviews}
-                  />
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.review.review_id.toString()}
-            />
+            <View style={{ marginTop: 10 }}>
+              <FlatList
+                data={reviewsData}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ViewReview', { reviewID: item.review.review_id, likedReviews })}
+                    style={{ marginBottom: 10 }}
+                  >
+                    <ReviewWidget
+                      review={item.review}
+                      location={item.location}
+                      myReview
+                      likedReviews={likedReviews}
+                    />
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.review.review_id.toString()}
+              />
+            </View>
           </>
         )}
-    </View>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1,
   },
 });
 

@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,11 +14,10 @@ import Modal from 'react-native-modal';
 import {
   Text,
   Input,
-  Button,
+  Layout,
   Icon,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 import PropTypes from 'prop-types';
 
@@ -28,7 +27,6 @@ import Utilities from 'src/components/Utilities.js';
 
 const ChangePasswordModal = (props) => {
   const newPasswordMessage = 'Password should be greater than 8 characters and have atleast 1 letter and number';
-  const isFocused = useIsFocused();
   const [secureTextEntryOld, setSecureTextEntryOld] = useState(true);
   const [secureTextEntryNew, setSecureTextEntryNew] = useState(true);
   const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
@@ -41,7 +39,7 @@ const ChangePasswordModal = (props) => {
     setPasswords({ oldPassword: '', newPassword: '' });
     setErrorMessage({ oldPassword: '', newPassword: newPasswordMessage });
     setTextStatus({ oldPassword: 'basic', newPassword: 'basic' });
-  }, [isFocused]);
+  }, []);
 
   const changePassword = async () => {
     const fields = await checkRequiredFields();
@@ -155,18 +153,18 @@ const ChangePasswordModal = (props) => {
       style={styles.modalMain}
       onBackdropPress={props.toggleModalPassword}
     >
-      <View style={styles.modalContent}>
-        <Text style={styles.title}>Change Password</Text>
-        <Text style={styles.errorMain}>{errorMessage.main}</Text>
+      <Layout style={styles.modalContent} level="1">
+        <Text category="h3">Change Password</Text>
+        <Text status="danger" category="c1">{errorMessage.main}</Text>
 
         <View style={styles.sectionStyle}>
-          <Text style={styles.sectionHeading}>Old Password</Text>
+          <Text category="s1">Old Password</Text>
           <Input
             value={passwords.oldPassword}
             onChangeText={(value) => updatePasswordsState(value, 'oldPassword')}
             placeholder="Enter old password"
             accessoryRight={renderSecureIconOld}
-            secureTextEntry={toggleSecureTextEntryOld}
+            secureTextEntry={secureTextEntryOld}
             style={styles.inputBox}
             status={textStatus.oldPassword}
             caption={errorMessage.oldPassword}
@@ -174,13 +172,13 @@ const ChangePasswordModal = (props) => {
         </View>
 
         <View style={styles.sectionStyle}>
-          <Text style={styles.sectionHeading}>New Password</Text>
+          <Text category="s1">New Password</Text>
           <Input
             value={passwords.newPassword}
             onChangeText={(value) => updatePasswordsState(value, 'newPassword')}
             placeholder="Enter new password"
             accessoryRight={renderSecureIconNew}
-            secureTextEntry={toggleSecureTextEntryNew}
+            secureTextEntry={secureTextEntryNew}
             style={styles.inputBox}
             status={textStatus.newPassword}
             caption={errorMessage.newPassword}
@@ -194,11 +192,11 @@ const ChangePasswordModal = (props) => {
         />
 
         <TouchableOpacity style={styles.updateButton} onPress={() => changePassword()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+          <Text style={{ color: '#FFFFFF' }} category="h6">
             Update
           </Text>
         </TouchableOpacity>
-      </View>
+      </Layout>
     </Modal>
   );
 };
@@ -209,29 +207,13 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
-  title: {
-    fontSize: 26,
-    fontFamily: 'Nunito-Bold',
-  },
-  errorMain: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
-    marginBottom: 15,
-    color: '#B74171',
-    marginTop: 5,
-  },
   sectionStyle: {
-    height: 100,
-  },
-  sectionHeading: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
+    height: 110,
   },
   button: {
     marginTop: 20,

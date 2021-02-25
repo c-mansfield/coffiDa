@@ -12,7 +12,9 @@ import {
   Keyboard,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text, Input, Icon } from '@ui-kitten/components';
+import {
+  Text, Input, Icon, Layout,
+} from '@ui-kitten/components';
 
 import UserManagement from 'src/api/UserManagement.js';
 import Utilities from 'src/components/Utilities.js';
@@ -157,58 +159,60 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
       style={styles.modalMain}
       onBackdropPress={toggleRegisterModal}
     >
-      <KeyboardAvoidingView style={styles.modalContent}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.errorMain}>{errorMessage.main}</Text>
+      <Layout style={styles.modalContent} level="1">
+        <KeyboardAvoidingView keyboardVerticalOffset={200}>
+          <Text category="h4">Create Account</Text>
+          <Text category="c1" status="danger">{errorMessage.main}</Text>
 
-        <Text style={styles.inputHeader}>First Name</Text>
-        <Input
-          style={styles.inputStyle}
-          placeholder="First Name"
-          onChangeText={(firstNameInput) => updateUserDetailsState(firstNameInput, 'first_name')}
-          defaultValue={userDetails.first_name}
-          caption={errorMessage.first_name}
-          status={textStatus.first_name}
-        />
+          <Text category="c1" style={styles.inputHeader}>First Name</Text>
+          <Input
+            style={styles.inputStyle}
+            placeholder="First Name"
+            onChangeText={(firstNameInput) => updateUserDetailsState(firstNameInput, 'first_name')}
+            defaultValue={userDetails.first_name}
+            caption={errorMessage.first_name}
+            status={textStatus.first_name}
+          />
 
-        <Text style={styles.inputHeader}>Last Name</Text>
-        <Input
-          style={styles.inputStyle}
-          placeholder="Last Name"
-          onChangeText={(lastNameInput) => updateUserDetailsState(lastNameInput, 'last_name')}
-          defaultValue={userDetails.last_name}
-          caption={errorMessage.last_name}
-          status={textStatus.last_name}
-        />
+          <Text category="c1" style={styles.inputHeader}>Last Name</Text>
+          <Input
+            style={styles.inputStyle}
+            placeholder="Last Name"
+            onChangeText={(lastNameInput) => updateUserDetailsState(lastNameInput, 'last_name')}
+            defaultValue={userDetails.last_name}
+            caption={errorMessage.last_name}
+            status={textStatus.last_name}
+          />
 
-        <Text style={styles.inputHeader}>Email</Text>
-        <Input
-          style={styles.inputStyle}
-          placeholder="Email"
-          onChangeText={(emailInput) => updateUserDetailsState(emailInput, 'email')}
-          defaultValue={userDetails.email}
-          caption={errorMessage.email}
-          status={textStatus.email}
-        />
+          <Text category="c1" style={styles.inputHeader}>Email</Text>
+          <Input
+            style={styles.inputStyle}
+            placeholder="Email"
+            onChangeText={(emailInput) => updateUserDetailsState(emailInput, 'email')}
+            defaultValue={userDetails.email}
+            caption={errorMessage.email}
+            status={textStatus.email}
+          />
 
-        <Text style={styles.inputHeader}>Password</Text>
-        <Input
-          style={styles.inputStylePassword}
-          placeholder="Password"
-          secureTextEntry={secureTextEntry}
-          onChangeText={(passwordInput) => updateUserDetailsState(passwordInput, 'password')}
-          defaultValue={userDetails.password}
-          accessoryRight={renderIcon}
-          caption={errorMessage.password}
-          status={textStatus.password}
-        />
+          <Text category="c1" style={styles.inputHeader}>Password</Text>
+          <Input
+            style={styles.inputStylePassword}
+            placeholder="Password"
+            secureTextEntry={secureTextEntry}
+            onChangeText={(passwordInput) => updateUserDetailsState(passwordInput, 'password')}
+            defaultValue={userDetails.password}
+            accessoryRight={renderIcon}
+            caption={errorMessage.password}
+            status={textStatus.password}
+          />
 
-        <TouchableOpacity style={styles.registerButton} onPress={() => checkCanSignUp()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
-            REGISTER
-          </Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+          <TouchableOpacity style={styles.registerButton} onPress={() => checkCanSignUp()}>
+            <Text style={{ color: '#FFFFFF' }} category="h6">
+              REGISTER
+            </Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </Layout>
     </Modal>
   );
 };
@@ -219,27 +223,14 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
-  title: {
-    fontSize: 32,
-    fontFamily: 'Nunito-Bold',
-  },
-  errorMain: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
-    marginBottom: 15,
-    color: '#B74171',
-    marginTop: 5,
-  },
   inputHeader: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 14,
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop: 5,
   },
   inputStyle: {
     height: 40,

@@ -70,6 +70,7 @@ const AddReview = () => {
 
     if (response.success) {
       setLocations(response.body);
+      console.log(response.body);
     } else {
       DropDownHolder.error('error', response.error);
       setLocations([{ location_name: '', location_town: '' }]);
@@ -187,7 +188,7 @@ const AddReview = () => {
 
   return (
     <Layout level="2" style={styles.main}>
-      <Text style={styles.title}>Add Review</Text>
+      <Text category="h1" style={{ marginBottom: 10 }}>Add Review</Text>
 
       <Autocomplete
         placeholder="Find Location"
@@ -210,7 +211,7 @@ const AddReview = () => {
         {reviewData.review_body.length}/200
       </Text>
 
-      <Text style={styles.subHeadingBold}>Overall Rating</Text>
+      <Text style={styles.subHeadingBold} category="h6">Overall Rating</Text>
       <Slider
         value={reviewData.overall_rating}
         onValueChange={(overallInput) => updateReviewDataState(overallInput, 'overall_rating')}
@@ -220,11 +221,11 @@ const AddReview = () => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text style={styles.sliderText}>{reviewData.overall_rating}</Text>
+            <Text style={styles.sliderText} category="s2">{reviewData.overall_rating}</Text>
           ),
         }}
       />
-      <Text style={styles.subHeading}>Price Rating</Text>
+      <Text style={styles.subHeading} category="s1">Price Rating</Text>
       <Slider
         value={reviewData.price_rating}
         onValueChange={(priceInput) => updateReviewDataState(priceInput, 'price_rating')}
@@ -234,11 +235,11 @@ const AddReview = () => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text style={styles.sliderText}>{reviewData.price_rating}</Text>
+            <Text style={styles.sliderText} category="s2">{reviewData.price_rating}</Text>
           ),
         }}
       />
-      <Text style={styles.subHeading}>Quality Rating</Text>
+      <Text style={styles.subHeading} category="s1">Quality Rating</Text>
       <Slider
         value={reviewData.quality_rating}
         onValueChange={(qualityInput) => updateReviewDataState(qualityInput, 'quality_rating')}
@@ -248,11 +249,11 @@ const AddReview = () => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text style={styles.sliderText}>{reviewData.quality_rating}</Text>
+            <Text style={styles.sliderText} category="s2">{reviewData.quality_rating}</Text>
           ),
         }}
       />
-      <Text style={styles.subHeading}>Cleanliness Rating</Text>
+      <Text style={styles.subHeading} category="s1">Cleanliness Rating</Text>
       <Slider
         value={reviewData.clenliness_rating}
         onValueChange={(cleanlinessInput) => updateReviewDataState(cleanlinessInput, 'clenliness_rating')}
@@ -262,12 +263,12 @@ const AddReview = () => {
         thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
         thumbProps={{
           children: (
-            <Text style={styles.sliderText}>{reviewData.clenliness_rating}</Text>
+            <Text style={styles.sliderText} category="s2">{reviewData.clenliness_rating}</Text>
           ),
         }}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => checkReview()}>
-        <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+        <Text style={{ color: '#FFFFFF' }} category="h6">
           Add
         </Text>
       </TouchableOpacity>
@@ -287,24 +288,17 @@ const styles = StyleSheet.create({
     padding: 15,
     flex: 1,
   },
-  title: {
-    fontSize: 36,
-    fontFamily: 'Nunito-Bold',
-  },
   subHeadingBold: {
-    fontSize: 18,
     fontFamily: 'Nunito-Bold',
     marginTop: 15,
   },
   subHeading: {
-    fontSize: 18,
     fontFamily: 'Nunito-Regular',
     marginTop: 25,
   },
   sliderText: {
     marginTop: 30,
     alignSelf: 'center',
-    fontFamily: 'Nunito-Regular',
   },
   addButton: {
     backgroundColor: '#247BA0',

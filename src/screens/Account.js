@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View, StyleSheet, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
@@ -19,12 +19,14 @@ import UserManagement from 'src/api/UserManagement.js';
 import EditDetailsModal from 'src/components/EditDetailsModal.js';
 import ChangePasswordModal from 'src/components/ChangePasswordModal.js';
 import DropDownHolder from 'src/services/DropdownHolder.js';
+import ThemeContext from 'src/services/theme-context';
 
 const Account = ({ navigation }) => {
   const [userData, setUserData] = useState({});
   const [modalDetailsVisible, setModalDetailsVisible] = useState(false);
   const [modalPasswordVisible, setModalPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const themeContext = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +66,12 @@ const Account = ({ navigation }) => {
   const toggleModalPassword = () => {
     setModalPasswordVisible(!modalPasswordVisible);
   };
+
+  const renderToggleIcon = (props) => (
+    <TouchableOpacity onPress={themeContext.toggleTheme}>
+      <Icon {...props} name={themeContext.theme === 'light' ? 'toggle-left' : 'toggle-right'} />
+    </TouchableOpacity>
+  );
 
   return (
     <Layout level="1" style={styles.main}>
@@ -113,9 +121,9 @@ const Account = ({ navigation }) => {
               <Text style={styles.sectionHeader}>Accessibility</Text>
 
               <MenuItem
-                title="Language"
-                accessoryLeft={GlobeIcon}
-                accessoryRight={ForwardIcon}
+                title="Dark Mode"
+                accessoryLeft={MoonIcon}
+                accessoryRight={renderToggleIcon}
               />
             </View>
 
@@ -142,8 +150,8 @@ const ForwardIcon = (props) => (
   <Icon {...props} name="arrow-ios-forward" />
 );
 
-const GlobeIcon = (props) => (
-  <Icon {...props} name="globe-3" />
+const MoonIcon = (props) => (
+  <Icon {...props} name="moon" />
 );
 
 const styles = StyleSheet.create({

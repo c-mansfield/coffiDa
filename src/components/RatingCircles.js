@@ -31,7 +31,7 @@ const RatingCircles = ({ rating }) => {
       height: 8,
       borderWidth: 0,
       borderRadius: 14,
-      backgroundColor: '#C3B299',
+      backgroundColor: '#80956A',
       justifyContent: 'center',
       alignItems: 'center',
     };
@@ -43,7 +43,7 @@ const RatingCircles = ({ rating }) => {
       height: 8,
       borderWidth: 0,
       borderRadius: 14,
-      backgroundColor: '#C3B299',
+      backgroundColor: '#80956A',
       justifyContent: 'center',
       alignItems: 'center',
       borderTopRightRadius: 0,
@@ -77,15 +77,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   circle: {
-    width: 20,
-    height: 20,
+    width: 21,
+    height: 21,
     borderWidth: 2.5,
     borderRadius: 100,
     borderColor: '#247BA0',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#E9E9E9',
   },
 });
 

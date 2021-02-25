@@ -12,7 +12,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { Text } from '@ui-kitten/components';
+import { Text, Layout } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import * as ImagePicker from 'react-native-image-picker';
 import { RNCamera } from 'react-native-camera';
@@ -152,25 +152,25 @@ const AddPhotoModal = ({
       style={styles.modalMain}
       onBackdropPress={togglePhotoModal}
     >
-      <View style={styles.modalContent}>
+      <Layout style={styles.modalContent} level="1">
         {!cameraPermission ? (
           <>
-            <Text style={styles.title}>Camera not enabled</Text>
+            <Text style={styles.title} category="h3">Camera not enabled</Text>
             <TouchableOpacity style={styles.primaryButton} onPress={() => requestCamera()}>
-              <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+              <Text style={{ color: '#FFFFFF' }} category="h6">
                 Enable Camera 📷
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-              <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Maybe Later</Text>
+              <Text category="h6">Maybe Later</Text>
             </TouchableOpacity>
           </>
         ) : (
           <>
             {photo ? (
               <>
-                <Text style={styles.title}>Edit review photo</Text>
+                <Text style={styles.title} category="h3">Edit review photo</Text>
 
                 <View style={styles.imageView}>
                   <View style={styles.cameraPreview}>
@@ -183,52 +183,52 @@ const AddPhotoModal = ({
                     ? (
                       <>
                         <TouchableOpacity style={styles.primaryButton} onPress={() => uploadPhoto()}>
-                          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                          <Text style={{ color: '#FFFFFF' }} category="h6">
                             Upload Photo
                           </Text>
                         </TouchableOpacity>
                       </>
                     ) : null }
                   <TouchableOpacity style={styles.secondaryButton} onPress={() => retakePhoto()}>
-                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                    <Text style={{ color: '#FFFFFF' }} category="h6">
                       Retake photo
                     </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Edit Photo Later</Text>
+                    <Text category="h6">Edit Photo Later</Text>
                   </TouchableOpacity>
                 </View>
               </>
             ) : (
               <>
 
-                <Text style={styles.title}>Add photo to review</Text>
-                <View style={styles.imageView}>
+                <Text style={styles.title} category="h3">Add photo to review</Text>
 
+                <View style={styles.imageView}>
                   <View style={styles.cameraPreview}>
                     <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} captureAudio={false} />
                   </View>
                   <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
-                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+                    <Text style={{ color: '#FFFFFF' }} category="h6">
                       Take Photo 📷
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.secondaryButton} onPress={() => handleChoosePhoto()}>
-                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
+                    <Text style={{ color: '#FFFFFF' }} category="h6">
                       Choose From Library
                     </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                    <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 16, color: '#000000' }}>Add a Photo Later</Text>
+                    <Text category="h6">Add a Photo Later</Text>
                   </TouchableOpacity>
                 </View>
               </>
             )}
           </>
         )}
-      </View>
+      </Layout>
     </Modal>
   );
 };
@@ -239,18 +239,13 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   title: {
-    fontSize: 26,
-    fontFamily: 'Nunito-Bold',
-    marginBottom: 10,
-  },
-  imageView: {
+    marginBottom: 20,
   },
   cameraPreview: {
     alignItems: 'center',

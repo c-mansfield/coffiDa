@@ -21,11 +21,10 @@ const LocationStackNavigation = () => {
       }}
     >
       <Stack.Screen name="LocationDetails" component={LocationDetails} />
-      <Stack.Screen name="AllReviews" component={AllReviews} options={{ headerTitle: 'All Reviews', headerShown: true }} />
+      <Stack.Screen name="AllReviews" component={AllReviews} />
       <Stack.Screen
         name="NearbyLocations"
         component={NearbyLocations}
-        options={{ headerTitle: 'Nearby Locations', headerShown: true }}
       />
     </Stack.Navigator>
   );

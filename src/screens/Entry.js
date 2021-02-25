@@ -19,7 +19,7 @@ import LoginModal from 'src/components/LoginModal.js';
 import RegisterModal from 'src/components/RegisterModal.js';
 
 const logoIcon = require('assets/images/coffee_cup_blue.png');
-const coffeeVideo = require('assets/images/coffee_video3.mp4');
+const coffeeVideo = require('assets/images/coffee_video2.mp4');
 
 const { height } = Dimensions.get('window');
 
@@ -51,22 +51,24 @@ const Entry = ({ navigation }) => {
         ignoreSilentSwitch="obey"
       />
       <KeyboardAvoidingView style={{ flex: 1 }}>
-        <Text style={{
-          fontFamily: 'Nunito-Regular', fontSize: 38, color: '#FFFFFF', marginTop: 70,
-        }}
+        <Text
+          style={{
+            fontFamily: 'Nunito-Regular', fontSize: 38, color: '#FFFFFF', marginTop: 70,
+          }}
+          category="h2"
         >
           Find the perfect cup...
         </Text>
 
         <View style={styles.buttonsStyles}>
           <TouchableOpacity style={styles.loginButton} onPress={() => toggleLoginModal()}>
-            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFCFF' }}>
               LOGIN
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.registerButton} onPress={() => toggleRegisterModal()}>
-            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+            <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFCFF' }}>
               REGISTER
             </Text>
           </TouchableOpacity>

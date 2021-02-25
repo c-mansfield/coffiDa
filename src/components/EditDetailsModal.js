@@ -9,16 +9,14 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import { Text, Input } from '@ui-kitten/components';
+import { Text, Input, Layout } from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import UserManagement from 'src/api/UserManagement.js';
 import Utilities from 'src/components/Utilities.js';
 
 const EditDetailsModal = (props) => {
-  const isFocused = useIsFocused();
   const [user, setUser] = useState({
     first_name: '',
     last_name: '',
@@ -42,7 +40,7 @@ const EditDetailsModal = (props) => {
     setErrorMessage({
       main: '', first_name: '', last_name: '', email: '',
     });
-  }, [isFocused, modalDetailsVisible]);
+  }, [modalDetailsVisible]);
 
   const updateUser = async () => {
     const updatedDetails = await getUserUpdates();
@@ -57,7 +55,7 @@ const EditDetailsModal = (props) => {
   };
 
   const getUserUpdates = async () => {
-    const updatedDetails = user;
+    const updatedDetails = { ...user };
 
     // Checks if element in user has been updated, if not then delete that element
     // so doesn't get patched
@@ -130,12 +128,12 @@ const EditDetailsModal = (props) => {
       style={styles.modalMain}
       onBackdropPress={toggleModalDetails}
     >
-      <View style={styles.modalContent}>
-        <Text style={styles.title}>Edit Details</Text>
-        <Text style={styles.errorMain}>{errorMessage.main}</Text>
+      <Layout style={styles.modalContent} level="1">
+        <Text category="h3">Edit Details</Text>
+        <Text status="danger" category="c1">{errorMessage.main}</Text>
 
         <View style={styles.sectionStyle}>
-          <Text style={styles.sectionHeading}>First Name</Text>
+          <Text category="s1">First Name</Text>
           <Input
             placeholder="Enter first name"
             value={user.first_name}
@@ -147,7 +145,7 @@ const EditDetailsModal = (props) => {
         </View>
 
         <View style={styles.sectionStyle}>
-          <Text style={styles.sectionHeading}>Last Name</Text>
+          <Text category="s1">Last Name</Text>
           <Input
             placeholder="Enter last name"
             value={user.last_name}
@@ -159,7 +157,7 @@ const EditDetailsModal = (props) => {
         </View>
 
         <View style={styles.sectionStyle}>
-          <Text style={styles.sectionHeading}>Email</Text>
+          <Text category="s1">Email</Text>
           <Input
             placeholder="Enter email"
             value={user.email}
@@ -171,11 +169,11 @@ const EditDetailsModal = (props) => {
         </View>
 
         <TouchableOpacity style={styles.updateButton} onPress={() => checkCanUpdate()}>
-          <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
+          <Text style={{ color: '#FFFFFF' }} category="h6">
             Update
           </Text>
         </TouchableOpacity>
-      </View>
+      </Layout>
     </Modal>
   );
 };
@@ -186,29 +184,13 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 22,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
-  title: {
-    fontSize: 26,
-    fontFamily: 'Nunito-Bold',
-  },
-  errorMain: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
-    marginBottom: 5,
-    color: '#B74171',
-    marginTop: 5,
-  },
   sectionStyle: {
     marginTop: 25,
-  },
-  sectionHeading: {
-    fontSize: 14,
-    fontFamily: 'Nunito-Regular',
   },
   inputsStyle: {
     marginTop: 5,

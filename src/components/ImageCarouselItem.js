@@ -18,10 +18,11 @@ const ImageCarouselItem = ({ location }) => {
         <ImageBackground
           source={location.photo_path ? { uri: location.photo_path } : null}
           style={styles.image}
+          imageStyle={{ opacity: 0.4 }}
         >
           <View style={styles.overlay}>
-            <Text style={{ fontSize: 48, fontFamily: 'Nunito-Bold' }} numberOfLines={1}>{location.location_name}</Text>
-            <Text style={{ fontSize: 28, color: '#504F4F' }} numberOfLines={1}>{location.location_town}</Text>
+            <Text category="h1" numberOfLines={1}>{location.location_name}</Text>
+            <Text category="s1" numberOfLines={1}>{location.location_town}</Text>
           </View>
         </ImageBackground>
       )
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.7)',
     justifyContent: 'flex-end',
     padding: 5,
   },

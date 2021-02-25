@@ -25,13 +25,21 @@ const styles = StyleSheet.create({
   addReviewStyle: {
     height: 70,
     width: 70,
-    backgroundColor: '#C3B299',
+    backgroundColor: '#80956A',
     borderRadius: 100,
     top: -15,
-    borderWidth: 6,
+    borderWidth: 7,
     borderColor: '#247BA0',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24,
   },
   addReviewTextStyle: {
     height: 38,

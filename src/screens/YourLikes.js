@@ -12,6 +12,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import {
+  Layout,
+} from '@ui-kitten/components';
 
 import ExpandableReviewWidget from 'src/components/ExpandableReviewWidget.js';
 import UserManagement from 'src/api/UserManagement.js';
@@ -45,7 +48,7 @@ const YourLikes = () => {
   };
 
   return (
-    <View style={styles.main}>
+    <Layout level="1" style={styles.main}>
       { isLoading
         ? (
           <>
@@ -58,27 +61,33 @@ const YourLikes = () => {
           </>
         ) : (
           <>
-            <FlatList
-              data={likesData}
-              renderItem={({ item }) => (
-                <ExpandableReviewWidget
-                  review={item.review}
-                  location={item.location}
-                  myReview
-                  likedReviews={[item.review.review_id]}
-                />
-              )}
-              keyExtractor={(item) => item.review.review_id.toString()}
-            />
+            <View style={{ marginTop: 10 }}>
+              <FlatList
+                data={likesData}
+                renderItem={({ item }) => (
+                  <View style={{ marginBottom: 10 }}>
+                    <ExpandableReviewWidget
+                      review={item.review}
+                      location={item.location}
+                      myReview
+                      likedReviews={[item.review.review_id]}
+                    />
+                  </View>
+                )}
+                keyExtractor={(item) => item.review.review_id.toString()}
+              />
+            </View>
           </>
         )}
-    </View>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1,
   },
 });
 
