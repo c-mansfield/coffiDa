@@ -28,7 +28,7 @@ const AddReview = () => {
   const [location, setLocation] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [locationID, setLocationID] = useState(0);
-  const [locations, setLocations] = React.useState([{ location_name: '', location_town: '' }]);
+  const [locations, setLocations] = useState([]);
   const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
   const [reviewID, setReviewID] = useState(0);
   const [reviewData, setReviewData] = useState({
@@ -70,7 +70,6 @@ const AddReview = () => {
 
     if (response.success) {
       setLocations(response.body);
-      console.log(response.body);
     } else {
       DropDownHolder.error('error', response.error);
       setLocations([{ location_name: '', location_town: '' }]);
@@ -78,16 +77,18 @@ const AddReview = () => {
   };
 
   const renderLocations = (item, index) => {
-    if (item.location_name) {
+    console.log('item ', item);
+    console.log('index ', index);
+    // if (item.location_name) {
       return (
         <AutocompleteItem
           key={index}
           title={`${item.location_name}, ${item.location_town}`}
         />
       );
-    }
-
-    return null;
+    // }
+    //
+    // return null;
   };
 
   const checkReview = async () => {

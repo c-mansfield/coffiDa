@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  Icon, Divider, Layout, Text,
+  Icon, Divider, Layout, Text, TopNavigationAction,
 } from '@ui-kitten/components';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
@@ -155,6 +155,12 @@ const LocationDetails = ({ navigation, route }) => {
     }
   };
 
+  const BackIcon = (props) => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Icon {...props} name="arrow-back" />
+    </TouchableOpacity>
+  );
+
   return (
     <Layout level="1" style={styles.detailsMain}>
       <ScrollView>
@@ -179,9 +185,7 @@ const LocationDetails = ({ navigation, route }) => {
                   imageStyle={{ opacity: 0.4 }}
                 >
                   <View style={styles.detailsOverlay}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <Icon style={styles.iconSize} fill="#000000" name="arrow-back" />
-                    </TouchableOpacity>
+                    <TopNavigationAction icon={BackIcon} />
 
                     <View style={styles.detailsHeaderText}>
                       <View style={styles.detailsHeaderTextWrapper}>
@@ -319,7 +323,7 @@ const styles = StyleSheet.create({
   },
   detailsOverlay: {
     flex: 1,
-    padding: 10,
+    paddingTop: 15,
   },
   iconSize: {
     height: 38,
@@ -328,6 +332,7 @@ const styles = StyleSheet.create({
   detailsHeaderText: {
     flex: 1,
     justifyContent: 'flex-end',
+    padding: 10,
   },
   detailsHeaderTextWrapper: {
     flexDirection: 'row',

@@ -191,7 +191,14 @@ const Home = ({ navigation }) => {
                 ref={carousel}
                 data={carouselLocations}
                 renderItem={({ item }) => (
-                  <ImageCarouselItem location={item} />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(
+                      'LocationStackNavigation',
+                      { screen: 'LocationDetails', params: { locationID: item.location_id } },
+                    )}
+                  >
+                    <ImageCarouselItem location={item} />
+                  </TouchableOpacity>
                 )}
                 itemWidth={screenWidth}
                 sliderWidth={screenWidth}
