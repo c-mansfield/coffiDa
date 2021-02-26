@@ -21,7 +21,7 @@ const getLocation = async (locationID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -51,7 +51,7 @@ const favouriteReview = async (locationID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -81,7 +81,7 @@ const unfavouriteReview = async (locationID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -110,7 +110,7 @@ const searchLocations = async (urlQueries) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 

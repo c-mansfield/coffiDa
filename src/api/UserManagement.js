@@ -22,7 +22,7 @@ const addUser = async (data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -47,7 +47,7 @@ const login = async (data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -74,7 +74,7 @@ const logout = async () => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -101,7 +101,7 @@ const getUser = async (userID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -133,7 +133,7 @@ const updateUser = async (userID, data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 

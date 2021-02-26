@@ -207,7 +207,7 @@ const LocationDetails = ({ navigation, route }) => {
                         </View>
 
                         <TouchableOpacity onPress={() => changeFavourite()} style={styles.detailsHeaderRHS}>
-                          <Icon style={styles.iconSize} fill="#000000" name={favouriteIcon} />
+                          <Icon style={styles.iconSize} fill="#247BA0" name={favouriteIcon} />
                         </TouchableOpacity>
                       </View>
                     </View>

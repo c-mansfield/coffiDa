@@ -62,6 +62,8 @@ const LoginModal = ({ navigateHome, loginModalVisible, toggleLoginModal }) => {
 
     if (!fields && !emailCheck) {
       await loginUser();
+    } else {
+      Keyboard.dismiss();
     }
   };
 

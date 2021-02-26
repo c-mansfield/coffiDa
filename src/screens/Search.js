@@ -83,9 +83,9 @@ const Search = ({ navigation }) => {
                             'LocationStackNavigationSearch',
                             { screen: 'LocationDetails', params: { locationID: location.location_id } },
                           )}
-                          key={`${location.location_id}_searchTouchableOpacity`}
+                          key={`${location.location_id}${Math.floor(Math.random() * 100)}`}
                         >
-                          <LocationTile location={location} key={`${location.location_id}_searchLocationTile`} />
+                          <LocationTile location={location} key={`${location.location_id}${Math.floor(Math.random() * 100)}`} />
                         </TouchableOpacity>
                       </>
                     ))}

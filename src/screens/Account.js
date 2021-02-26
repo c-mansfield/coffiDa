@@ -69,9 +69,7 @@ const Account = ({ navigation }) => {
   };
 
   const renderToggleIcon = (props) => (
-    <TouchableOpacity onPress={themeContext.toggleTheme}>
-      <Icon {...props} name={themeContext.theme === 'light' ? 'toggle-left' : 'toggle-right'} />
-    </TouchableOpacity>
+    <Icon {...props} name={themeContext.theme === 'light' ? 'toggle-left' : 'toggle-right'} />
   );
 
   return (
@@ -125,6 +123,7 @@ const Account = ({ navigation }) => {
                 title="Dark Mode"
                 accessoryLeft={MoonIcon}
                 accessoryRight={renderToggleIcon}
+                onPress={themeContext.toggleTheme}
               />
             </View>
 

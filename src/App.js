@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import * as eva from '@eva-design/eva';
 import {
   ApplicationProvider,
@@ -16,13 +16,16 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { default as evaTheme } from 'assets/theme/theme.json';
 import { default as mapping } from 'assets/mapping.json';
 import DropdownAlert from 'react-native-dropdownalert';
+import { LogBox } from 'react-native';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import ThemeContext from 'src/services/theme-context';
 import MainStackNavigation from './navigation/MainStackNavigation.js';
 
 const App = () => {
-  const [theme, setTheme] = React.useState('dark');
+  const [theme, setTheme] = useState('light');
+
+  LogBox.ignoreAllLogs();
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';

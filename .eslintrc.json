@@ -17,7 +17,8 @@
     "react/jsx-one-expression-per-line": 0,
     "no-plusplus": "off",
     "max-len": [2, 128, 4],
-    "react/jsx-props-no-spreading": 0
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": "off"
   },
   "globals": {
     "fetch": false

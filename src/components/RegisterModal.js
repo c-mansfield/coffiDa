@@ -18,6 +18,7 @@ import {
 
 import UserManagement from 'src/api/UserManagement.js';
 import Utilities from 'src/components/Utilities.js';
+import DropDownHolder from 'src/services/DropdownHolder.js';
 
 const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
   const [userDetails, setUserDetails] = useState({
@@ -64,6 +65,7 @@ const RegisterModal = ({ registerModalVisible, toggleRegisterModal }) => {
         password: '',
       });
       toggleRegisterModal();
+      DropDownHolder.success('Success', 'User successfully created!');
     } else {
       Keyboard.dismiss();
       updateErrorMessageState(response.error, 'main');

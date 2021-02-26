@@ -62,7 +62,7 @@ const Entry = ({ navigation }) => {
           </View>
         </View>
         <Text
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20, color: '#ffffff' }}
           category="h1"
         >
           Find the perfect cup...

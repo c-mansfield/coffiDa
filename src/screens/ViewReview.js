@@ -274,6 +274,7 @@ const ViewReview = ({ navigation, route }) => {
                 status="danger"
                 onPress={() => changeLike()}
                 appearance="outline"
+                size="small"
               >
                 {review.likes}
               </Button>

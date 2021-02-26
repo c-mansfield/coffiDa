@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   sectionRow: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   pinIcon: {
     height: 16,

@@ -31,7 +31,7 @@ const AllReviews = ({ navigation, route }) => {
       <TopNavigation
         accessoryLeft={BackAction}
         alignment="center"
-        title="Nearby Locations"
+        title="All reviews"
       />
       <View style={{padding: 15}}>
         <FlatList

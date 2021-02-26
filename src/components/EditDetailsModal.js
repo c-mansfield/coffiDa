@@ -132,7 +132,7 @@ const EditDetailsModal = (props) => {
         <Text category="h3">Edit Details</Text>
         <Text status="danger" category="c1">{errorMessage.main}</Text>
 
-        <View style={styles.sectionStyle}>
+        <View style={{ marginTop: 10 }}>
           <Text category="s1">First Name</Text>
           <Input
             placeholder="Enter first name"

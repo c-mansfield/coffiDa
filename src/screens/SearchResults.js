@@ -10,7 +10,9 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { Icon, Input, Layout } from '@ui-kitten/components';
+import {
+  Icon, Input, Layout,
+} from '@ui-kitten/components';
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationWidget from 'src/components/LocationWidget.js';
@@ -22,53 +24,31 @@ const SearchResults = ({ navigation }) => {
   const [locations, setLocations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState({});
-  const [page, setPage] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      await searchLocations();
+      if (searchQuery !== '') {
+        await searchLocations();
+      }
     };
 
     fetchData();
-  }, [search, isRefreshing, page, searchQuery]);
+  }, [search, searchQuery]);
 
   const searchLocations = async () => {
     // Append the search query to the filters object
     const sendQuery = searchQuery;
     sendQuery.q = search;
-    sendQuery.limit = 8;
-    sendQuery.offset = page;
+    sendQuery.limit = 10;
 
     const response = await LocationManagement.searchLocations(sendQuery);
 
     if (response.success) {
-      setCorrectLocation(response.body);
+      setLocations(response.body);
     } else {
       DropDownHolder.error('Error', response.error);
       setLocations([]);
     }
-
-    setIsRefreshing(false);
-  };
-
-  const setCorrectLocation = (response) => {
-    if (page === 0) {
-      setLocations(response);
-    } else {
-      setLocations([...locations, ...response]);
-    }
-  };
-
-  const handleNextPageSearch = async () => {
-    const nextPageNumber = page + 1;
-
-    setPage(nextPageNumber);
-  };
-
-  const handleRefreshSearch = async () => {
-    setPage(0);
-    setIsRefreshing(true);
   };
 
   const toggleModal = () => {
@@ -113,11 +93,7 @@ const SearchResults = ({ navigation }) => {
               <LocationWidget location={item} key={item.location_id.toString()} />
             </TouchableOpacity>
           )}
-          keyExtractor={(item) => item.location_id.toString()}
-          refreshing={isRefreshing}
-          onRefresh={() => handleRefreshSearch()}
-          onEndReached={() => handleNextPageSearch()}
-          onEndReachedThreshold={0}
+          keyExtractor={(item) => item.location_id.toString() + Math.floor(Math.random() * 100)}
         />
       </View>
     </Layout>

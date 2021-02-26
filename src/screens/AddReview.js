@@ -225,7 +225,7 @@ const AddReview = () => {
         maximumValue={5}
         minimumValue={0}
         step={1}
-        thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+        thumbStyle={styles.sliderPointStyle}
         thumbProps={{
           children: (
             <Text style={styles.sliderText} category="s2">{reviewData.overall_rating}</Text>
@@ -239,7 +239,7 @@ const AddReview = () => {
         maximumValue={5}
         minimumValue={0}
         step={1}
-        thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+        thumbStyle={styles.sliderPointStyle}
         thumbProps={{
           children: (
             <Text style={styles.sliderText} category="s2">{reviewData.price_rating}</Text>
@@ -253,7 +253,7 @@ const AddReview = () => {
         maximumValue={5}
         minimumValue={0}
         step={1}
-        thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+        thumbStyle={styles.sliderPointStyle}
         thumbProps={{
           children: (
             <Text style={styles.sliderText} category="s2">{reviewData.quality_rating}</Text>
@@ -267,7 +267,7 @@ const AddReview = () => {
         maximumValue={5}
         minimumValue={0}
         step={1}
-        thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+        thumbStyle={styles.sliderPointStyle}
         thumbProps={{
           children: (
             <Text style={styles.sliderText} category="s2">{reviewData.clenliness_rating}</Text>
@@ -315,6 +315,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginTop: 25,
+  },
+  sliderPointStyle: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#80956A',
   },
 });
 

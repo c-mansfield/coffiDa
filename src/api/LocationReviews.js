@@ -29,7 +29,7 @@ const addReview = async (locationID, data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -63,7 +63,7 @@ const updateReview = async (locationID, reviewID, data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -95,7 +95,7 @@ const deleteReview = async (locationID, reviewID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -119,7 +119,7 @@ const getReviewPhoto = async (locationID, reviewID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -151,7 +151,7 @@ const addReviewPhoto = async (locationID, reviewID, data) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -181,7 +181,7 @@ const deleteReviewPhoto = async (locationID, reviewID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -211,7 +211,7 @@ const likeReview = async (locationID, reviewID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 
@@ -241,7 +241,7 @@ const removeLikeReview = async (locationID, reviewID) => {
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return error;
+    return { success: false, status: error, error: 'Error making request!' };
   }
 };
 

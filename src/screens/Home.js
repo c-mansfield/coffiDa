@@ -39,16 +39,8 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await findCoordinates();
-    };
-
-    setIsLoading(true);
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
       await getLocations();
+      await findCoordinates();
     };
 
     setIsLoading(true);
@@ -59,9 +51,7 @@ const Home = ({ navigation }) => {
     const fetchData = async () => {
       await getCarouselLocations(3);
 
-      if (geoLocationDetails.locationPermission) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     };
 
     setIsLoading(true);

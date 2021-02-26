@@ -157,7 +157,7 @@ const AddPhotoModal = ({
           <>
             <Text style={styles.title} category="h3">Camera not enabled</Text>
             <TouchableOpacity style={styles.primaryButton} onPress={() => requestCamera()}>
-              <Text style={{ color: '#FFFFFF' }} category="h6">
+              <Text category="h6" style={{ color: '#ffffff' }}>
                 Enable Camera 📷
               </Text>
             </TouchableOpacity>
@@ -183,20 +183,20 @@ const AddPhotoModal = ({
                     ? (
                       <>
                         <TouchableOpacity style={styles.primaryButton} onPress={() => uploadPhoto()}>
-                          <Text style={{ color: '#FFFFFF' }} category="h6">
+                          <Text category="h6" style={{ color: '#ffffff' }}>
                             Upload Photo
                           </Text>
                         </TouchableOpacity>
                       </>
                     ) : null }
                   <TouchableOpacity style={styles.secondaryButton} onPress={() => retakePhoto()}>
-                    <Text style={{ color: '#FFFFFF' }} category="h6">
+                    <Text category="h6">
                       Retake photo
                     </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                    <Text category="h6">Edit Photo Later</Text>
+                    <Text category="h6">Maybe Later</Text>
                   </TouchableOpacity>
                 </View>
               </>
@@ -210,18 +210,18 @@ const AddPhotoModal = ({
                     <RNCamera ref={(ref) => { camera = ref; }} style={styles.preview} captureAudio={false} />
                   </View>
                   <TouchableOpacity style={styles.primaryButton} onPress={() => takePicture()}>
-                    <Text style={{ color: '#FFFFFF' }} category="h6">
+                    <Text category="h6" style={{ color: '#ffffff' }}>
                       Take Photo 📷
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.secondaryButton} onPress={() => handleChoosePhoto()}>
-                    <Text style={{ color: '#FFFFFF' }} category="h6">
+                    <Text category="h6">
                       Choose From Library
                     </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.maybeLater} onPress={togglePhotoModal}>
-                    <Text category="h6">Add a Photo Later</Text>
+                    <Text category="h6">Maybe Later</Text>
                   </TouchableOpacity>
                 </View>
               </>

@@ -157,7 +157,7 @@ const EditReview = ({ navigation, route }) => {
                 maximumValue={5}
                 minimumValue={0}
                 step={1}
-                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbStyle={styles.sliderPointStyle}
                 thumbProps={{
                   children: (
                     <Text style={styles.sliderText} category="s2">{reviewData.overall_rating}</Text>
@@ -171,7 +171,7 @@ const EditReview = ({ navigation, route }) => {
                 maximumValue={5}
                 minimumValue={0}
                 step={1}
-                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbStyle={styles.sliderPointStyle}
                 thumbProps={{
                   children: (
                     <Text style={styles.sliderText} category="s2">{reviewData.price_rating}</Text>
@@ -185,7 +185,7 @@ const EditReview = ({ navigation, route }) => {
                 maximumValue={5}
                 minimumValue={0}
                 step={1}
-                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbStyle={styles.sliderPointStyle}
                 thumbProps={{
                   children: (
                     <Text style={styles.sliderText} category="s2">{reviewData.quality_rating}</Text>
@@ -199,7 +199,7 @@ const EditReview = ({ navigation, route }) => {
                 maximumValue={5}
                 minimumValue={0}
                 step={1}
-                thumbStyle={{ height: 30, width: 30, backgroundColor: '#C3B299' }}
+                thumbStyle={styles.sliderPointStyle}
                 thumbProps={{
                   children: (
                     <Text style={styles.sliderText} category="s2">{reviewData.clenliness_rating}</Text>
@@ -207,14 +207,14 @@ const EditReview = ({ navigation, route }) => {
                 }}
               />
 
-              <TouchableOpacity style={styles.secondaryButton} onPress={() => togglePhotoModal()}>
-                <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#247BA0' }}>
-                  Edit Photo 📷
-                </Text>
-              </TouchableOpacity>
               <TouchableOpacity style={styles.primaryButton} onPress={() => checkEditReview()}>
                 <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
                   Update Review
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.secondaryButton} onPress={() => togglePhotoModal()}>
+                <Text category="h6">
+                  Edit Photo 📷
                 </Text>
               </TouchableOpacity>
 
@@ -265,16 +265,22 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 30,
   },
   secondaryButton: {
     borderRadius: 30,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
     borderColor: '#247BA0',
+    marginTop: 10,
     borderWidth: 1,
+    marginBottom: 30,
+  },
+  sliderPointStyle: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#80956A',
   },
 });
 
