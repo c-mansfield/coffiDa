@@ -19,15 +19,13 @@ import {
   Spinner,
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
-import { useIsFocused } from '@react-navigation/native';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import LocationReviews from 'src/api/LocationReviews.js';
-import { FilterWords } from 'assets/globals.js';
+import FilterWords from 'assets/globals.js';
 
 const EditReview = ({ navigation, route }) => {
-  const isFocused = useIsFocused();
   const [modalPhotoVisible, setModalPhotoVisible] = useState(false);
   const { locationData, reviewDefault } = route.params;
   const [reviewData, setReviewData] = useState();
@@ -73,11 +71,7 @@ const EditReview = ({ navigation, route }) => {
   };
 
   const checkReviewFields = () => {
-    if (reviewData.review_body !== ''
-        && reviewData.overall_rating > 0
-        && reviewData.price_rating > 0
-        && reviewData.quality_rating > 0
-        && reviewData.clenliness_rating > 0) {
+    if (reviewData.review_body !== '') {
       return true;
     }
 
@@ -283,9 +277,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#80956A',
   },
 });
-
-EditReview.propTypes = {
-  // route: PropTypes.InstanceOf(Object).isRequired,
-};
 
 export default EditReview;

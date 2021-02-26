@@ -137,7 +137,7 @@ const LocationDetails = ({ navigation, route }) => {
             review={location.location_reviews[i]}
             location={location}
             likedReviews={likedReviews}
-          />
+          />,
         );
       }
     }

@@ -1,5 +1,4 @@
 import { CommonActions } from '@react-navigation/core';
-import { StackActions } from '@react-navigation/native';
 
 let _container; // eslint-disable-line
 

@@ -12,7 +12,6 @@ import {
   Text, Icon, Layout, Button,
 } from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native';
-import PropTypes from 'prop-types';
 
 import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
@@ -22,7 +21,7 @@ const ReviewWidget = (props) => {
   const isFocused = useIsFocused();
   const [likeIcon, setLikeIcon] = useState('heart-outline');
   const [like, setLike] = useState(false);
-  let {
+  const {
     likedReviews,
     location,
     review,
@@ -100,14 +99,14 @@ const ReviewWidget = (props) => {
     return false;
   };
 
-  const HeartIcon = (props) => (
-    <Icon {...props} name={likeIcon} />
+  const HeartIcon = (propsIcon) => (
+    <Icon {...propsIcon} name={likeIcon} />
   );
 
   return (
     <Layout level="3" style={styles.widgetMain}>
       <View style={styles.widgetWrapper}>
-        <Text category="h6" numberOfLines={1}>"{review.review_body}"</Text>
+        <Text category="h6" numberOfLines={1}>&ldquo;{review.review_body}&rdquo;</Text>
         <Text category="s1" appearance="hint">
           {location.location_name}
           ,
@@ -171,13 +170,7 @@ const styles = StyleSheet.create({
   likeButton: {
     marginTop: 15,
     flexDirection: 'row',
-  }
+  },
 });
-
-ReviewWidget.propTypes = {
-  review: PropTypes.object.isRequired,
-  likedReviews: PropTypes.array.isRequired,
-  location: PropTypes.object.isRequired,
-};
 
 export default ReviewWidget;

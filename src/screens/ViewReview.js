@@ -90,7 +90,6 @@ const ViewReview = ({ navigation, route }) => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         { text: 'Yes', onPress: () => deleteReview() },
@@ -158,7 +157,7 @@ const ViewReview = ({ navigation, route }) => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
 
     if (response.success) {
-      const reader = new FileReader();
+      const reader = new global.FileReader();
       reader.readAsDataURL(response.body);
 
       reader.onloadend = () => {
@@ -168,7 +167,6 @@ const ViewReview = ({ navigation, route }) => {
       DropDownHolder.error('Error', response.error);
     }
   };
-
 
   const renderRightActions = () => {
     return (
@@ -245,7 +243,7 @@ const ViewReview = ({ navigation, route }) => {
                 {location.location_name}, {location.location_town}
               </Text>
 
-              <Text category="s1" style={{ marginTop: 5 }}>"{review.review_body}"</Text>
+              <Text category="s1" style={{ marginTop: 5 }}>&ldquo;{review.review_body}&rdquo;</Text>
             </View>
 
             <View style={styles.sectionStyle}>
@@ -320,7 +318,7 @@ const styles = StyleSheet.create({
   likeButton: {
     marginTop: 15,
     flexDirection: 'row',
-  }
+  },
 });
 
 ViewReview.propTypes = {

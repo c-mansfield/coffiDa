@@ -5,7 +5,6 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import mapstyle from 'assets/theme/mapstyle.js';
 import { useIsFocused } from '@react-navigation/native';
@@ -74,7 +73,7 @@ const NearbyLocations = ({ navigation, route }) => {
   );
 
   return (
-    <Layout style={styles.main} level='1'>
+    <Layout style={styles.main} level="1">
       <TopNavigation
         accessoryLeft={BackAction}
         alignment="center"

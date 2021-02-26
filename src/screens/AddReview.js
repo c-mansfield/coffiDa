@@ -14,17 +14,15 @@ import {
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 import LocationReviews from 'src/api/LocationReviews.js';
 import AddPhotoModal from 'src/components/AddPhotoModal.js';
 import UserManagement from 'src/api/UserManagement.js';
-import { FilterWords } from 'assets/globals.js';
+import FilterWords from 'assets/globals.js';
 
 const AddReview = () => {
-  const isFocused = useIsFocused();
   const [location, setLocation] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [locationID, setLocationID] = useState(0);
@@ -84,16 +82,12 @@ const AddReview = () => {
   };
 
   const renderLocations = (item, index) => {
-    // if (item.location_name) {
-      return (
-        <AutocompleteItem
-          key={index}
-          title={`${item.location_name}, ${item.location_town}`}
-        />
-      );
-    // }
-    //
-    // return null;
+    return (
+      <AutocompleteItem
+        key={index}
+        title={`${item.location_name}, ${item.location_town}`}
+      />
+    );
   };
 
   const checkReview = async () => {
@@ -104,11 +98,7 @@ const AddReview = () => {
 
   const checkReviewFields = () => {
     if (location !== ''
-        && reviewData.review_body !== ''
-        && reviewData.overall_rating > 0
-        && reviewData.price_rating > 0
-        && reviewData.quality_rating > 0
-        && reviewData.clenliness_rating > 0) {
+        && reviewData.review_body !== '') {
       return true;
     }
 
@@ -180,6 +170,8 @@ const AddReview = () => {
             && item.review.review_id > maxReviewID) {
           maxReviewID = item.review.review_id;
         }
+
+        return true;
       });
 
       setReviewID(maxReviewID);

@@ -33,7 +33,7 @@ const AllReviews = ({ navigation, route }) => {
         alignment="center"
         title="All reviews"
       />
-      <View style={{padding: 15}}>
+      <View style={{ padding: 15 }}>
         <FlatList
           data={location.location_reviews}
           renderItem={({ item }) => (

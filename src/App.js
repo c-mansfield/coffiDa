@@ -14,7 +14,6 @@ import {
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { default as evaTheme } from 'assets/theme/theme.json';
-import { default as mapping } from 'assets/mapping.json';
 import DropdownAlert from 'react-native-dropdownalert';
 import { LogBox } from 'react-native';
 

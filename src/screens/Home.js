@@ -185,7 +185,7 @@ const Home = ({ navigation }) => {
           ? (
             <>
               <View style={{
-                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10, alignItems: 'center'
+                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10, alignItems: 'center',
               }}
               >
                 <Spinner />

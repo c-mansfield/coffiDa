@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Text, Layout } from '@ui-kitten/components';
-import PropTypes from 'prop-types';
 import * as ImagePicker from 'react-native-image-picker';
 import { RNCamera } from 'react-native-camera';
 
@@ -134,7 +133,7 @@ const AddPhotoModal = ({
     const response = await LocationReviews.getReviewPhoto(locationID, reviewID);
 
     if (response.success) {
-      const reader = new FileReader();
+      const reader = new global.FileReader();
       reader.readAsDataURL(response.body);
 
       reader.onloadend = () => {
@@ -279,13 +278,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-AddPhotoModal.propTypes = {
-  modalPhotoVisible: PropTypes.bool.isRequired,
-  togglePhotoModal: PropTypes.func.isRequired,
-  reviewID: PropTypes.number.isRequired,
-  locationID: PropTypes.number.isRequired,
-  editPhoto: PropTypes.bool,
-};
 
 export default AddPhotoModal;

@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -14,22 +14,6 @@ import BottomTabNavigation from './BottomTabNavigation.js';
 const Stack = createStackNavigator();
 
 const MainStackNavigation = () => {
-  const [userToken, setUserToken] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // let asyncToken;
-      // asyncToken = await AsyncStorage.getItem('@token');
-      // // if (asyncToken) {
-      // };
-      // setUserToken(asyncToken);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <NavigationContainer
       ref={(navigationRef) => NavigationService.setContainer(navigationRef)}

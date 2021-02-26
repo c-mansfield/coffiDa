@@ -31,6 +31,7 @@ const SearchFilterModal = (props) => {
     search_in_checked: false,
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { modalVisible, toggleModal } = props;
 
   const setFilterObject = async () => {
     const filtersObj = await buildFiltersObject();
@@ -50,7 +51,6 @@ const SearchFilterModal = (props) => {
       }
     });
 
-    console.log(filtersCopy);
     return filtersCopy;
   };
 
@@ -74,10 +74,10 @@ const SearchFilterModal = (props) => {
 
   return (
     <Modal
-      isVisible={props.modalVisible}
+      isVisible={modalVisible}
       swipeDirection={['down']}
       style={styles.modalMain}
-      onBackdropPress={props.toggleModal}
+      onBackdropPress={toggleModal}
     >
       <Layout style={styles.modalContent} level="1">
         <Text category="h3">Filter by</Text>
@@ -225,11 +225,6 @@ const SearchFilterModal = (props) => {
       </Layout>
     </Modal>
   );
-};
-
-const useRadioState = (initialCheck = false) => {
-  const [checked, setChecked] = React.useState(initialCheck);
-  return { checked, onChange: setChecked };
 };
 
 const styles = StyleSheet.create({

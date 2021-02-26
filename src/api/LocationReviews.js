@@ -253,5 +253,5 @@ module.exports = {
   addReviewPhoto,
   deleteReviewPhoto,
   likeReview,
-  removeLikeReview
-}
+  removeLikeReview,
+};

@@ -14,7 +14,6 @@ import {
   Text, Icon, Layout, Button,
 } from '@ui-kitten/components';
 import { useIsFocused } from '@react-navigation/native';
-import PropTypes from 'prop-types';
 
 import RatingCircles from 'src/components/RatingCircles.js';
 import LocationReviews from 'src/api/LocationReviews.js';
@@ -120,7 +119,7 @@ const ExpandableReviewWidget = (props) => {
     const response = await LocationReviews.getReviewPhoto(location.location_id, review.review_id);
 
     if (response.success) {
-      const reader = new FileReader();
+      const reader = new global.FileReader();
       reader.readAsDataURL(response.body);
 
       reader.onloadend = () => {
@@ -131,8 +130,8 @@ const ExpandableReviewWidget = (props) => {
     }
   };
 
-  const HeartIcon = (props) => (
-    <Icon {...props} name={likeIcon} />
+  const HeartIcon = (propsIcon) => (
+    <Icon {...propsIcon} name={likeIcon} />
   );
 
   return (
@@ -142,7 +141,7 @@ const ExpandableReviewWidget = (props) => {
           ? (
             <>
               <View style={styles.textWrapper}>
-                <Text category="h6">"{review.review_body}"</Text>
+                <Text category="h6">&ldquo;{review.review_body}&rdquo;</Text>
                 {
                   myReview
                     ? (
@@ -201,7 +200,7 @@ const ExpandableReviewWidget = (props) => {
           : (
             <>
               <View style={styles.textWrapper}>
-                <Text numberOfLines={1} category="h6">"{review.review_body}"</Text>
+                <Text numberOfLines={1} category="h6">&ldquo;{review.review_body}&rdquo;</Text>
                 {
                   myReview
                     ? (
@@ -275,13 +274,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-
-ExpandableReviewWidget.propTypes = {
-  review: PropTypes.object,
-  likedReviews: PropTypes.array,
-  location: PropTypes.object,
-  myReview: PropTypes.bool,
-  removeLike: PropTypes.bool,
-};
 
 export default ExpandableReviewWidget;

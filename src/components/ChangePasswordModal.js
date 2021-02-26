@@ -19,7 +19,6 @@ import {
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
-import PropTypes from 'prop-types';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import UserManagement from 'src/api/UserManagement.js';
@@ -34,6 +33,7 @@ const ChangePasswordModal = (props) => {
   const [errorMessage, setErrorMessage] = useState({
     oldPassword: '', newPassword: newPasswordMessage, main: '',
   });
+  const { modalPasswordVisible, toggleModalPassword } = props;
 
   useEffect(() => {
     setPasswords({ oldPassword: '', newPassword: '' });
@@ -114,23 +114,23 @@ const ChangePasswordModal = (props) => {
     return error;
   };
 
-  const toggleSecureTextEntryOld = (field) => {
+  const toggleSecureTextEntryOld = () => {
     setSecureTextEntryOld(!secureTextEntryOld);
   };
 
-  const toggleSecureTextEntryNew = (field) => {
+  const toggleSecureTextEntryNew = () => {
     setSecureTextEntryNew(!secureTextEntryNew);
   };
 
-  const renderSecureIconOld = (props) => (
+  const renderSecureIconOld = (propsIcon) => (
     <TouchableWithoutFeedback onPress={toggleSecureTextEntryOld}>
-      <Icon {...props} name={secureTextEntryOld ? 'eye-off' : 'eye'} />
+      <Icon {...propsIcon} name={secureTextEntryOld ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
 
-  const renderSecureIconNew = (props) => (
+  const renderSecureIconNew = (propsIcon) => (
     <TouchableWithoutFeedback onPress={toggleSecureTextEntryNew}>
-      <Icon {...props} name={secureTextEntryNew ? 'eye-off' : 'eye'} />
+      <Icon {...propsIcon} name={secureTextEntryNew ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
 
@@ -148,10 +148,10 @@ const ChangePasswordModal = (props) => {
 
   return (
     <Modal
-      isVisible={props.modalPasswordVisible}
+      isVisible={modalPasswordVisible}
       swipeDirection={['down']}
       style={styles.modalMain}
-      onBackdropPress={props.toggleModalPassword}
+      onBackdropPress={toggleModalPassword}
     >
       <Layout style={styles.modalContent} level="1">
         <Text category="h3">Change Password</Text>
@@ -233,14 +233,8 @@ const styles = StyleSheet.create({
   },
 });
 
-ChangePasswordModal.propTypes = {
-  modalPasswordVisible: PropTypes.bool.isRequired,
-  toggleModalPassword: PropTypes.func.isRequired,
-  userData: PropTypes.object.isRequired,
-};
-
 const AlertIcon = (props) => (
-  <Icon {...props} name="alert-circle-outline"/>
+  <Icon {...props} name="alert-circle-outline" />
 );
 
 export default ChangePasswordModal;
