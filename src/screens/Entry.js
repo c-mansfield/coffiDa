@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Dimensions,
+  Image,
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,7 +19,7 @@ import Video from 'react-native-video';
 import LoginModal from 'src/components/LoginModal.js';
 import RegisterModal from 'src/components/RegisterModal.js';
 
-const logoIcon = require('assets/images/coffee_cup_blue.png');
+const logoIcon = require('assets/images/coffee_cup.png');
 const coffeeVideo = require('assets/images/coffee_video2.mp4');
 
 const { height } = Dimensions.get('window');
@@ -47,15 +48,22 @@ const Entry = ({ navigation }) => {
         muted
         repeat
         resizeMode="cover"
-        rate={1.0}
+        rate={0.7}
         ignoreSilentSwitch="obey"
       />
       <KeyboardAvoidingView style={{ flex: 1 }}>
+
+        <View style={styles.logoWrapper}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image
+              style={styles.logoIconStyle}
+              source={logoIcon}
+            />
+          </View>
+        </View>
         <Text
-          style={{
-            fontFamily: 'Nunito-Regular', fontSize: 38, color: '#FFFFFF', marginTop: 70,
-          }}
-          category="h2"
+          style={{ marginTop: 20 }}
+          category="h1"
         >
           Find the perfect cup...
         </Text>
@@ -105,13 +113,12 @@ const styles = StyleSheet.create({
     height: 88,
     width: 88,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 15,
     marginTop: 30,
   },
   logoIconStyle: {
-    width: 60,
-    height: 44,
-    marginTop: 50,
+    width: 64,
+    height: 64,
   },
   buttonsStyles: {
     flex: 1,

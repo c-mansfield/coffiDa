@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Autocomplete,
@@ -38,9 +38,16 @@ const AddReview = () => {
     quality_rating: 0,
     clenliness_rating: 0,
   });
+  const autocompleteRef = createRef();
 
+  // Workaround for async autocomplete call not returning list back initially
+  // https://github.com/akveo/react-native-ui-kitten/issues/1117
   useEffect(() => {
-  }, [isFocused]);
+    const shouldBecomeVisible = (autocompleteRef.current.isFocused() || false) && (locations.length || 0) > 0;
+    if (autocompleteRef.current.state.listVisible !== shouldBecomeVisible) {
+      autocompleteRef.current.setState({ listVisible: shouldBecomeVisible });
+    }
+  }, [locations]);
 
   const onSelectLocation = (index) => {
     setLocation(`${locations[index].location_name}, ${locations[index].location_town}`);
@@ -77,8 +84,6 @@ const AddReview = () => {
   };
 
   const renderLocations = (item, index) => {
-    console.log('item ', item);
-    console.log('index ', index);
     // if (item.location_name) {
       return (
         <AutocompleteItem
@@ -196,6 +201,7 @@ const AddReview = () => {
         value={location}
         onSelect={onSelectLocation}
         onChangeText={checkLocationSelect}
+        ref={autocompleteRef}
       >
         {locations.map(renderLocations)}
       </Autocomplete>

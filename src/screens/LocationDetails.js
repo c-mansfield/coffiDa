@@ -3,19 +3,18 @@
  * @flow strict-local
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
   StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  Icon, Divider, Layout, Text, TopNavigationAction,
+  Icon, Divider, Layout, Text, TopNavigationAction, Spinner,
 } from '@ui-kitten/components';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
@@ -26,6 +25,7 @@ import UserManagement from 'src/api/UserManagement.js';
 import LocationManagement from 'src/api/LocationManagement.js';
 import mapstyle from 'assets/theme/mapstyle.js';
 import DropDownHolder from 'src/services/DropdownHolder.js';
+import ThemeContext from 'src/services/theme-context';
 
 const LocationDetails = ({ navigation, route }) => {
   const { locationID } = route.params;
@@ -35,10 +35,13 @@ const LocationDetails = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [likedReviews, setLikedReviews] = useState([]);
   const isFocused = useIsFocused();
+  const [googleMapStyle, setGoogleMapStyle] = useState('');
+  const themeContext = useContext(ThemeContext);
 
   // Get liked locations each time page reloads
   useEffect(() => {
     const fetchData = async () => {
+      getMapStyle();
       await getLikedReviews();
     };
 
@@ -155,6 +158,12 @@ const LocationDetails = ({ navigation, route }) => {
     }
   };
 
+  const getMapStyle = () => {
+    if (themeContext.theme === 'dark') {
+      setGoogleMapStyle(mapstyle);
+    }
+  };
+
   const BackIcon = (props) => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
       <Icon {...props} name="arrow-back" />
@@ -171,7 +180,7 @@ const LocationDetails = ({ navigation, route }) => {
                 flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
               }}
               >
-                <ActivityIndicator />
+                <Spinner />
               </View>
             </>
           )
@@ -263,7 +272,7 @@ const LocationDetails = ({ navigation, route }) => {
                     tracksViewChanges={false}
                     scrollEnabled={false}
                     zoomEnabled={false}
-                    customMapStyle={mapstyle}
+                    customMapStyle={googleMapStyle}
                   >
                     <Marker
                       coordinate={{

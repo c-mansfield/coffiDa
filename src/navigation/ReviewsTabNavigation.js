@@ -6,7 +6,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {
-  TabBar, Tab, Icon,
+  TabBar, Tab, Icon, Text, Layout,
 } from '@ui-kitten/components';
 
 import YourFavourites from 'src/screens/YourFavourites.js';
@@ -15,7 +15,17 @@ import YourReviews from 'src/screens/YourReviews.js';
 
 const TabNavigation = createMaterialTopTabNavigator();
 
-const ReviewsTabNavigation = () => {
+export const ReviewsTabNavigation = () => {
+  return (
+    <>
+      <Layout style={{ flex: 1 }} level="1">
+        <ReviewsTabNavigationMain />
+      </Layout>
+    </>
+  );
+};
+
+const ReviewsTabNavigationMain = () => {
   return (
     <TabNavigation.Navigator
       initialRouteName="Reviews"
@@ -35,23 +45,33 @@ const TopTabBar = ({ navigation, state }) => (
   <TabBar
     selectedIndex={state.index}
     onSelect={(index) => navigation.navigate(state.routeNames[index])}
+    style={{ flexGrow: 1 }}
   >
-    <Tab title="Reviews" icon={ClipBoardIcon} />
-    <Tab title="Likes" icon={HeartIcon} />
-    <Tab title="Favourites" icon={StarIcon} />
+    <Tab
+      icon={ClipBoardIcon}
+      title={<Text category="c1">Reviews</Text>}
+    />
+    <Tab
+      icon={HeartIcon}
+      title="Likes"
+    />
+    <Tab
+      icon={StarIcon}
+      title="Favourites"
+    />
   </TabBar>
 );
 
 const ClipBoardIcon = (props) => (
-  <Icon {...props} name="clipboard-outline" />
+  <Icon {...props} name="clipboard" />
 );
 
 const HeartIcon = (props) => (
-  <Icon {...props} name="heart-outline" />
+  <Icon {...props} name="heart" />
 );
 
 const StarIcon = (props) => (
-  <Icon {...props} name="star-outline" />
+  <Icon {...props} name="star" />
 );
 
 export default ReviewsTabNavigation;

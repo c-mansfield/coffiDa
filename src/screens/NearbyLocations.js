@@ -3,7 +3,7 @@
  * @flow strict-local
 */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -15,20 +15,29 @@ import {
 
 import LocationManagement from 'src/api/LocationManagement.js';
 import DropDownHolder from 'src/services/DropdownHolder.js';
+import ThemeContext from 'src/services/theme-context';
 
 const NearbyLocations = ({ navigation, route }) => {
   const { location } = route.params;
   const [nearbyLocations, setNearbyLocations] = useState([]);
   const isFocused = useIsFocused();
+  const [googleMapStyle, setGoogleMapStyle] = useState('');
+  const themeContext = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('NearbyLocations ', route);
+      getMapStyle();
       await getNearbyLocations();
     };
 
     fetchData();
   }, [isFocused]);
+
+  const getMapStyle = () => {
+    if (themeContext.theme === 'dark') {
+      setGoogleMapStyle(mapstyle);
+    }
+  };
 
   const getNearbyLocations = async () => {
     const sendQuery = {
@@ -81,7 +90,7 @@ const NearbyLocations = ({ navigation, route }) => {
           latitudeDelta: 0.002,
         }}
         tracksViewChanges={false}
-        customMapStyle={mapstyle}
+        customMapStyle={googleMapStyle}
       >
         <Marker
           coordinate={{

@@ -18,7 +18,6 @@ MERGED from [:react-native-image-picker] C:\Users\Cole\Documents\Github\coffiDa\
 MERGED from [:react-native-maps] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-maps\lib\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-video] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-video\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.63.4] C:\Users\Cole\.gradle\caches\transforms-2\files-2.1\c228fed2165ab6c2250f937bb3781cf3\jetified-react-native-0.63.4\AndroidManifest.xml:2:1-13:12
@@ -262,8 +261,6 @@ MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\no
 MERGED from [:react-native-reanimated] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-reanimated\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-screens\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-svg] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-svg\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-vector-icons] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-vector-icons\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-video] C:\Users\Cole\Documents\Github\coffiDa\node_modules\react-native-video\android\build\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41

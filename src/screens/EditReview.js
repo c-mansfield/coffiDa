@@ -8,7 +8,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import {
   Input,
@@ -17,6 +16,7 @@ import {
   TopNavigation,
   Icon,
   Layout,
+  Spinner,
 } from '@ui-kitten/components';
 import { Slider } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
@@ -126,7 +126,7 @@ const EditReview = ({ navigation, route }) => {
               flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
             }}
             >
-              <ActivityIndicator />
+              <Spinner />
             </View>
           </>
         ) : (

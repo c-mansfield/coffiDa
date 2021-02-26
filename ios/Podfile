@@ -14,6 +14,8 @@ target 'coffiDa' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'coffiDaTests' do
     inherit! :complete
     # Pods for testing

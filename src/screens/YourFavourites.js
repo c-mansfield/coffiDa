@@ -9,12 +9,11 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import {
-  Layout,
+  Layout, Spinner,
 } from '@ui-kitten/components';
 
 import UserManagement from 'src/api/UserManagement.js';
@@ -58,7 +57,7 @@ const YourFavourites = ({ navigation }) => {
               flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
             }}
             >
-              <ActivityIndicator />
+              <Spinner />
             </View>
           </>
         ) : (

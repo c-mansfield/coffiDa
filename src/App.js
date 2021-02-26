@@ -36,7 +36,6 @@ const App = () => {
         <ApplicationProvider
           {...eva}
           theme={{ ...eva[theme], ...evaTheme }}
-          customMapping={mapping}
         >
           <MainStackNavigation />
           <DropdownAlert ref={(ref) => DropDownHolder.setDropDown(ref)} />

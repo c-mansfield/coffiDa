@@ -10,11 +10,10 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {
-  Icon, Text, Layout, TopNavigationAction, TopNavigation, Button,
+  Icon, Text, Layout, TopNavigationAction, TopNavigation, Button, Spinner,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -221,7 +220,7 @@ const ViewReview = ({ navigation, route }) => {
               flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
             }}
             >
-              <ActivityIndicator />
+              <Spinner />
             </View>
           </>
         ) : (

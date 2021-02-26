@@ -9,12 +9,11 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import {
-  Layout,
+  Layout, Spinner,
 } from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
@@ -71,7 +70,7 @@ const YourReviews = ({ navigation }) => {
               flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
             }}
             >
-              <ActivityIndicator />
+              <Spinner />
             </View>
           </>
         ) : (

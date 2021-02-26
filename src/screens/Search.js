@@ -9,11 +9,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {
-  Icon, Input, Layout, Text,
+  Icon, Input, Layout, Text, Spinner,
 } from '@ui-kitten/components';
 
 import LocationTile from 'src/components/LocationTile.js';
@@ -58,7 +57,7 @@ const Search = ({ navigation }) => {
                 flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
               }}
               >
-                <ActivityIndicator />
+                <Spinner />
               </View>
             </>
           ) : (

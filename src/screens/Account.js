@@ -5,13 +5,14 @@
 
 import React, { useEffect, useState, useContext } from 'react';
 import {
-  View, StyleSheet, ActivityIndicator, TouchableOpacity,
+  View, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import {
   Icon,
   Layout,
   MenuItem,
   Text,
+  Spinner,
 } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -82,7 +83,7 @@ const Account = ({ navigation }) => {
               flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
             }}
             >
-              <ActivityIndicator />
+              <Spinner />
             </View>
           </>
         ) : (

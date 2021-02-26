@@ -9,14 +9,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   PermissionsAndroid,
-  ActivityIndicator,
   ScrollView,
   Dimensions,
+  Alert,
+  Linking,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Carousel from 'react-native-snap-carousel';
 import { useIsFocused } from '@react-navigation/native';
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout, Text, Spinner } from '@ui-kitten/components';
 
 import DropDownHolder from 'src/services/DropdownHolder.js';
 import LocationTile from 'src/components/LocationTile.js';
@@ -58,7 +59,9 @@ const Home = ({ navigation }) => {
     const fetchData = async () => {
       await getCarouselLocations(3);
 
-      setIsLoading(false);
+      if (geoLocationDetails.locationPermission) {
+        setIsLoading(false);
+      }
     };
 
     setIsLoading(true);
@@ -172,6 +175,19 @@ const Home = ({ navigation }) => {
     }
   };
 
+  const locationAlert = () => Alert.alert(
+    'Let Coffida use your location',
+    'Settings > Location > Allow location',
+    [
+      {
+        text: 'No thanks',
+        style: 'cancel',
+      },
+      { text: 'Open Settings', onPress: () => Linking.openSettings() },
+    ],
+    { cancelable: false },
+  );
+
   return (
     <Layout level="1" style={styles.main}>
       <ScrollView>
@@ -179,10 +195,10 @@ const Home = ({ navigation }) => {
           ? (
             <>
               <View style={{
-                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10,
+                flex: 1, justifyContent: 'center', flexDirection: 'row', padding: 10, alignItems: 'center'
               }}
               >
-                <ActivityIndicator />
+                <Spinner />
               </View>
             </>
           ) : (
@@ -232,12 +248,12 @@ const Home = ({ navigation }) => {
                   <>
                     <View style={styles.locationOverlay}>
                       <Layout level="2" style={styles.locationOverlayWrapper}>
-                        <Text category="h2">Explore places nearby to you</Text>
-                        <Text style={styles.locationText} category="c1">
-                          Enable your location services so you can get the best
-                          out of the app and explore all the places near you!
+                        <Text category="h2">Explore near you</Text>
+                        <Text style={styles.locationText} category="p1">
+                          Enable your location services so you can explore all the places near you
+                          and grab the perfect cup!
                         </Text>
-                        <TouchableOpacity style={styles.primaryButton} onPress={() => requestLocationPermission()}>
+                        <TouchableOpacity style={styles.primaryButton} onPress={() => locationAlert()}>
                           <Text style={{ fontFamily: 'Nunito-Bold', fontSize: 18, color: '#FFFFFF' }}>
                             Enable Location 🗺️
                           </Text>
