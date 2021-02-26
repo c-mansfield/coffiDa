@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { url, handleUnauthorised } from 'src/api/api.js';
+import { url, handleUnauthorised, errorMessages } from 'src/api/api.js';
 
 const addReview = async (locationID, data) => {
   try {
@@ -17,19 +17,19 @@ const addReview = async (locationID, data) => {
       case 201:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: errorMessages.badRequest };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };
       case 404:
-        return { success: false, status: response.status, error: 'Location not found' };
+        return { success: false, status: response.status, error: errorMessages.locationError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -49,21 +49,21 @@ const updateReview = async (locationID, reviewID, data) => {
       case 200:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: errorMessages.badRequest };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };
       case 403:
-        return { success: false, status: response.status, error: 'Forbidden request' };
+        return { success: false, status: response.status, error: errorMessages.forbiddenRequest };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -81,21 +81,21 @@ const deleteReview = async (locationID, reviewID) => {
       case 200:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: errorMessages.badRequest };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };
       case 403:
-        return { success: false, status: response.status, error: 'Forbidden request' };
+        return { success: false, status: response.status, error: errorMessages.forbiddenRequest };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -114,12 +114,12 @@ const getReviewPhoto = async (locationID, reviewID) => {
       case 404:
         return { success: false, status: response.status };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -144,14 +144,14 @@ const addReviewPhoto = async (locationID, reviewID, data) => {
         handleUnauthorised();
         return { success: false, status: response.status };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -172,16 +172,16 @@ const deleteReviewPhoto = async (locationID, reviewID) => {
         handleUnauthorised();
         return { success: false, status: response.status };
       case 403:
-        return { success: false, status: response.status, error: 'Forbidden request' };
+        return { success: false, status: response.status, error: errorMessages.forbiddenRequest };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -199,19 +199,19 @@ const likeReview = async (locationID, reviewID) => {
       case 200:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: errorMessages.badRequest };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
@@ -229,19 +229,19 @@ const removeLikeReview = async (locationID, reviewID) => {
       case 200:
         return { success: true, status: response.status };
       case 400:
-        return { success: false, status: response.status, error: 'Bad request, please try again!' };
+        return { success: false, status: response.status, error: errorMessages.badRequest };
       case 401:
         handleUnauthorised();
         return { success: false, status: response.status };
       case 404:
-        return { success: false, status: response.status, error: 'Review not found' };
+        return { success: false, status: response.status, error: errorMessages.reviewError };
       case 500:
-        return { success: false, status: response.status, error: 'Our server is having a break, please try again later!' };
+        return { success: false, status: response.status, error: errorMessages.serverError };
       default:
         return { success: false, status: response.status };
     }
   } catch (error) {
-    return { success: false, status: error, error: 'Error making request!' };
+    return { success: false, status: error, error: errorMessages.requestError };
   }
 };
 
